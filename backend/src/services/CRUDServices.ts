@@ -1,23 +1,25 @@
-export default class CRUDServices {
-	constructor(public model: unknown) {}
+import mongoose, { type AnyObject, type UpdateQuery } from "mongoose"
 
-	async getAll<T>(): Promise<T[]> {
+export default class CRUDServices<T> {
+	constructor(public model: mongoose.Model<T>) {}
+
+	async getAll() {
 		return this.model.find({})
 	}
 
-	async getById<T>(id: string): Promise<T[]> {
+	async getById(id: string) {
 		return this.model.findById(id)
 	}
 
-	async addOne<T>(value: T): Promise<T[]> {
+	async addOne<U>(value: U) {
 		return this.model.create(value)
 	}
 
-	async updateOne<T>(id: string, newValue: T): Promise<T[]> {
+	async updateOne(id: string, newValue: UpdateQuery<AnyObject>) {
 		return this.model.findByIdAndUpdate(id, newValue)
 	}
 
-	async deleteOne<T>(id: string): Promise<T[]> {
+	async deleteOne(id: string) {
 		return this.model.findByIdAndDelete(id)
 	}
 }
