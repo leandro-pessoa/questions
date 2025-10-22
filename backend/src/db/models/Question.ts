@@ -8,7 +8,7 @@ const questionSchema = new Schema({
 	subject: {
 		type: String,
 		required: [true, 'Disciplina da questão é obrigatória'],
-		minLength: [3, 'O enunciado deve ter no mínimo 3 caracteres'],
+		minLength: [2, 'O enunciado deve ter no mínimo 2 caracteres'],
 		maxLength: [20, 'O enunciado deve ter no máximo 20 caracteres'],
 	},
 	statement: {
@@ -22,10 +22,30 @@ const questionSchema = new Schema({
 		min: [1900, 'O ano não pode ser inferior a 1900'],
 		max: [fullYear, `O ano não pode ser superior a ${fullYear}`]
 	},
-	test: {
+	instituition: {
 		type: String,
-		minLength: [4, 'A prova deve ter no mínimo 4 caracteres'],
-		maxLength: [30, 'A prova deve ter no máximo 30 caracteres'],
+		minLength: [2, 'A organização deve ter no mínimo 2 caracteres'],
+		maxLength: [30, 'A organização deve ter no máximo 20 caracteres'],
+	},
+	position: {
+		type: String,
+		minLength: [4, 'O cargo deve ter no mínimo 4 caracteres'],
+		maxLength: [30, 'A organização deve ter no máximo 30 caracteres'],
+	},
+	wrongAlternatives: {
+		type: [String],
+		validate: {
+			validator: (value: string[]) => {return value.length > 4 || value.length < 1},
+			message: 'Quantidade de alternativas inválida (min: 1, max: 4)'
+		},
+		minLength: [1, 'Cada alternativa deve ter no mínimo 1 caractere'],
+		maxLength: [100, 'Cada alternativa deve ter no máximo 100 caracteres'],
+	},
+	rightAlternative: {
+		type: String,
+		require: [true, 'Alternativa correta obrigatória'],
+		minLength: [1, 'A alternativa deve ter no mínimo 1 caractere'],
+		maxLength: [100, 'A alternativa deve ter no máximo 100 caracteres'],
 	}
 })
 
