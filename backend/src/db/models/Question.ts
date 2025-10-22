@@ -1,10 +1,11 @@
 import mongoose from 'mongoose'
+import type { IQuestion } from '../../types/IQuestion.js'
 
 const { Schema } = mongoose
 
 const fullYear = new Date().getFullYear()
 
-const questionSchema = new Schema({
+const questionSchema = new Schema<IQuestion>({
 	subject: {
 		type: String,
 		required: [true, 'Disciplina da questão é obrigatória'],
