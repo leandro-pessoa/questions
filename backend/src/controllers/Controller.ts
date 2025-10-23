@@ -18,7 +18,7 @@ export default class Controller<T> {
 
 		try {
 			const value = await this.serviceEntity.getById(id as string)
-			if (value.length >= 1) {
+			if (value!.length >= 1) {
 				return res.status(200).json(value)
 			} else {
 				next()
@@ -42,7 +42,7 @@ export default class Controller<T> {
 
 		try {
 			const value = await this.serviceEntity.getById(id as string)
-			if (value.length >= 1) {
+			if (value!.length >= 1) {
 				await this.serviceEntity.updateOne(id as string, req.body)
 				const updatedValue = await this.serviceEntity.getById(id as string)
 				return res.status(200).json(updatedValue)
@@ -60,7 +60,7 @@ export default class Controller<T> {
 
 		try {
 			const value = await this.serviceEntity.getById(id as string)
-			if (value.length >= 1) {
+			if (value!.length >= 1) {
 				await this.serviceEntity.deleteOne(id as string)
 				return res.status(200).json(value)
 			} else {

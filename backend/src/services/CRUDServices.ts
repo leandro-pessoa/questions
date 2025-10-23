@@ -3,12 +3,12 @@ import mongoose, { type AnyObject, type UpdateQuery } from "mongoose"
 export default class CRUDServices<T> {
 	constructor(public model: mongoose.Model<T>) {}
 
-	async getAll() {
+	async getAll(): Promise<T[]> {
 		return this.model.find({})
 	}
 
-	async getById(id: string) {
-		return this.model.findById(id)
+	async getById(id: string): Promise<T[] | null> {
+		return this.model.findById(id) || []
 	}
 
 	async addOne<U>(value: U) {
