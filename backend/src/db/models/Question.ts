@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import type { IQuestion } from '../../types/IQuestion.js'
+import type { IQuestion } from '@/types/IQuestion.js'
 
 const { Schema } = mongoose
 

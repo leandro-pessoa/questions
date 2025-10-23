@@ -42,5 +42,11 @@
 
 	// Não faz a compilação caso haja algum erro
 	"noEmitOnError": true,
+
+	// Absolute imports
+	"baseUrl": ".",
+        "paths": {
+            "@/*": ["src/*"]
+        }
   }
 }
