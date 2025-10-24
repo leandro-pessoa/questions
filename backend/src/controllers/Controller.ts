@@ -18,6 +18,7 @@ export default class Controller<T> {
 
 		try {
 			const value = await this.serviceEntity.getById(id as string)
+			
 			if (value!.length >= 1) {
 				return res.status(200).json(value)
 			} else {
