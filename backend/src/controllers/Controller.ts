@@ -57,7 +57,7 @@ export default class Controller<T> {
 	}
 
 	async delete(req: Request, res: Response, next: NextFunction) {
-		const { id } = req.body
+		const { id } = req.params
 
 		try {
 			const value = await this.serviceEntity.getById(id as string)
