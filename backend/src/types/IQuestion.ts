@@ -4,6 +4,7 @@ export interface IQuestion {
 	year?: number
 	instituition?: string
 	position?: string
+	examiningBoard?: string
 	wrongAlternatives: string[]
 	rightAlternative: string
 }

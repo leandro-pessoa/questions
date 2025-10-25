@@ -31,7 +31,12 @@ const questionSchema = new Schema<IQuestion>({
 	position: {
 		type: String,
 		minLength: [4, 'O cargo deve ter no mínimo 4 caracteres'],
-		maxLength: [30, 'A organização deve ter no máximo 30 caracteres'],
+		maxLength: [30, 'O cargo deve ter no máximo 30 caracteres'],
+	},
+	examiningBoard: {
+		type: String,
+		minLength: [2, 'A banca deve ter no mínimo 2 caracteres'],
+		maxLength: [30, 'A banca deve ter no máximo 15 caracteres'],
 	},
 	wrongAlternatives: {
 		type: [String],
