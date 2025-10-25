@@ -21,7 +21,7 @@ const userSchema = new Schema<IUser>({
 		type: [String]
 	},
 	passwordHash: {
-		type: String
+		type: String,
 	},
 	password: {
 		type: String,
@@ -36,8 +36,11 @@ const userSchema = new Schema<IUser>({
 	}
 })
 
-userSchema.post('save', async (user) => {
-	user.passwordHash = bcrypt.hashSync(user.password as string, 8)
+userSchema.pre('save', async function (next) {
+	if(this.isModified('password')) {
+		this.passwordHash = await bcrypt.hash(this.password as string, 8)
+	}
+	next()
 })
 
 const User = mongoose.model('User', userSchema)
