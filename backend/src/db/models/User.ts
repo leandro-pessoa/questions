@@ -1,7 +1,8 @@
 import mongoose, { Schema, VirtualType } from 'mongoose'
 import bcrypt from 'bcryptjs'
+import type { IUser } from '@/types/IUser.js'
 
-const userSchema = new Schema({
+const userSchema = new Schema<IUser>({
 	completeName: {
 		type: String,
 		require: [true, 'Nome completo obrigatório'],
