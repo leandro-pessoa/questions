@@ -3,5 +3,5 @@ export interface IUser {
 	email: string
 	answeredQuestions?: string
 	passwordHash?: string
-	password?: string
+	password: string
 }

@@ -1,4 +1,4 @@
-import mongoose, { Schema, VirtualType } from 'mongoose'
+import mongoose, { Schema } from 'mongoose'
 import bcrypt from 'bcryptjs'
 import type { IUser } from '@/types/IUser.js'
 
@@ -24,7 +24,7 @@ const userSchema = new Schema<IUser>({
 		type: String
 	},
 	password: {
-		type: VirtualType,
+		type: String,
 		require: [true, 'Senha obrigatória'],
 		minLength: [6, 'O nome completo precisa ter pelo menos 6 caracteres'],
 		maxLength: [30, 'O nome completo não pode ultrapassar 30 caracteres'],
@@ -32,6 +32,7 @@ const userSchema = new Schema<IUser>({
 			validator: (value: string) => {return !(value.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{1,}$/))},
 			message: 'Senha muito fraca'
 		},
+		select: false
 	}
 })
 
