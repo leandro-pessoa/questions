@@ -1,4 +1,5 @@
 import mongoose, { Schema, VirtualType } from 'mongoose'
+import bcrypt from 'bcryptjs'
 
 const userSchema = new Schema({
 	completeName: {
@@ -30,12 +31,11 @@ const userSchema = new Schema({
 			validator: (value: string) => {return !(value.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{1,}$/))},
 			message: 'Senha muito fraca'
 		},
-
 	}
 })
 
-userSchema.pre('save', () => {
-
+userSchema.post('save', async (user) => {
+	user.passwordHash = bcrypt.hashSync(user.password as string, 8)
 })
 
 const User = mongoose.model('User', userSchema)
