@@ -38,7 +38,8 @@ const userSchema = new Schema<IUser>({
 
 userSchema.pre('save', async function (next) {
 	if(this.isModified('password')) {
-		this.passwordHash = await bcrypt.hash(this.password as string, 8)
+		const salt = await bcrypt.genSalt(8)
+		this.passwordHash = await bcrypt.hash(this.password as string, salt)
 	}
 	next()
 })
