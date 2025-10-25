@@ -7,7 +7,7 @@ const userSchema = new Schema<IUser>({
 		type: String,
 		require: [true, 'Nome completo obrigatório'],
 		minLength: [3, 'O nome completo precisa ter pelo menos 3 caracteres'],
-		maxLength: [10, 'O nome completo não pode ultrapassar 30 caracteres']
+		maxLength: [60, 'O nome completo não pode ultrapassar 60 caracteres']
 	},
 	email: {
 		type: String,
