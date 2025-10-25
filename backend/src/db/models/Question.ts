@@ -1,7 +1,5 @@
-import mongoose from 'mongoose'
+import mongoose, { Schema } from 'mongoose'
 import type { IQuestion } from '@/types/IQuestion.js'
-
-const { Schema } = mongoose
 
 const fullYear = new Date().getFullYear()
 
