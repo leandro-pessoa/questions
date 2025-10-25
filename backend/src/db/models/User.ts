@@ -5,7 +5,7 @@ import type { IUser } from '@/types/IUser.js'
 const userSchema = new Schema<IUser>({
 	completeName: {
 		type: String,
-		require: [true, 'Nome completo obrigatório'],
+		required: [true, 'Nome completo obrigatório'],
 		minLength: [3, 'O nome completo precisa ter pelo menos 3 caracteres'],
 		maxLength: [60, 'O nome completo não pode ultrapassar 60 caracteres']
 	},
@@ -25,9 +25,9 @@ const userSchema = new Schema<IUser>({
 	},
 	password: {
 		type: String,
-		require: [true, 'Senha obrigatória'],
-		minLength: [6, 'O nome completo precisa ter pelo menos 6 caracteres'],
-		maxLength: [30, 'O nome completo não pode ultrapassar 30 caracteres'],
+		required: [true, 'Senha obrigatória'],
+		minLength: [6, 'A senha precisa ter pelo menos 6 caracteres'],
+		maxLength: [30, 'A senha não pode ultrapassar 30 caracteres'],
 		validate: {
 			validator: (value: string) => {return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{1,}$/.test(value)},
 			message: 'Senha muito fraca'
