@@ -13,7 +13,7 @@ const userSchema = new Schema<IUser>({
 		type: String,
 		require: [true, 'E-mail obrigatório'],
 		validate: {
-			validator: (value: string) => {return !(value.match(/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/))},
+			validator: (value: string) => {return /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value)},
 			message: 'E-mail inválido'
 		}
 	},
@@ -29,7 +29,7 @@ const userSchema = new Schema<IUser>({
 		minLength: [6, 'O nome completo precisa ter pelo menos 6 caracteres'],
 		maxLength: [30, 'O nome completo não pode ultrapassar 30 caracteres'],
 		validate: {
-			validator: (value: string) => {return !(value.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{1,}$/))},
+			validator: (value: string) => {return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{1,}$/.test(value)},
 			message: 'Senha muito fraca'
 		},
 		select: false
