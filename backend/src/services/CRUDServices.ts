@@ -20,7 +20,7 @@ export default class CRUDServices<T> {
 
 	// atualiza um valor no documento
 	async updateOne(id: string, newValue: UpdateQuery<AnyObject>) {
-		return this.model.findByIdAndUpdate(id, newValue)
+		return this.model.findByIdAndUpdate(id, newValue, { runValidators: true })
 	}
 
 	// remove um valor do documento
