@@ -7,18 +7,20 @@ const userSchema = new Schema<IUser>({
 		type: String,
 		required: [true, 'Nome completo obrigatório'],
 		minLength: [3, 'O nome completo precisa ter pelo menos 3 caracteres'],
-		maxLength: [60, 'O nome completo não pode ultrapassar 60 caracteres']
+		maxLength: [60, 'O nome completo não pode ultrapassar 60 caracteres'],
 	},
 	email: {
 		type: String,
 		require: [true, 'E-mail obrigatório'],
 		validate: {
-			validator: (value: string) => {return /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value)},
-			message: 'E-mail inválido'
-		}
+			validator: (value: string) => {
+				return /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value)
+			},
+			message: 'E-mail inválido',
+		},
 	},
 	answeredQuestions: {
-		type: [String]
+		type: [String],
 	},
 	passwordHash: {
 		type: String,
@@ -29,15 +31,19 @@ const userSchema = new Schema<IUser>({
 		minLength: [6, 'A senha precisa ter pelo menos 6 caracteres'],
 		maxLength: [30, 'A senha não pode ultrapassar 30 caracteres'],
 		validate: {
-			validator: (value: string) => {return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{1,}$/.test(value)},
-			message: 'Senha muito fraca'
+			validator: (value: string) => {
+				return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{1,}$/.test(
+					value,
+				)
+			},
+			message: 'Senha muito fraca',
 		},
-		select: false
-	}
+		select: false,
+	},
 })
 
 userSchema.pre('save', async function (next) {
-	if(this.isModified('password')) {
+	if (this.isModified('password')) {
 		const salt = await bcrypt.genSalt(8)
 		this.passwordHash = await bcrypt.hash(this.password as string, salt)
 	}
