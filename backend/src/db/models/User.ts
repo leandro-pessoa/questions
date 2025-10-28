@@ -38,7 +38,7 @@ const userSchema = new Schema<IUser>({
 			},
 			message: 'Senha muito fraca',
 		},
-		select: false,
+		select: false
 	},
 })
 
@@ -46,6 +46,17 @@ userSchema.pre('save', async function (next) {
 	if (this.isModified('password')) {
 		const salt = await bcrypt.genSalt(8)
 		this.passwordHash = await bcrypt.hash(this.password as string, salt)
+	}
+	next()
+})
+
+userSchema.pre('findOneAndUpdate', async function (next) {
+	const { password } = this.getUpdate() as Partial<IUser>
+	const { _id } = this.getQuery()
+	if(password) {
+		const salt = await bcrypt.genSalt(8)
+		const newPasswordHash = await bcrypt.hash(password as string, salt)
+		await this.model.findByIdAndUpdate(_id, { passwordHash: newPasswordHash })
 	}
 	next()
 })
