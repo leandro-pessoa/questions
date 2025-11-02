@@ -1,12 +1,14 @@
 import type { Response } from 'express'
-import mongoose from 'mongoose'
+import mongoose, { MongooseError } from 'mongoose'
 
 export default class BaseError extends Error {
 	constructor(
 		public msg:
 			| string
 			| string[]
-			| mongoose.Error.CastError = 'Erro interno do servidor',
+			| mongoose.Error.CastError
+			| MongooseError
+			= 'Erro interno do servidor',
 		public status: number = 500,
 	) {
 		super()
