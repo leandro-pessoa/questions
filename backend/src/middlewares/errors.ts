@@ -1,17 +1,21 @@
 import ValidationError from '@/errors/ValidationError.js'
 import type { MongooseError } from 'mongoose'
 import mongoose from 'mongoose'
-import type { Response } from 'express'
+import type { NextFunction, Request, Response } from 'express'
 import BadRequest from '@/errors/BadRequest.js'
 import BaseError from '@/errors/BaseError.js'
+import NotFound from '@/errors/NotFound.js'
 
-const errors = (err: MongooseError, res: Response) => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const errors = (err: MongooseError, req: Request, res: Response, next: NextFunction) => {
 	if (err instanceof mongoose.Error.CastError) {
-		new BadRequest(err).sendResponse(res)
+		new BadRequest().sendResponse(res)
 	} else if (err instanceof mongoose.Error.ValidationError) {
 		new ValidationError(err).sendResponse(res)
+	} else if (err instanceof NotFound) {
+		new NotFound().sendResponse(res)
 	} else {
-		new BaseError(err).sendResponse(res)
+		new BaseError().sendResponse(res)
 	}
 }
 

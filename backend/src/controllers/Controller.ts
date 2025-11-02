@@ -1,3 +1,4 @@
+import NotFound from '@/errors/NotFound.js'
 import CRUDServices from '@/services/CRUDServices.js'
 import type { Request, Response, NextFunction } from 'express'
 
@@ -22,7 +23,7 @@ export default class Controller<T> {
 			if (value) {
 				return res.status(200).json(value)
 			} else {
-				next()
+				next(new NotFound())
 			}
 		} catch (err) {
 			next(err)
@@ -48,7 +49,7 @@ export default class Controller<T> {
 				const updatedValue = await this.serviceEntity.getById(id as string)
 				return res.status(200).json(updatedValue)
 			} else {
-				next()
+				next(new NotFound())
 			}
 
 		} catch (err) {
@@ -65,7 +66,7 @@ export default class Controller<T> {
 				await this.serviceEntity.deleteOne(id as string)
 				return res.status(200).json(value)
 			} else {
-				next()
+				next(new NotFound())
 			}
 		} catch (err) {
 			next(err)
