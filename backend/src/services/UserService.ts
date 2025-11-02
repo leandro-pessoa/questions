@@ -16,8 +16,12 @@ export class UserService extends CRUDServices<IUser> {
 			const id = user._id
 			const name = user.completeName
 			const email = user.email
-			const token = jwt.sign({ id, name, email }, process.env.TOKEN_SECRET, {
-				expiresIn: process.env.TOKEN_EXPIRATION
-			})
+
+			const data = { id, name, email }
+			const secretKey = process.env.TOKEN_SECRET
+			if(secretKey) {
+				const token = jwt.sign(data, secretKey, {expiresIn: '7d'})
+				return token
+			}
 	}
 }}
