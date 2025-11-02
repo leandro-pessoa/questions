@@ -2,6 +2,7 @@ import type { IUser } from '@/types/IUser.js'
 import CRUDServices from './CRUDServices.js'
 import User from '@/db/models/User.js'
 import bcrypt from 'bcryptjs'
+import jwt from 'jsonwebtoken'
 
 export class UserService extends CRUDServices<IUser> {
 	constructor() {
@@ -19,4 +20,4 @@ export class UserService extends CRUDServices<IUser> {
 				expiresIn: process.env.TOKEN_EXPIRATION
 			})
 	}
-}
+}}
