@@ -12,6 +12,8 @@ const errors = (err: MongooseError, req: Request, res: Response, next: NextFunct
 		new BadRequest().sendResponse(res)
 	} else if (err instanceof mongoose.Error.ValidationError) {
 		new ValidationError(err).sendResponse(res)
+	} else if (err instanceof BadRequest) {
+		err.sendResponse(res)
 	} else if (err instanceof NotFound) {
 		err.sendResponse(res)
 	} else {
