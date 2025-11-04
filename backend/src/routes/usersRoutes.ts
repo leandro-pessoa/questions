@@ -15,9 +15,9 @@ router.post('/users', (req, res, next) => userController.store(req, res, next))
 router.post('/users/login', (req, res, next) => userController.login(req, res, next))
 
 // PUT
-router.put('/users/:id', loginRequired, (req, res, next) => userController.update(req, res, next))
+router.put('/users', loginRequired, (req, res, next) => userController.userUpdate(req, res, next))
 
 // DELETE
-router.delete('/users/:id', loginRequired, (req, res, next) => userController.delete(req, res, next))
+router.delete('/users', loginRequired, (req, res, next) => userController.userDelete(req, res, next))
 
 export default router

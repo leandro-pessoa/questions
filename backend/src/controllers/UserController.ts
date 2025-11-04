@@ -3,6 +3,7 @@ import Controller from './Controller.js'
 import type { IUser } from '@/types/IUser.js'
 import type { Request, Response, NextFunction } from 'express'
 import BadRequest from '@/errors/BadRequest.js'
+import NotFound from '@/errors/NotFound.js'
 
 const userService = new UserService()
 
@@ -27,7 +28,7 @@ export default class UserController extends Controller<IUser> {
 			next(invalidCredentials)
 			return
 		}
-		
+
 		try {
 			const token = await userService.verifyLogin(user, password)
 			res.status(200).json({
@@ -39,6 +40,42 @@ export default class UserController extends Controller<IUser> {
 				},
 			})
 		} catch (err) {
+			next(err)
+		}
+	}
+
+	async userUpdate(req: Request, res: Response, next: NextFunction) {
+		const id = req._id
+
+		try {
+			const user = await userService.getById(id)
+
+			if(user) {
+				await userService.updateOne(id, req.body)
+				const { _id, completeName, email } = user
+				res.status(200).json({ _id, completeName, email })
+			} else {
+				next(new NotFound('Usuário não encontrado'))
+			}
+		} catch(err) {
+			next(err)
+		}
+	}
+	
+	async userDelete(req: Request, res: Response, next: NextFunction) {
+		const id = req._id
+
+		try {
+			const user = await userService.getById(id)
+
+			if(user) {
+				await userService.deleteOne(id)
+				const { _id, completeName, email } = user
+				res.status(200).json({ _id, completeName, email })
+			} else {
+				next(new NotFound('Usuário não encontrado'))
+			}
+		} catch(err) {
 			next(err)
 		}
 	}
