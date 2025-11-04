@@ -3,6 +3,14 @@ import bcrypt from 'bcryptjs'
 import type { IUser } from '@/types/IUser.js'
 
 const userSchema = new Schema<IUser>({
+	role: {
+		type: String,
+		enum: {
+			values: ['default', 'admin'],
+			message: '{VALUE} não é aceito. (default ou admin)'
+		},
+		default: 'default'
+	},
 	completeName: {
 		type: String,
 		required: [true, 'Nome completo obrigatório'],
