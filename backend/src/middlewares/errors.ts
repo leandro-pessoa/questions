@@ -13,7 +13,7 @@ const errors = (err: MongooseError, req: Request, res: Response, next: NextFunct
 	} else if (err instanceof mongoose.Error.ValidationError) {
 		new ValidationError(err).sendResponse(res)
 	} else if (err instanceof NotFound) {
-		new NotFound().sendResponse(res)
+		err.sendResponse(res)
 	} else {
 		new BaseError().sendResponse(res)
 	}
