@@ -19,11 +19,11 @@ export class UserService extends CRUDServices<IUser> {
 		const verifyPassword = await bcrypt.compare(password ,user.passwordHash)
 
 		if (verifyPassword) {
-			const id = user._id
-			const name = user.completeName
+			const _id = user._id
+			const completeName = user.completeName
 			const email = user.email
 
-			const data = { id, name, email }
+			const data = { _id, completeName, email }
 			const secretKey = process.env.TOKEN_SECRET
 			if(secretKey) {
 				const token = jwt.sign(data, secretKey, {expiresIn: '7d'})

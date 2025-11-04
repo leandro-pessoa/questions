@@ -1,4 +1,5 @@
 import UserController from '@/controllers/UserController.js'
+import { loginRequired } from '@/middlewares/loginRequired.js'
 import { Router } from 'express'
 
 const router = Router()
@@ -14,9 +15,9 @@ router.post('/users', (req, res, next) => userController.store(req, res, next))
 router.post('/users/login', (req, res, next) => userController.login(req, res, next))
 
 // PUT
-router.put('/users/:id', (req, res, next) => userController.update(req, res, next))
+router.put('/users/:id', loginRequired, (req, res, next) => userController.update(req, res, next))
 
 // DELETE
-router.delete('/users/:id', (req, res, next) => userController.delete(req, res, next))
+router.delete('/users/:id', loginRequired, (req, res, next) => userController.delete(req, res, next))
 
 export default router
