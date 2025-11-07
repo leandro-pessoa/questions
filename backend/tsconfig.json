@@ -1,6 +1,6 @@
 {
   // exlude build and tests
-  "exclude": ["./dist", "__tests__", "jest.config.js"],
+  "exclude": ["./coverage", "./dist", "__tests__", "jest.config.js"],
 
   // Visit https://aka.ms/tsconfig to read more about this file
   "compilerOptions": {
