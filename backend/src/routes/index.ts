@@ -1,6 +1,6 @@
 import type { Request, Response, Application } from 'express'
-import questions from './questionsRoutes.js'
-import users from './usersRoutes.js'
+import questions from './questionsRoutes'
+import users from './usersRoutes'
 import express from 'express'
 
 const routes = (app: Application) => {

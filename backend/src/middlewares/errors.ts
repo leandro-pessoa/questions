@@ -1,10 +1,10 @@
-import ValidationError from '@/errors/ValidationError.js'
+import ValidationError from '@/errors/ValidationError'
 import type { MongooseError } from 'mongoose'
 import mongoose from 'mongoose'
 import type { NextFunction, Request, Response } from 'express'
-import BadRequest from '@/errors/BadRequest.js'
-import BaseError from '@/errors/BaseError.js'
-import NotFound from '@/errors/NotFound.js'
+import BadRequest from '@/errors/BadRequest'
+import BaseError from '@/errors/BaseError'
+import NotFound from '@/errors/NotFound'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const errors = (err: MongooseError, req: Request, res: Response, next: NextFunction) => {

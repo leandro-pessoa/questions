@@ -1,6 +1,6 @@
-import CRUDServices from './CRUDServices.js'
-import type { IQuestion } from '@/types/IQuestion.js'
-import Question from '@/db/models/Question.js'
+import CRUDServices from './CRUDServices'
+import type { IQuestion } from '@/types/IQuestion'
+import Question from '@/db/models/Question'
 
 export default class QuestionService extends CRUDServices<IQuestion> {
 	constructor() {

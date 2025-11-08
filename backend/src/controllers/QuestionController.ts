@@ -1,6 +1,6 @@
-import QuestionService from '@/services/QuestionService.js'
-import Controller from './Controller.js'
-import type { IQuestion } from '@/types/IQuestion.js'
+import QuestionService from '@/services/QuestionService'
+import Controller from './Controller'
+import type { IQuestion } from '@/types/IQuestion'
 
 const questionService = new QuestionService()
 

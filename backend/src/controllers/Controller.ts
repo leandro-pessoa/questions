@@ -1,5 +1,5 @@
-import NotFound from '@/errors/NotFound.js'
-import CRUDServices from '@/services/CRUDServices.js'
+import NotFound from '@/errors/NotFound'
+import CRUDServices from '@/services/CRUDServices'
 import type { Request, Response, NextFunction } from 'express'
 
 export default class Controller<T> {

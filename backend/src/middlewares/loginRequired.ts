@@ -1,6 +1,6 @@
-import User from '@/db/models/User.js'
-import BadRequest from '@/errors/BadRequest.js'
-import BaseError from '@/errors/BaseError.js'
+import User from '@/db/models/User'
+import BadRequest from '@/errors/BadRequest'
+import BaseError from '@/errors/BaseError'
 import type { Request, Response, NextFunction } from 'express'
 import jwt from 'jsonwebtoken'
 

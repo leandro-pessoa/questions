@@ -1,9 +1,9 @@
-import { UserService } from '@/services/UserService.js'
-import Controller from './Controller.js'
-import type { IUser } from '@/types/IUser.js'
+import { UserService } from '@/services/UserService'
+import Controller from './Controller'
+import type { IUser } from '@/types/IUser'
 import type { Request, Response, NextFunction } from 'express'
-import BadRequest from '@/errors/BadRequest.js'
-import NotFound from '@/errors/NotFound.js'
+import BadRequest from '@/errors/BadRequest'
+import NotFound from '@/errors/NotFound'
 
 const userService = new UserService()
 
@@ -61,7 +61,7 @@ export default class UserController extends Controller<IUser> {
 			next(err)
 		}
 	}
-	
+
 	async userDelete(req: Request, res: Response, next: NextFunction) {
 		const id = req._id
 

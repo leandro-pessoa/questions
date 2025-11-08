@@ -1,4 +1,4 @@
-import BaseError from './BaseError.js'
+import BaseError from './BaseError'
 
 export default class BadRequest extends BaseError {
 	constructor(

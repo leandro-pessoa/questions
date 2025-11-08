@@ -1,4 +1,4 @@
-import BadRequest from './BadRequest.js'
+import BadRequest from './BadRequest'
 import type mongoose from 'mongoose'
 
 export default class ValidationError extends BadRequest {

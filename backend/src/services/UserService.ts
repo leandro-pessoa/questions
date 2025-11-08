@@ -1,10 +1,10 @@
-import type { IUser } from '@/types/IUser.js'
-import CRUDServices from './CRUDServices.js'
-import User from '@/db/models/User.js'
+import type { IUser } from '@/types/IUser'
+import CRUDServices from './CRUDServices'
+import User from '@/db/models/User'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
-import BaseError from '@/errors/BaseError.js'
-import BadRequest from '@/errors/BadRequest.js'
+import BaseError from '@/errors/BaseError'
+import BadRequest from '@/errors/BadRequest'
 
 export class UserService extends CRUDServices<IUser> {
 	constructor() {
