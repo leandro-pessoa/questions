@@ -10,7 +10,6 @@ export default {
 		...tsJestTransformCfg,
 	},
 	moduleNameMapper: {
-		'@/(.*)': '<rootDir>/src/$1',
-	},
-	setupFiles: ['<rootDir>/.jest/setEnvVariables.js'],
+		'@/(.*)': '<rootDir>/src/$1'
+	}
 }
