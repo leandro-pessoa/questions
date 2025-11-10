@@ -19,7 +19,7 @@ const userSchema = new Schema<IUser>({
 	},
 	email: {
 		type: String,
-		require: [true, 'E-mail obrigatório'],
+		required: [true, 'E-mail obrigatório'],
 		validate: {
 			validator: (value: string) => {
 				return /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value)
