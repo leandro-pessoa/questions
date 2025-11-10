@@ -33,7 +33,7 @@ export default class Controller<T> {
 	async store(req: Request, res: Response, next: NextFunction) {
 		try {
 			const newValue = await this.serviceEntity.addOne(req.body)
-			return res.status(200).json(newValue)
+			return res.status(201).json(newValue)
 		} catch (err) {
 			next(err)
 		}
