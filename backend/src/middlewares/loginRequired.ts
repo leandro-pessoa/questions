@@ -49,11 +49,12 @@ export const loginRequired = async (
 			return
 		}
 
-		const { _id, completeName, email } = user
+		const { _id, completeName, email, role } = user
 
 		req._id = _id
 		req.completeName = completeName
 		req.email = email
+		req.role = role
 
 		return next()
 	} catch {

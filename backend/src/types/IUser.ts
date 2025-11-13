@@ -1,6 +1,6 @@
 export interface IUser {
 	_id: string
-	role: string
+	role: 'default' | 'admin'
 	completeName: string
 	email: string
 	answeredQuestions?: string[]
