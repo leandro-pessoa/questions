@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import QuestionController from '@/controllers/QuestionController'
 import { adminRequired } from '@/middlewares/adminRequired'
+import { loginRequired } from '@/middlewares/loginRequired'
 
 const router = Router()
 
@@ -11,12 +12,12 @@ router.get('/questions', (req, res, next) => questionController.index(req, res, 
 router.get('/questions/:id', (req, res, next) => questionController.show(req, res, next))
 
 // POST
-router.post('/questions', adminRequired, (req, res, next) => questionController.store(req, res, next))
+router.post('/questions', loginRequired, adminRequired, (req, res, next) => questionController.store(req, res, next))
 
 // PUT
-router.put('/questions/:id', adminRequired, (req, res, next) => questionController.update(req, res, next))
+router.put('/questions/:id', loginRequired, adminRequired, (req, res, next) => questionController.update(req, res, next))
 
 // DELETE
-router.delete('/questions/:id', adminRequired, (req, res, next) => questionController.delete(req, res, next))
+router.delete('/questions/:id', loginRequired, adminRequired, (req, res, next) => questionController.delete(req, res, next))
 
 export default router
