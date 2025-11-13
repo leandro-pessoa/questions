@@ -35,4 +35,5 @@ export class UserService extends CRUDServices<IUser> {
 		} else {
 			throw new BadRequest('Credenciais inválidas', 401)
 		}
-}}
+	}
+}

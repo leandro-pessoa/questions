@@ -12,6 +12,23 @@ export default class UserController extends Controller<IUser> {
 		super(userService)
 	}
 
+	async userStore(req: Request, res: Response, next: NextFunction) {
+		const { email } = req.body
+
+		try {
+			const emailExists = await userService.getOneByEmail(email)
+
+			if (emailExists) {
+				next(new BadRequest('E-mail já cadastrado'))
+			}
+
+			const newValue = await userService.addOne(req.body)
+			return res.status(201).json(newValue)
+		} catch (err) {
+			next(err)
+		}
+	}
+
 	async login(req: Request, res: Response, next: NextFunction) {
 		const invalidCredentials = new BadRequest('Credenciais inválidas', 401)
 
@@ -46,9 +63,15 @@ export default class UserController extends Controller<IUser> {
 
 	async userUpdate(req: Request, res: Response, next: NextFunction) {
 		const id = req._id
+		const { email } = req.body
 
 		try {
 			const user = await userService.getById(id)
+			const emailExists = await userService.getOneByEmail(email)
+
+			if (emailExists) {
+				next(new BadRequest('E-mail já cadastrado'))
+			}
 
 			if(user) {
 				await userService.updateOne(id, req.body)
