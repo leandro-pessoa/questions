@@ -73,6 +73,35 @@ describe('User routes errors', () => {
       			]
 			})
 	})
+
+	it('should return an error when e-mail already exists', async () => {
+		await request(app)
+			.post('/users')
+			.send(testUserData)
+			.set('Content-Type', 'application/json')
+
+		await request(app)
+			.post('/users')
+			.send(testUserData)
+			.set('Content-Type', 'application/json')
+			.expect(400, {
+				status: 400,
+				message: 'E-mail já cadastrado'
+			})
+
+		await request(app)
+			.post('/users/login')
+			.send({
+				email,
+				password
+			})
+			.set('Content-Type', 'application/json')
+			.then(async res => {
+				await request(app)
+					.set('Authorization', `Bearer ${res.body.token}`)
+					.delete('/users')
+			})
+	})
 })
 
 describe('User routes', () => {
