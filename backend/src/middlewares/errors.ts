@@ -19,7 +19,7 @@ const errors = (err: MongooseError, req: Request, res: Response, next: NextFunct
 	} else {
 		new BaseError().sendResponse(res)
 	}
-	console.log(err)
+	// console.log(err)
 }
 
 export default errors

@@ -20,6 +20,7 @@ export default class UserController extends Controller<IUser> {
 
 			if (emailExists) {
 				next(new BadRequest('E-mail já cadastrado'))
+				return
 			}
 
 			const newValue = await userService.addOne(req.body)
@@ -73,14 +74,14 @@ export default class UserController extends Controller<IUser> {
 				next(new BadRequest('E-mail já cadastrado'))
 			}
 
-			if(user) {
+			if (user) {
 				await userService.updateOne(id, req.body)
 				const { _id, completeName, email } = user
 				res.status(200).json({ _id, completeName, email })
 			} else {
 				next(new NotFound('Usuário não encontrado'))
 			}
-		} catch(err) {
+		} catch (err) {
 			next(err)
 		}
 	}
@@ -91,14 +92,14 @@ export default class UserController extends Controller<IUser> {
 		try {
 			const user = await userService.getById(id)
 
-			if(user) {
+			if (user) {
 				await userService.deleteOne(id)
 				const { _id, completeName, email } = user
 				res.status(200).json({ _id, completeName, email })
 			} else {
 				next(new NotFound('Usuário não encontrado'))
 			}
-		} catch(err) {
+		} catch (err) {
 			next(err)
 		}
 	}
