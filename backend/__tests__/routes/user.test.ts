@@ -28,6 +28,12 @@ describe('User GET', () => {
 })
 
 describe('User POST', () => {
+	afterEach(async () => {
+		await request(app)
+			.delete(`/users/${_id}`)
+			.set('Authorization', `Bearer ${adminToken}`)
+	})
+
 	it('should return an error when completeName, email and password is not submitted', async () => {
 		await request(app)
 			.post('/users')
@@ -123,29 +129,19 @@ describe('User POST', () => {
 	})
 
 	it('should return an error when e-mail already exists', async () => {
-		afterAll(async () => {
-			await request(app)
-				.delete(`/users/${_id}`)
-				.set('Authorization', `Bearer ${adminToken}`)
-				.expect(200)
-				.then(res => {
-					console.log(res)
-				})
+		await request(app)
+		.post('/users')
+		.send(testUserData)
+		.set('Content-Type', 'application/json')
+
+		await request(app)
+		.post('/users')
+		.send(testUserData)
+		.set('Content-Type', 'application/json')
+		.expect(400, {
+			status: 400,
+			message: 'E-mail já cadastrado'
 		})
-
-		await request(app)
-			.post('/users')
-			.send(testUserData)
-			.set('Content-Type', 'application/json')
-
-		await request(app)
-			.post('/users')
-			.send(testUserData)
-			.set('Content-Type', 'application/json')
-			.expect(400, {
-				status: 400,
-				message: 'E-mail já cadastrado'
-			})
 	})
 
 	it('should create an user if submitted attibutes is valid', async () => {
