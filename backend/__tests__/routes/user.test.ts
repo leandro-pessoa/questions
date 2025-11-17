@@ -12,6 +12,19 @@ const { _id, completeName, email, password } = testUserData
 
 let adminToken: string
 
+const createTestUser = async () => {
+	await request(app)
+		.post('/users')
+		.send(testUserData)
+		.set('Content-Type', 'application/json')
+}
+
+const deleteTestUser = async () => {
+	await request(app)
+		.delete(`/users/${_id}`)
+		.set('Authorization', `Bearer ${adminToken}`)
+}
+
 beforeAll(async () => {
 	await request(app)
 		.post('/users/login')
@@ -28,9 +41,7 @@ describe('User GET', () => {})
 
 describe('User POST', () => {
 	afterEach(async () => {
-		await request(app)
-			.delete(`/users/${_id}`)
-			.set('Authorization', `Bearer ${adminToken}`)
+		await deleteTestUser()
 	})
 
 	it('should return an error when completeName, email and password is not submitted', async () => {
@@ -128,10 +139,7 @@ describe('User POST', () => {
 	})
 
 	it('should return an error when e-mail already exists', async () => {
-		await request(app)
-			.post('/users')
-			.send(testUserData)
-			.set('Content-Type', 'application/json')
+		await createTestUser()
 
 		await request(app)
 			.post('/users')
@@ -162,10 +170,7 @@ describe('User POST', () => {
 	})
 
 	it('should return a token and user when you log in', async () => {
-		await request(app)
-			.post('/users')
-			.send(testUserData)
-			.set('Content-Type', 'application/json')
+		await createTestUser()
 
 		await request(app)
 			.post('/users/login')
@@ -186,16 +191,11 @@ describe('User POST', () => {
 
 describe('User UPDATE', () => {
 	beforeEach(async () => {
-		await request(app)
-			.post('/users')
-			.send(testUserData)
-			.set('Content-Type', 'application/json')
+		await createTestUser()
 	})
 
 	afterEach(async () => {
-		await request(app)
-			.delete(`/users/${_id}`)
-			.set('Authorization', `Bearer ${adminToken}`)
+		await deleteTestUser()
 	})
 
 	it('should return updated user when update', async () => {
@@ -227,10 +227,7 @@ describe('User UPDATE', () => {
 
 describe('User DELETE', () => {
 	it('should return deleted user when delete by id', async () => {
-		await request(app)
-			.post('/users')
-			.send(testUserData)
-			.set('Content-Type', 'application/json')
+		await createTestUser()
 
 		await request(app)
 			.post('/users/login')
@@ -250,6 +247,5 @@ describe('User DELETE', () => {
 						expect(res.body.email).toEqual(email)
 					})
 			})
-
 	})
 })
