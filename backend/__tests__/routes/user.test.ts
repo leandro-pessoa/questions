@@ -159,13 +159,9 @@ describe('User POST', () => {
 			.expect(201)
 			.then((res) => {
 				expect(res.body.role).toEqual('default')
-				expect.objectContaining({
-					role: 'default',
-					completeName: 'Teste',
-					email: 'teste@gmail.com',
-					answeredQuestions: [],
-					password: '123@Tes',
-				})
+				expect(res.body.completeName).toEqual('Teste')
+				expect(res.body.email).toEqual('teste@gmail.com')
+				expect(res.body.password).toEqual('123@Tes')
 			})
 	})
 
