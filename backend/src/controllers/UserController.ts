@@ -71,13 +71,17 @@ export default class UserController extends Controller<IUser> {
 			const emailExists = await userService.getOneByEmail(email)
 
 			if (emailExists) {
-				next(new BadRequest('E-mail já cadastrado'))
+				next(new BadRequest('E-mail já cadastrado', 409))
+				return
 			}
 
 			if (user) {
 				await userService.updateOne(id, req.body)
-				const { _id, completeName, email } = user
-				res.status(200).json({ _id, completeName, email })
+				const newUser = await userService.getById(id)
+				if (newUser) {
+					const { _id, completeName, email } = newUser
+					res.status(200).json({ _id, completeName, email })
+				}
 			} else {
 				next(new NotFound('Usuário não encontrado'))
 			}
