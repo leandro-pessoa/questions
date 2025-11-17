@@ -37,7 +37,57 @@ beforeAll(async () => {
 		})
 })
 
-describe('User GET', () => {})
+describe('User GET', () => {
+	beforeAll(async () => {
+		await createTestUser()
+	})
+
+	afterAll(async () => {
+		await deleteTestUser()
+	})
+
+	it('should return an error if user does not exist', async () => {
+		await request(app)
+			.get('/users/69169cea4b1e3b44ecffde93')
+			.set('Authorization', `Bearer ${adminToken}`)
+			.expect(404, {
+				status: 404,
+				message: 'Valor não encontrado'
+			})
+	})
+
+	it('should return an error if the id format is invalid', async () => {
+		await request(app)
+			.get('/users/69169cea4b1e3b44ecffde9')
+			.set('Authorization', `Bearer ${adminToken}`)
+			.expect(400, {
+				status: 400,
+				message: 'Requisição inválida'
+			})
+	})
+
+	it('return the users on get', async () => {
+		await request(app)
+			.get('/users')
+			.set('Authorization', `Bearer ${adminToken}`)
+			.expect(200)
+			.then(res => {
+				expect(res.body[0].completeName).toBeDefined()
+				expect(res.body[0].email).toBeDefined()
+			})
+	})
+
+	it('return user on get by id', async () => {
+		await request(app)
+			.get(`/users/${_id}`)
+			.set('Authorization', `Bearer ${adminToken}`)
+			.expect(200)
+			.then(res => {
+				expect(res.body.completeName).toEqual(completeName)
+				expect(res.body.email).toEqual(email)
+			})
+	})
+})
 
 describe('User POST', () => {
 	afterEach(async () => {
@@ -213,7 +263,6 @@ describe('User UPDATE', () => {
 					.set('Content-Type', 'application/json')
 					.expect(200)
 					.then((res) => {
-						console.log(res.body)
 						expect(res.body.completeName).toEqual('Teste Update')
 						expect(res.body.email).toEqual('testeupdate@gmail.com')
 					})
