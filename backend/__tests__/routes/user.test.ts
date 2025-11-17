@@ -218,7 +218,8 @@ describe('User UPDATE', () => {
 					.expect(200)
 					.then((res) => {
 						console.log(res.body)
-						// expect(res.body.user.completeName).toBeDefined()
+						expect(res.body.completeName).toEqual('Teste Update')
+						expect(res.body.email).toEqual('testeupdate@gmail.com')
 					})
 			})
 	})
@@ -226,16 +227,29 @@ describe('User UPDATE', () => {
 
 describe('User DELETE', () => {
 	it('should return deleted user when delete by id', async () => {
-		const user = await request(app).get(`/users/${email}`)
+		await request(app)
+			.post('/users')
+			.send(testUserData)
+			.set('Content-Type', 'application/json')
 
 		await request(app)
-			.set('Authorization', `Bearer ${adminToken}`)
-			.delete(`/users/${user.body._id}`)
-			.expect(200)
-			.then((res) => {
-				expect(res.body._id).toBeDefined()
-				expect(res.body.completeName).toBeDefined()
-				expect(res.body.email).toBeDefined()
+			.post('/users/login')
+			.send({
+				email,
+				password,
 			})
+			.set('Content-Type', 'application/json')
+			.then(async res => {
+				await request(app)
+					.delete(`/users`)
+					.set('Authorization', `Bearer ${res.body.token}`)
+					.expect(200)
+					.then((res) => {
+						expect(res.body._id).toEqual(_id)
+						expect(res.body.completeName).toEqual(completeName)
+						expect(res.body.email).toEqual(email)
+					})
+			})
+
 	})
 })
