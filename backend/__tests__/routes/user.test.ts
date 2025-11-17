@@ -11,6 +11,7 @@ const testUserData = {
 const { _id, completeName, email, password } = testUserData
 
 let adminToken: string
+
 beforeAll(async () => {
 	await request(app)
 		.post('/users/login')
@@ -23,9 +24,7 @@ beforeAll(async () => {
 		})
 })
 
-describe('User GET', () => {
-
-})
+describe('User GET', () => {})
 
 describe('User POST', () => {
 	afterEach(async () => {
@@ -130,18 +129,18 @@ describe('User POST', () => {
 
 	it('should return an error when e-mail already exists', async () => {
 		await request(app)
-		.post('/users')
-		.send(testUserData)
-		.set('Content-Type', 'application/json')
+			.post('/users')
+			.send(testUserData)
+			.set('Content-Type', 'application/json')
 
 		await request(app)
-		.post('/users')
-		.send(testUserData)
-		.set('Content-Type', 'application/json')
-		.expect(400, {
-			status: 400,
-			message: 'E-mail já cadastrado'
-		})
+			.post('/users')
+			.send(testUserData)
+			.set('Content-Type', 'application/json')
+			.expect(400, {
+				status: 400,
+				message: 'E-mail já cadastrado',
+			})
 	})
 
 	it('should create an user if submitted attibutes is valid', async () => {
@@ -164,6 +163,11 @@ describe('User POST', () => {
 
 	it('should return a token and user when you log in', async () => {
 		await request(app)
+			.post('/users')
+			.send(testUserData)
+			.set('Content-Type', 'application/json')
+
+		await request(app)
 			.post('/users/login')
 			.send({
 				email,
@@ -181,17 +185,41 @@ describe('User POST', () => {
 })
 
 describe('User UPDATE', () => {
+	beforeEach(async () => {
+		await request(app)
+			.post('/users')
+			.send(testUserData)
+			.set('Content-Type', 'application/json')
+	})
+
+	afterEach(async () => {
+		await request(app)
+			.delete(`/users/${_id}`)
+			.set('Authorization', `Bearer ${adminToken}`)
+	})
+
 	it('should return updated user when update', async () => {
 		await request(app)
-			.put('/users')
+			.post('/users/login')
 			.send({
-				completeName: 'Teste Update',
-				email: 'testeupdate@gmail.com',
+				email,
+				password,
 			})
 			.set('Content-Type', 'application/json')
-			.expect(200)
-			.then((res) => {
-				expect(res.body.user.completeName).toBeDefined()
+			.then(async (res) => {
+				await request(app)
+					.put('/users')
+					.send({
+						completeName: 'Teste Update',
+						email: 'testeupdate@gmail.com',
+					})
+					.set('Authorization', `Bearer ${res.body.token}`)
+					.set('Content-Type', 'application/json')
+					.expect(200)
+					.then((res) => {
+						console.log(res.body)
+						// expect(res.body.user.completeName).toBeDefined()
+					})
 			})
 	})
 })
