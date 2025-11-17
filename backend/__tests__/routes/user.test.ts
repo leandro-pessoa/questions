@@ -145,8 +145,8 @@ describe('User POST', () => {
 			.post('/users')
 			.send(testUserData)
 			.set('Content-Type', 'application/json')
-			.expect(400, {
-				status: 400,
+			.expect(409, {
+				status: 409,
 				message: 'E-mail já cadastrado',
 			})
 	})
