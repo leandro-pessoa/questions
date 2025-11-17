@@ -19,7 +19,7 @@ export default class UserController extends Controller<IUser> {
 			const emailExists = await userService.getOneByEmail(email)
 
 			if (emailExists) {
-				next(new BadRequest('E-mail já cadastrado'))
+				next(new BadRequest('E-mail já cadastrado', 409))
 				return
 			}
 
