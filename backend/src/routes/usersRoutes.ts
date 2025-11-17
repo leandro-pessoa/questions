@@ -9,7 +9,7 @@ const userController = new UserController()
 
 // GET
 router.get('/users', loginRequired, adminRequired, (req, res, next) => userController.index(req, res, next))
-router.get('/users/:id', adminRequired, (req, res, next) => userController.show(req, res, next))
+router.get('/users/:id', loginRequired, adminRequired, (req, res, next) => userController.show(req, res, next))
 
 // POST
 router.post('/users', (req, res, next) => userController.userStore(req, res, next))
