@@ -218,6 +218,23 @@ describe('User POST', () => {
 				email: 'batata@gmail.com',
 				password: '123@Bat'
 			})
+			.set('Content-Type', 'application/json')
+			.expect(401, {
+				status: 401,
+				message: 'Credenciais inválidas'
+			})
+	})
+
+	it('should return an error if the password is invalid', async () => {
+		await createTestUser()
+
+		await request(app)
+			.post('/users/login')
+			.set('Content-Type', 'application/json')
+			.send({
+				email,
+				password: '123456'
+			})
 			.expect(401, {
 				status: 401,
 				message: 'Credenciais inválidas'
