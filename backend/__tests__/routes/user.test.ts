@@ -244,6 +244,18 @@ describe('User UPDATE', () => {
 		await deleteTestUser()
 	})
 
+	it('should return an error if user dont exists', async () => {
+		await request(app)
+			.put('/users/69169cea4b1e3b44ecffde93')
+			.send({email: 'teste@gmaill.com'})
+			.set('Authorization', `Bearer ${adminToken}`)
+			.set('Content-Type', 'application/json')
+			.expect(404, {
+				status: 404,
+				message: 'Valor não encontrado'
+			})
+	})
+
 	it('should return updated user when update', async () => {
 		await request(app)
 			.post('/users/login')
