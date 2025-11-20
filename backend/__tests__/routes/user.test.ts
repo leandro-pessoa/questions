@@ -279,6 +279,26 @@ describe('User UPDATE', () => {
 			})
 	})
 
+	it('should return an error when e-mail already exists', async () => {
+		await createTestUser()
+
+		await request(app)
+			.post('/users/login')
+			.send({email, password})
+			.set('Content-Type', 'application/json')
+			.then(async res => {
+				await request(app)
+					.put('/users')
+					.send({email})
+					.set('Authorization', `Bearer ${res.body.token}`)
+					.set('Content-Type', 'application/json')
+					.expect(409, {
+						status: 409,
+						message: 'E-mail já cadastrado',
+					})
+			})
+	})
+
 	it('should return updated user when update', async () => {
 		await request(app)
 			.post('/users/login')
