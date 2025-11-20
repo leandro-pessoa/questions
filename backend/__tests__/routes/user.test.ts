@@ -201,6 +201,29 @@ describe('User POST', () => {
 			})
 	})
 
+	it('should return an error if e-mail or user is not submitted in login', async () => {
+		await request(app)
+			.post('/users/login')
+			.send({})
+			.expect(401, {
+				status: 401,
+				message: 'Credenciais inválidas'
+			})
+	})
+
+	it('should return an error if the user doesnt exists in login', async () => {
+		await request(app)
+			.post('/users/login')
+			.send({
+				email: 'batata@gmail.com',
+				password: '123@Bat'
+			})
+			.expect(401, {
+				status: 401,
+				message: 'Credenciais inválidas'
+			})
+	})
+
 	it('should create an user if submitted attibutes is valid', async () => {
 		await request(app)
 			.post('/users')
