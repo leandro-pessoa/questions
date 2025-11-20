@@ -270,6 +270,7 @@ describe('User UPDATE', () => {
 					.send({
 						completeName: 'Teste Update',
 						email: 'testeupdate@gmail.com',
+						password: '123@Tes'
 					})
 					.set('Authorization', `Bearer ${res.body.token}`)
 					.set('Content-Type', 'application/json')
