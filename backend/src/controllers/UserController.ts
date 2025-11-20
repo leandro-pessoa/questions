@@ -3,7 +3,6 @@ import Controller from './Controller'
 import type { IUser } from '@/types/IUser'
 import type { Request, Response, NextFunction } from 'express'
 import BadRequest from '@/errors/BadRequest'
-import NotFound from '@/errors/NotFound'
 
 const userService = new UserService()
 
@@ -82,9 +81,8 @@ export default class UserController extends Controller<IUser> {
 					const { _id, completeName, email } = newUser
 					res.status(200).json({ _id, completeName, email })
 				}
-			} else {
-				next(new NotFound('Usuário não encontrado'))
 			}
+
 		} catch (err) {
 			next(err)
 		}
@@ -100,9 +98,8 @@ export default class UserController extends Controller<IUser> {
 				await userService.deleteOne(id)
 				const { _id, completeName, email } = user
 				res.status(200).json({ _id, completeName, email })
-			} else {
-				next(new NotFound('Usuário não encontrado'))
 			}
+
 		} catch (err) {
 			next(err)
 		}
