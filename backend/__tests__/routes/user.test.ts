@@ -1,45 +1,20 @@
 import request from 'supertest'
 import app from '../../src/app'
-
-const testUserData = {
-	_id: '69169cea4b1e3b44ecffde92',
-	completeName: 'Teste',
-	email: 'teste@gmail.com',
-	password: '123@Tes',
-}
-
-const { _id, completeName, email, password } = testUserData
+import {
+	testUserData,
+	_id, completeName,
+	email,
+	password,
+	createTestUser,
+	deleteTestUser,
+	login
+} from '../testUtils/testUsers'
+import { getAdminToken } from '../testUtils/getAdminToken'
 
 let adminToken: string
 
-const createTestUser = async () => {
-	await request(app)
-		.post('/users')
-		.send(testUserData)
-		.set('Content-Type', 'application/json')
-}
-
-const deleteTestUser = async () => {
-	await request(app)
-		.delete(`/users/${_id}`)
-		.set('Authorization', `Bearer ${adminToken}`)
-}
-
-const login = async (email: string, password: string) => {
-	return await request(app)
-		.post('/users/login')
-		.send({email, password})
-		.set('Content-Type', 'application/json')
-}
-
 beforeAll(async () => {
-	await login(
-		process.env.ADMIN_EMAIL as string,
-		process.env.ADMIN_PASSWORD as string
-	)
-		.then((res) => {
-			adminToken = res.body.token
-		})
+	adminToken = await getAdminToken()
 })
 
 describe('User GET', () => {
@@ -48,7 +23,7 @@ describe('User GET', () => {
 	})
 
 	afterAll(async () => {
-		await deleteTestUser()
+		await deleteTestUser(adminToken)
 	})
 
 	it('should return an error if user does not exist', async () => {
@@ -96,7 +71,7 @@ describe('User GET', () => {
 
 describe('User POST', () => {
 	afterEach(async () => {
-		await deleteTestUser()
+		await deleteTestUser(adminToken)
 	})
 
 	it('should return an error when completeName, email and password is not submitted', async () => {
@@ -256,7 +231,7 @@ describe('User UPDATE', () => {
 	})
 
 	afterEach(async () => {
-		await deleteTestUser()
+		await deleteTestUser(adminToken)
 	})
 
 	it('should return an error if user dont exists', async () => {
