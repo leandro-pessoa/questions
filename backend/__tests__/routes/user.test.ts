@@ -18,11 +18,11 @@ beforeAll(async () => {
 })
 
 describe('User GET', () => {
-	beforeAll(async () => {
+	beforeEach(async () => {
 		await createTestUser()
 	})
 
-	afterAll(async () => {
+	afterEach(async () => {
 		await deleteTestUser(adminToken)
 	})
 

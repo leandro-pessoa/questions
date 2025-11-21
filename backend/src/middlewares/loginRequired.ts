@@ -14,14 +14,12 @@ export const loginRequired = async (
 
 	try {
 		if (!authorization) {
-			console.log('authorization')
 			next(new BadRequest('Login necessário', 401))
 			return
 		}
 
 		const [, token] = authorization.split(' ')
 		if (!token) {
-			console.log('token')
 			next(new BadRequest('Login necessário', 401))
 			return
 		}
