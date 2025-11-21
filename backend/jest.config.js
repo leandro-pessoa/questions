@@ -13,4 +13,5 @@ export default {
 		'@/(.*)': '<rootDir>/src/$1',
 	},
 	setupFiles: ['<rootDir>/.jest/setEnvVariables.js'],
+	modulePathIgnorePatterns: ['testUtils']
 }
