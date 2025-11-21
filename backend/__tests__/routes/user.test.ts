@@ -25,13 +25,18 @@ const deleteTestUser = async () => {
 		.set('Authorization', `Bearer ${adminToken}`)
 }
 
-beforeAll(async () => {
-	await request(app)
+const login = async (email: string, password: string) => {
+	return await request(app)
 		.post('/users/login')
-		.send({
-			email: process.env.ADMIN_EMAIL,
-			password: process.env.ADMIN_PASSWORD,
-		})
+		.send({email, password})
+		.set('Content-Type', 'application/json')
+}
+
+beforeAll(async () => {
+	await login(
+		process.env.ADMIN_EMAIL as string,
+		process.env.ADMIN_PASSWORD as string
+	)
 		.then((res) => {
 			adminToken = res.body.token
 		})
@@ -92,36 +97,6 @@ describe('User GET', () => {
 describe('User POST', () => {
 	afterEach(async () => {
 		await deleteTestUser()
-	})
-
-	it('should return an error when completeName, email and password is not submitted', async () => {
-		await request(app)
-			.post('/users')
-			.send({})
-			.set('Content-Type', 'application/json')
-			.expect(400, {
-				status: 400,
-				message: [
-					'password: Senha obrigatória',
-					'email: E-mail obrigatório',
-					'completeName: Nome completo obrigatório',
-				],
-			})
-	})
-
-	it('should return an error when completeName, email and password is not submitted', async () => {
-		await request(app)
-			.post('/users')
-			.send({})
-			.set('Content-Type', 'application/json')
-			.expect(400, {
-				status: 400,
-				message: [
-					'password: Senha obrigatória',
-					'email: E-mail obrigatório',
-					'completeName: Nome completo obrigatório',
-				],
-			})
 	})
 
 	it('should return an error when completeName, email and password is not submitted', async () => {
@@ -299,10 +274,7 @@ describe('User UPDATE', () => {
 	it('should return an error when e-mail already exists', async () => {
 		await createTestUser()
 
-		await request(app)
-			.post('/users/login')
-			.send({email, password})
-			.set('Content-Type', 'application/json')
+		await login(email, password)
 			.then(async res => {
 				await request(app)
 					.put('/users')
@@ -317,13 +289,7 @@ describe('User UPDATE', () => {
 	})
 
 	it('should return updated user when update', async () => {
-		await request(app)
-			.post('/users/login')
-			.send({
-				email,
-				password,
-			})
-			.set('Content-Type', 'application/json')
+		await login(email, password)
 			.then(async (res) => {
 				await request(app)
 					.put('/users')
@@ -347,13 +313,7 @@ describe('User DELETE', () => {
 	it('should return deleted user when delete by id', async () => {
 		await createTestUser()
 
-		await request(app)
-			.post('/users/login')
-			.send({
-				email,
-				password,
-			})
-			.set('Content-Type', 'application/json')
+		await login(email, password)
 			.then(async res => {
 				await request(app)
 					.delete(`/users`)
