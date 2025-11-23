@@ -38,16 +38,24 @@ const questionSchema = new Schema<IQuestion>({
 	},
 	wrongAlternatives: {
 		type: [String],
-		validate: {
-			validator: (value: string[]) => {return !(value.length > 4 || value.length < 1)},
-			message: 'Quantidade de alternativas inválida (min: 1, max: 4) foi:'
-		},
-		minLength: [1, 'Cada alternativa deve ter no mínimo 1 caractere'],
-		maxLength: [100, 'Cada alternativa deve ter no máximo 100 caracteres'],
+		validate: [
+			{
+				validator: (value: string[]) => {return !(value.length > 4 || value.length < 1)},
+				message: 'Quantidade de alternativas inválida (min: 1, max: 4)'
+			},
+			{
+				validator: (value: string[]) => {return value.every(alternative => alternative.length >= 1)},
+				message: 'Cada alternativa deve ter no mínimo 1 caractere'
+			},
+			{
+				validator: (value: string[]) => {return value.every(alternative => alternative.length <= 100)},
+				message: 'Cada alternativa deve ter no máximo 100 caracteres'
+			},
+		],
 	},
 	rightAlternative: {
 		type: String,
-		require: [true, 'Alternativa correta obrigatória'],
+		required: [true, 'Alternativa correta obrigatória'],
 		minLength: [1, 'A alternativa deve ter no mínimo 1 caractere'],
 		maxLength: [100, 'A alternativa deve ter no máximo 100 caracteres'],
 	}
