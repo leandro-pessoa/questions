@@ -1,4 +1,5 @@
 export interface IQuestion {
+	_id: string
 	subject: string
 	statement: string
 	year?: number
