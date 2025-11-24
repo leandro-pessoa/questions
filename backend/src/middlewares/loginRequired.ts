@@ -1,4 +1,3 @@
-import User from '@/db/models/User'
 import BadRequest from '@/errors/BadRequest'
 import BaseError from '@/errors/BaseError'
 import type { IUser } from '@/types/IUser'
@@ -30,9 +29,7 @@ export const loginRequired = async (
 			return
 		}
 
-		const data = jwt.verify(token, process.env.TOKEN_SECRET)
-
-		const user = await User.findOne({ _id: (data as { _id: string })._id })
+		const user = jwt.verify(token, process.env.TOKEN_SECRET)
 
 		const { _id, completeName, email, role } = user as IUser
 
