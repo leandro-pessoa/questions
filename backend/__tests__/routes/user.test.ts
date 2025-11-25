@@ -6,7 +6,8 @@ import {
 	email,
 	password,
 	login,
-	deleteTestUser
+	deleteTestUser,
+	createTestUser
 } from '../testUtils/testUsers'
 import { getAdminToken } from '../testUtils/getAdminToken'
 
@@ -270,6 +271,20 @@ describe('User DELETE', () => {
 						expect(res.body.completeName).toEqual(completeName + ' Update')
 						expect(res.body.email).toEqual('testeupdate@gmail.com')
 					})
+			})
+	})
+
+	it('should return deleted user when delete by id', async () => {
+		await createTestUser()
+
+		await request(app)
+			.delete(`/users/${_id}`)
+			.set('Authorization', `Bearer ${adminToken}`)
+			.expect(200)
+			.then((res) => {
+				expect(res.body._id).toEqual(_id)
+				expect(res.body.completeName).toEqual(completeName)
+				expect(res.body.email).toEqual(email)
 			})
 	})
 })
