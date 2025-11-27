@@ -14,6 +14,11 @@ export default class UserController extends Controller<IUser> {
 	async userStore(req: Request, res: Response, next: NextFunction) {
 		const { email } = req.body
 
+		if(req.body.role === 'admin') {
+			next(new BadRequest())
+			return
+		}
+
 		try {
 			const emailExists = await userService.getOneByEmail(email)
 
@@ -64,6 +69,11 @@ export default class UserController extends Controller<IUser> {
 	async userUpdate(req: Request, res: Response, next: NextFunction) {
 		const id = req._id
 		const { email } = req.body
+
+		if(req.body.role === 'admin') {
+			next(new BadRequest())
+			return
+		}
 
 		try {
 			const user = await userService.getById(id)
