@@ -10,7 +10,7 @@ export default class CRUDServices<T> {
 
 	// obtém um valor do documento
 	async getById(id: string): Promise<T | null> {
-		return this.model.findById(id) || []
+		return this.model.findById(id)
 	}
 
 	// adiciona um valor no documento
