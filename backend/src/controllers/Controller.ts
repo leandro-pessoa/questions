@@ -7,8 +7,8 @@ export default class Controller<T> {
 
 	async index(req: Request, res: Response, next: NextFunction) {
 		try {
-			const values = await this.serviceEntity.getAll()
-			return res.status(200).json(values)
+			req.result = this.serviceEntity.model
+			next()
 		} catch (err) {
 			next(err)
 		}

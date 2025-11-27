@@ -2,13 +2,14 @@ import { Router } from 'express'
 import QuestionController from '@/controllers/QuestionController'
 import { adminRequired } from '@/middlewares/adminRequired'
 import { loginRequired } from '@/middlewares/loginRequired'
+import { pagination } from '@/middlewares/pagination'
 
 const router = Router()
 
 const questionController = new QuestionController()
 
 // GET
-router.get('/questions', (req, res, next) => questionController.index(req, res, next))
+router.get('/questions', (req, res, next) => questionController.index(req, res, next), pagination)
 router.get('/questions/:id', (req, res, next) => questionController.show(req, res, next))
 
 // POST

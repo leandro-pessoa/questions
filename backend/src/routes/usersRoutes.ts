@@ -1,6 +1,7 @@
 import UserController from '@/controllers/UserController'
 import { adminRequired } from '@/middlewares/adminRequired'
 import { loginRequired } from '@/middlewares/loginRequired'
+import { pagination } from '@/middlewares/pagination'
 import { Router } from 'express'
 
 const router = Router()
@@ -8,7 +9,7 @@ const router = Router()
 const userController = new UserController()
 
 // GET
-router.get('/users', loginRequired, adminRequired, (req, res, next) => userController.index(req, res, next))
+router.get('/users', loginRequired, adminRequired, (req, res, next) => userController.index(req, res, next), pagination)
 router.get('/users/:id', loginRequired, adminRequired, (req, res, next) => userController.show(req, res, next))
 
 // POST
