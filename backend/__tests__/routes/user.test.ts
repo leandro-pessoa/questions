@@ -106,6 +106,21 @@ describe('User POST', () => {
 			})
 	})
 
+	it('should return an error if the user try to add role admin on post body', async () => {
+		await request(app)
+			.post('/users')
+			.send({
+				email,
+				password,
+				role: 'admin'
+			})
+			.set('Content-Type', 'application/json')
+			.expect(400, {
+				status: 400,
+				message: 'Requisição inválida'
+			})
+	})
+
 	it('should create an user if submitted attibutes is valid', async () => {
 		await deleteTestUser(adminToken)
 
@@ -233,6 +248,25 @@ describe('User UPDATE', () => {
 					.expect(409, {
 						status: 409,
 						message: 'E-mail já cadastrado',
+					})
+			})
+	})
+
+	it('should return an error if the user try to add role admin on update body', async () => {
+		await login(email, password)
+			.then(async res => {
+				await request(app)
+					.put('/users')
+					.send({
+						email,
+						password,
+						role: 'admin'
+					})
+					.set('Authorization', `Bearer ${res.body.token}`)
+					.set('Content-Type', 'application/json')
+					.expect(400, {
+						status: 400,
+						message: 'Requisição inválida'
 					})
 			})
 	})
