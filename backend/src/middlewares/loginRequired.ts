@@ -3,6 +3,9 @@ import BaseError from '@/errors/BaseError'
 import type { IUser } from '@/types/IUser'
 import type { Request, Response, NextFunction } from 'express'
 import jwt from 'jsonwebtoken'
+import UserService from '@/services/UserService'
+
+const userService = new UserService()
 
 export const loginRequired = async (
 	req: Request,
@@ -32,6 +35,10 @@ export const loginRequired = async (
 		const user = jwt.verify(token, process.env.TOKEN_SECRET)
 
 		const { _id, completeName, email, role } = user as IUser
+
+		const userExists = await userService.getById(_id)
+
+		if (!userExists) throw new Error()
 
 		req._id = _id
 		req.completeName = completeName
