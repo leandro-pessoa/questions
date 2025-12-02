@@ -1,10 +1,13 @@
-import { UserService } from '@/services/UserService'
+import UserService from '@/services/UserService'
+import QuestionService from '@/services/QuestionService'
 import Controller from './Controller'
 import type { IUser } from '@/types/IUser'
 import type { Request, Response, NextFunction } from 'express'
 import BadRequest from '@/errors/BadRequest'
+import NotFound from '@/errors/NotFound'
 
 const userService = new UserService()
+const questionService = new QuestionService()
 
 export default class UserController extends Controller<IUser> {
 	constructor() {
@@ -94,6 +97,26 @@ export default class UserController extends Controller<IUser> {
 			}
 
 		} catch (err) {
+			next(err)
+		}
+	}
+
+	async addAnsweredQuestion(req: Request, res: Response, next: NextFunction) {
+		const id = req._id
+		const { questionId, selectedOption } = req.body
+
+		try {
+			const question = await questionService.getById(questionId)
+
+			if(!question) {
+				next(new NotFound())
+				return
+			}
+
+			await userService.answerQuestion(id, questionId, selectedOption, question.rightAlternative)
+			const newUser = await userService.getById(id)
+			res.status(200).json(newUser)
+		} catch(err) {
 			next(err)
 		}
 	}
