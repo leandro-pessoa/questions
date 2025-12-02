@@ -27,9 +27,12 @@ const userSchema = new Schema<IUser>({
 			message: 'E-mail inválido',
 		},
 	},
-	answeredQuestions: {
-		type: [String],
-	},
+	answeredQuestions: [{
+		questionId: String,
+		selectedOption: String,
+		correctOption: String,
+		isCorrectAnswer: Boolean
+	}],
 	passwordHash: {
 		type: String,
 	},
