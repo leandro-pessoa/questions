@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken'
 import BaseError from '@/errors/BaseError'
 import BadRequest from '@/errors/BadRequest'
 
-export class UserService extends CRUDServices<IUser> {
+export default class UserService extends CRUDServices<IUser> {
 	constructor() {
 		super(User)
 	}
@@ -35,6 +35,39 @@ export class UserService extends CRUDServices<IUser> {
 			}
 		} else {
 			throw new BadRequest('Credenciais inválidas', 401)
+		}
+	}
+
+	async answerQuestion(
+		userId: string,
+		questionId: string,
+		selectedOption: string,
+		correctOption: string
+	) {
+		if (!userId && !questionId && !selectedOption) {
+			throw new BadRequest()
+		}
+
+		const user = await User.findById(userId)
+
+		const isAlreadyAnswered =
+			user?.answeredQuestions?.find(
+				(value) => value.questionId === questionId
+			)
+
+		if(!isAlreadyAnswered) {
+			await User.updateOne(
+				{ _id: userId },
+				{
+					$push: {
+						answeredQuestions: {
+							questionId,
+							selectedOption,
+							correctOption,
+							isCorrectAnswer: selectedOption === correctOption
+						}
+					}
+				})
 		}
 	}
 }
