@@ -44,7 +44,7 @@ export default class UserService extends CRUDServices<IUser> {
 		selectedOption: string,
 		correctOption: string
 	) {
-		if (!userId && !questionId && !selectedOption) {
+		if (!userId || !questionId || !selectedOption) {
 			throw new BadRequest()
 		}
 
