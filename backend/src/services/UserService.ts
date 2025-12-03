@@ -68,6 +68,21 @@ export default class UserService extends CRUDServices<IUser> {
 						}
 					}
 				})
-		}
+		} else {
+			await User.updateOne(
+				{ 'answeredQuestions.questionId': questionId },
+				{
+					$set: {
+						'answeredQuestions.$.questionId': questionId,
+						'answeredQuestions.$.selectedOption': selectedOption,
+						'answeredQuestions.$.correctOption': correctOption,
+						'answeredQuestions.$.isCorrectAnswer': selectedOption === correctOption
+					}
+				},
+				{
+					arrayFilters: [{'answeredQuestion.questionId': questionId}]
+				}
+			)
+		 }
 	}
 }
