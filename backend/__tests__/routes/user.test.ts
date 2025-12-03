@@ -10,6 +10,7 @@ import {
 	createTestUser
 } from '../testUtils/testUsers'
 import { getAdminToken } from '../testUtils/getAdminToken'
+import type { IAnsweredQuestion } from '../../src/types/IAnsweredQuestion'
 
 let adminToken: string
 
@@ -129,7 +130,7 @@ describe('User POST', () => {
 			.send(testUserData)
 			.set('Content-Type', 'application/json')
 			.expect(201)
-			.then((res) => {
+			.then(res => {
 				expect(res.body.role).toEqual('default')
 				expect(res.body.completeName).toEqual('Teste')
 				expect(res.body.email).toEqual('teste@gmail.com')
@@ -171,7 +172,7 @@ describe('User POST', () => {
 			})
 			.set('Content-Type', 'application/json')
 			.expect(200)
-			.then((res) => {
+			.then(res => {
 				expect(res.body.token).toHaveLength(260)
 				expect(res.body.user.id).toBeDefined()
 				expect(res.body.user.email).toBeDefined()
@@ -271,9 +272,80 @@ describe('User UPDATE', () => {
 			})
 	})
 
+	it('should return notfound error if questionId param is not sent to the answerQuestion method', async () => {
+		await login(email, password)
+			.then(async res => {
+				await request(app)
+					.put('/users/answerQuestion')
+					.send({})
+					.set('Authorization', `Bearer ${res.body.token}`)
+					.set('Content-Type', 'application/json')
+					.expect(404, {
+						status: 404,
+						message: 'Valor não encontrado'
+					})
+			})
+	})
+	it('should return badrequest error if other params is not sent to the answerQuestion method', async () => {
+		await login(email, password)
+			.then(async res => {
+				await request(app)
+					.put('/users/answerQuestion')
+					.send({
+						questionId: '68fcc7310f020b7ccf14cdd7'
+					})
+					.set('Authorization', `Bearer ${res.body.token}`)
+					.set('Content-Type', 'application/json')
+					.expect(400, {
+						status: 400,
+						message: 'Requisição inválida'
+					})
+			})
+	})
+
+	it('should return the user with correct answered question', async () => {
+		await login(email, password)
+			.then(async res => {
+				await request(app)
+					.put('/users/answerQuestion')
+					.send({
+						questionId: '68fcc7310f020b7ccf14cdd7',
+    					selectedOption: 'Eu'
+					})
+					.set('Authorization', `Bearer ${res.body.token}`)
+					.set('Content-Type', 'application/json')
+					.then((res: {body: {answeredQuestions: IAnsweredQuestion[]}}) => {
+						expect(res.body.answeredQuestions[0].questionId).toBe('68fcc7310f020b7ccf14cdd7')
+						expect(res.body.answeredQuestions[0].selectedOption).toBe('Eu')
+						expect(res.body.answeredQuestions[0].correctOption).toBe('Eu')
+						expect(res.body.answeredQuestions[0].isCorrectAnswer).toBeTruthy()
+					})
+			})
+	})
+
+	it('should return the user with incorrect answered question', async () => {
+		await login(email, password)
+			.then(async res => {
+				await request(app)
+					.put('/users/answerQuestion')
+					.send({
+						questionId: '68fcc7310f020b7ccf14cdd7',
+    					selectedOption: 'No'
+					})
+					.set('Authorization', `Bearer ${res.body.token}`)
+					.set('Content-Type', 'application/json')
+					.then((res: {body: {answeredQuestions: IAnsweredQuestion[]}}) => {
+						expect(res.body.answeredQuestions[0].questionId).toBe('68fcc7310f020b7ccf14cdd7')
+						expect(res.body.answeredQuestions[0].selectedOption).toBe('No')
+						expect(res.body.answeredQuestions[0].correctOption).toBe('Eu')
+						expect(res.body.answeredQuestions[0].isCorrectAnswer).toBeFalsy()
+					})
+			})
+	})
+
 	it('should return updated user when update', async () => {
 		await login(email, password)
-			.then(async (res) => {
+			.then(async res => {
 				await request(app)
 					.put('/users')
 					.send({
@@ -284,7 +356,7 @@ describe('User UPDATE', () => {
 					.set('Authorization', `Bearer ${res.body.token}`)
 					.set('Content-Type', 'application/json')
 					.expect(200)
-					.then((res) => {
+					.then(res => {
 						expect(res.body.completeName).toEqual('Teste Update')
 						expect(res.body.email).toEqual('testeupdate@gmail.com')
 					})
@@ -300,7 +372,7 @@ describe('User DELETE', () => {
 					.delete(`/users`)
 					.set('Authorization', `Bearer ${res.body.token}`)
 					.expect(200)
-					.then((res) => {
+					.then(res => {
 						expect(res.body._id).toEqual(_id)
 						expect(res.body.completeName).toEqual(completeName + ' Update')
 						expect(res.body.email).toEqual('testeupdate@gmail.com')
@@ -315,7 +387,7 @@ describe('User DELETE', () => {
 			.delete(`/users/${_id}`)
 			.set('Authorization', `Bearer ${adminToken}`)
 			.expect(200)
-			.then((res) => {
+			.then(res => {
 				expect(res.body._id).toEqual(_id)
 				expect(res.body.completeName).toEqual(completeName)
 				expect(res.body.email).toEqual(email)
