@@ -42,9 +42,17 @@ export default class UserService extends CRUDServices<IUser> {
 		userId: string,
 		questionId: string,
 		selectedOption: string,
-		correctOption: string
+		correctOption: string,
+		wrongAlternatives: string[]
 	) {
-		if (!userId || !questionId || !selectedOption) {
+		const allAlternatives = [...wrongAlternatives, correctOption]
+
+		if (
+			!userId ||
+			!questionId ||
+			!selectedOption ||
+			!allAlternatives.includes(selectedOption)
+		) {
 			throw new BadRequest()
 		}
 
