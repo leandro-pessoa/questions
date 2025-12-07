@@ -3,7 +3,7 @@ export const vars = {
 		primaryFont: '"Roboto", sans-serif'
 	},
 
-	colours: {
+	colors: {
 		white: '#fff',
 		black: '#0A0E14',
 		darkGray: '#48536B',
