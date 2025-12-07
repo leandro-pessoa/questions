@@ -1,8 +1,12 @@
 import AppRoutes from './routes'
+import { GlobalStyles } from './components/GlobalStyles'
 
 const App = () => {
 	return (
-		<AppRoutes />
+		<>
+			<GlobalStyles />
+			<AppRoutes />
+		</>
 	)
 }
 
