@@ -1,13 +1,8 @@
 import 'styled-components'
+import { lightTheme } from '@/styles/themeVars'
 
 declare module 'styled-components' {
 	export interface DefaultTheme {
-		colors: {
-			primaryBackgroundColor: string,
-			secondaryBackgroundColor: string,
-			tertiaryBackgroundColor: string,
-			primaryFontColor: string,
-			secondaryFontColor: string
-		}
+		colors: ReturnType<typeof lightTheme>
 	}
 }
