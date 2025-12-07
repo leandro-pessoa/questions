@@ -1,4 +1,5 @@
 import { createGlobalStyle } from 'styled-components'
+import { vars } from '@/styles/vars'
 
 export const GlobalStyles = createGlobalStyle`
 	html, body, div, span, applet, object, iframe,
@@ -28,6 +29,9 @@ export const GlobalStyles = createGlobalStyle`
 	}
 	body {
 		line-height: 1;
+		font-family: ${vars.fonts.primaryFont};
+		background-color: ${(props) => props.theme.colors.primaryBackgroundColor};
+		color: ${(props) => props.theme.colors.primaryFontColor}
 	}
 	ol, ul {
 		list-style: none;
