@@ -6,7 +6,8 @@ export const lightTheme = {
 		secondaryBackgroundColor: vars.colors.white,
 		tertiaryBackgroundColor: vars.colors.gray,
 		primaryFontColor: vars.colors.black,
-		secondaryFontColor: vars.colors.darkGray
+		secondaryFontColor: vars.colors.darkGray,
+		primaryBorderColor: vars.colors.gray
 	}
 }
 
@@ -16,6 +17,7 @@ export const darkTheme = {
 		secondaryBackgroundColor: vars.colors.black,
 		tertiaryBackgroundColor: vars.colors.darkGray,
 		primaryFontColor: vars.colors.white,
-		secondaryFontColor: vars.colors.lightGray
+		secondaryFontColor: vars.colors.lightGray,
+		primaryBorderColor: vars.colors.mediumGray
 	}
 }
