@@ -21,5 +21,9 @@ export const vars = {
 		tablet: '869px',
 		smartphone: '669px',
 		smallSmartphone: '429px',
+	},
+
+	border: {
+		radius: '6px'
 	}
 }
