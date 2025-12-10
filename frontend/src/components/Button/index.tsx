@@ -1,14 +1,15 @@
 import { StyledButton } from './styles'
 
 interface IButtonProps {
-	children: React.ReactNode | string | [React.ReactNode | string][]
+	children?: React.ReactNode | string | [React.ReactNode | string][]
 	icon?: React.ReactNode
+	onClick: () => void
 }
 
-const Button = ({ children, icon }: IButtonProps) => {
+const Button = ({ children, icon, onClick }: IButtonProps) => {
 	return (
 		<>
-			<StyledButton>
+			<StyledButton onClick={onClick}>
 				{icon}
 				{children}
 			</StyledButton>
