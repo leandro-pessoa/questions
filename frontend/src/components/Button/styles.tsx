@@ -11,8 +11,7 @@ export const StyledButton = styled.button<IStyledButtonProps>`
 	gap: 6px;
 	background-color: ${(props) => props.backgroundColor || vars.colors.blue};
 	color: ${(props) => props.theme.colors.primaryFontColor};
-	font-size: 1rem;
-	border-radius: 6px;
+	border-radius: ${vars.border.radius};
 	padding: 8px 12px;
 	border: none;
 

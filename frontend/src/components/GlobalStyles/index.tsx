@@ -31,7 +31,7 @@ export const GlobalStyles = createGlobalStyle`
 		line-height: 1;
 		font-family: ${vars.fonts.primaryFont};
 		background-color: ${(props) => props.theme.colors.primaryBackgroundColor};
-		color: ${(props) => props.theme.colors.primaryFontColor}
+		color: ${(props) => props.theme.colors.primaryFontColor};
 	}
 	ol, ul {
 		list-style: none;
@@ -47,5 +47,54 @@ export const GlobalStyles = createGlobalStyle`
 	table {
 		border-collapse: collapse;
 		border-spacing: 0;
+	}
+
+	body, input, button {
+		font-size: .9rem;
+	}
+
+	svg.lucide {
+		width: 20px;
+		height: 20px;
+	}
+
+	@media screen and (min-width: ${vars.breakpoints.smartphone}) {
+		body, input, button {
+			font-size: 1rem;
+		}
+
+		svg.lucide {
+			width: 22px;
+			height: 22px;
+		}
+	}
+
+	@media screen and (min-width: ${vars.breakpoints.tablet}) {
+		body, input, button {
+			font-size: 1.1rem;
+		}
+
+		svg.lucide {
+			width: 24px;
+			height: 24px;
+		}
+	}
+
+	@media screen and (min-width: ${vars.breakpoints.notebook}) {
+		body, input, button {
+			font-size: 1.2rem;
+		}
+
+		svg.lucide {
+			width: 25px;
+			height: 25px;
+		}
+	}
+	
+	@media screen and (min-width: ${vars.breakpoints.desktop}) {
+		svg.lucide {
+			width: 26px;
+			height: 26px;
+		}
 	}
 `

@@ -5,8 +5,7 @@ const Input = styled.input`
 	background-color: ${(props) => props.theme.colors.secondaryBackgroundColor};
 	border: 1px solid ${(props) => props.theme.colors.primaryBorderColor};
 	color: ${(props) => props.theme.colors.primaryFontColor};
-	border-radius: 6px;
-	font-size: 1rem;
+	border-radius: ${vars.border.radius};
 	padding: 6px 14px;
 	transition: ease .1s;
 
