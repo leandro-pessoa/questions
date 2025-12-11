@@ -11,6 +11,7 @@ export const vars = {
 		gray: '#ccc',
 		lightGray: '#F7FBFF',
 		darkBlue: '#0C1018',
+		mediumBlue: '#051426',
 		blue: '#027AF2',
 		red: '#ec4a4a'
 	},
@@ -24,6 +25,6 @@ export const vars = {
 	},
 
 	border: {
-		radius: '6px'
+		radius: '10px'
 	}
 }
