@@ -30,8 +30,15 @@ export const GlobalStyles = createGlobalStyle`
 	body {
 		line-height: 1;
 		font-family: ${vars.fonts.primaryFont};
-		background-color: ${(props) => props.theme.colors.primaryBackgroundColor};
+		/* background-color: ${(props) => props.theme.colors.primaryBackgroundColor}; */
+		background: radial-gradient(
+				${(props) => props.theme.colors.tertiaryBackgroundColor},
+				${(props) => props.theme.colors.primaryBackgroundColor},
+				${(props) => props.theme.colors.secondaryBackgroundColor}
+			);
 		color: ${(props) => props.theme.colors.primaryFontColor};
+		height: 100vh;
+		width: 100vw;
 	}
 	ol, ul {
 		list-style: none;
@@ -90,7 +97,7 @@ export const GlobalStyles = createGlobalStyle`
 			height: 25px;
 		}
 	}
-	
+
 	@media screen and (min-width: ${vars.breakpoints.desktop}) {
 		svg.lucide {
 			width: 26px;
