@@ -1,16 +1,18 @@
+import type { CSSProperties } from 'react'
 import { StyledButton } from './styles'
 
 interface IButtonProps {
 	children?: React.ReactNode | string | [React.ReactNode | string][]
 	icon?: React.ReactNode
 	onClick: () => void
-	styles?: string
+	style?: CSSProperties
+	backgroundColor?: string
 }
 
-const Button = ({ children, icon, onClick, styles }: IButtonProps) => {
+const Button = ({ children, icon, onClick, style, backgroundColor }: IButtonProps) => {
 	return (
 		<>
-			<StyledButton onClick={onClick} styles={styles}>
+			<StyledButton onClick={onClick} style={{...style}} backgroundColor={backgroundColor}>
 				{icon}
 				{children}
 			</StyledButton>
