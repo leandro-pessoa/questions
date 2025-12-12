@@ -17,7 +17,7 @@ export const darkTheme = {
 		secondaryBackgroundColor: vars.colors.black,
 		tertiaryBackgroundColor: vars.colors.mediumBlue,
 		primaryFontColor: vars.colors.white,
-		secondaryFontColor: vars.colors.lightGray,
+		secondaryFontColor: vars.colors.gray,
 		primaryBorderColor: vars.colors.darkGray
 	}
 }
