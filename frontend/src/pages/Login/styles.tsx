@@ -11,7 +11,6 @@ export const LoginContainer = styled.main`
 	padding: 16px;
 	border: 1px solid ${(props) => props.theme.colors.primaryBorderColor};
 	border-radius: ${vars.border.radius};
-	height: 70%;
 	width: calc(80% - ${xPadding * 2}px);
 
 	@media screen and (min-width: ${vars.breakpoints.smallSmartphone}) {
