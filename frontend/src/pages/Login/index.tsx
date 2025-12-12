@@ -6,10 +6,14 @@ import { LogIn } from 'lucide-react'
 import Form from '@/components/Form'
 import { LoginContainer } from './styles'
 import InputContainer from '@/components/Input/InputContainer'
+import { StyledLink } from '@/components/Link'
+import { Small } from '@/components/Small'
+import ThemeButton from '@/components/Button/ThemeButton'
 
 const Login = () => {
 	return (
 		<CenterContainer>
+			<ThemeButton fixed={true}/>
 			<LoginContainer>
 				<Title>Entrar</Title>
 				<Form>
@@ -21,7 +25,10 @@ const Login = () => {
 						<label htmlFor="password">Senha</label>
 						<FormInput id='password' name='password' type='password'/>
 					</InputContainer>
-					<Button onClick={() => {}} styles='margin-top: 16px;'>
+					<Small style={{textAlign: 'center', marginTop: '8px'}}>
+						Esqueceu sua senha? <StyledLink to='/' decoration={true}>Altere aqui</StyledLink>
+					</Small>
+					<Button onClick={() => {}} style={{marginTop: '16px'}}>
 						<LogIn />
 						Entrar
 					</Button>
