@@ -13,10 +13,10 @@ const Input = styled.input<IInputProps>`
 	color: ${(props) => props.theme.colors.primaryFontColor};
 	border-radius: ${vars.border.radius};
 	padding: 6px ${xPadding}px;
-	transition: ease .1s;
 	width: calc(100% - ${xPadding * 2}px);
 
 	&:hover {
+		transition: ease .1s;
 		border-color: ${vars.colors.mediumGray};
 	}
 
