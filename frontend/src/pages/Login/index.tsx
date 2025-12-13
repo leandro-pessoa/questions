@@ -9,6 +9,11 @@ import InputContainer from '@/components/Input/InputContainer'
 import { StyledLink } from '@/components/Link'
 import { Small } from '@/components/Small'
 import ThemeButton from '@/components/Button/ThemeButton'
+import type { FieldValues } from 'react-hook-form'
+
+const submitHandle = (data: FieldValues) => {
+	console.log(data)
+}
 
 const Login = () => {
 	return (
@@ -16,19 +21,19 @@ const Login = () => {
 			<ThemeButton fixed={true}/>
 			<LoginContainer>
 				<Title>Entrar</Title>
-				<Form>
+				<Form onSubmit={submitHandle}>
 					<InputContainer>
 						<label htmlFor="email">E-mail</label>
-						<FormInput id='email' name='email' email={true}/>
+						<FormInput id='email' name='E-mail' email={true} required/>
 					</InputContainer>
 					<InputContainer>
 						<label htmlFor="password">Senha</label>
-						<FormInput id='password' name='password' type='password'/>
+						<FormInput id='password' name='Senha' type='password' patternsOption={false} required/>
 					</InputContainer>
 					<Small style={{textAlign: 'center', marginTop: '8px'}}>
 						Esqueceu sua senha? <StyledLink to='/' decoration={true}>Altere aqui</StyledLink>
 					</Small>
-					<Button onClick={() => {}} style={{marginTop: '16px'}}>
+					<Button onClick={() => {}} style={{marginTop: '16px'}} type='submit'>
 						<LogIn />
 						Entrar
 					</Button>
