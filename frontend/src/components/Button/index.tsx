@@ -7,12 +7,18 @@ interface IButtonProps {
 	onClick: () => void
 	style?: CSSProperties
 	backgroundColor?: string
+	type?: 'button' | 'reset' | 'submit'
 }
 
-const Button = ({ children, icon, onClick, style, backgroundColor }: IButtonProps) => {
+const Button = ({ children, icon, onClick, style, backgroundColor, type = 'button' }: IButtonProps) => {
 	return (
 		<>
-			<StyledButton onClick={onClick} style={{...style}} backgroundColor={backgroundColor}>
+			<StyledButton
+				onClick={onClick}
+				style={{...style}}
+				backgroundColor={backgroundColor}
+				type={type}
+			>
 				{icon}
 				{children}
 			</StyledButton>
