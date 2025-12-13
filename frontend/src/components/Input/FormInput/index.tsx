@@ -1,7 +1,8 @@
 import { useFormContext } from 'react-hook-form'
 import Input from '..'
 import { Small } from '@/components/Small'
-import type { HTMLInputTypeAttribute } from 'react'
+import { useState, type HTMLInputTypeAttribute } from 'react'
+import InspectPassword from '@/components/Button/InspectPassword'
 
 interface InputProps {
     id: string
@@ -38,6 +39,8 @@ const FormInput = ({
     max = 0,
     hidden = false,
 }: InputProps) => {
+	// state para definir a visibilidade da senha
+	const [passwordVisibility, setPasswordVisibility] = useState(false)
 
     // métodos e atributos do react-hook-form
     const {
@@ -91,60 +94,83 @@ const FormInput = ({
 
     return (
         <>
-            <Input
-                type={type}
-                placeholder={placeholder}
-                id={id}
-                maxLength={maxLength}
-                autoComplete='on'
-                $error={!(errors[id]?.message === undefined)}
-                step={step}
-                hidden={hidden}
-                {...register(id, {
-                    // validações do react-hook-form
-                    required: {
-                        value: required,
-                        message: `O campo ${name} é obrigatório`,
-                    },
-                    pattern: patterns(email),
+			<div style={{ position: 'relative', width: '100%' }}>
+				<Input
+					type={
+						type === 'password' ?
+							passwordVisibility ?
+								'text'
+							:
+								'password'
+						:
+						type
+					}
+					placeholder={placeholder}
+					id={id}
+					maxLength={maxLength}
+					autoComplete='on'
+					$error={!(errors[id]?.message === undefined)}
+					step={step}
+					hidden={hidden}
+					style={
+						// muda o estilo caso o input seja password
+						type === 'password' ?
+							{width: '100%', paddingRight: '17%', boxSizing: 'border-box'}
+						:
+							{}
+					}
+					{...register(id, {
+						// validações do react-hook-form
+						required: {
+							value: required,
+							message: `O campo ${name} é obrigatório`,
+						},
+						pattern: patterns(email),
+						// verifica se o tipo do input é date
+						// caso seja, fará a validação, de acorodo com a data mínima
+						// caso não seja, não fará nada
+						min:
+							type === 'date'
+								? {
+										value: minDate,
+										message: 'Essa data é anterior à mínima',
+									}
+								: undefined,
+						// verifica se o tipo do input é date ou number
+						// caso seja date, fará a validação, de acorodo com a data máxima
+						// caso seja number, irá verificar o valor máximo definido na prop
+						// caso não, não fará nada
+						max:
+							type === 'date'
+								? {
+										value: maxDate,
+										message: 'Data posterior ao dia atual',
+									}
+								: type === 'number'
+								? {
+										value: max,
+										message: `Valor máximo: ${max}`,
+									}
+								: undefined,
+						// verifica a quantidade mínima de caracteres
+						minLength: {
+							value: minLength,
+							message: `Mínimo de ${minLength} caracteres`,
+						},
+						validate: validateEqualPassword,
+						value,
+					})}
+				/>
+				{/* button para mudar a visibilidade da senha */}
+				{
+					type === 'password' &&
+						<InspectPassword
+							actived={passwordVisibility}
+							toggleActived={() => setPasswordVisibility(!passwordVisibility)}
+						/>
+				}
+			</div>
 
-                    // verifica se o tipo do input é date
-                    // caso seja, fará a validação, de acorodo com a data mínima
-                    // caso não seja, não fará nada
-                    min:
-                        type === 'date'
-                            ? {
-                                  value: minDate,
-                                  message: 'Essa data é anterior à mínima',
-                              }
-                            : undefined,
-
-                    // verifica se o tipo do input é date ou number
-                    // caso seja date, fará a validação, de acorodo com a data máxima
-                    // caso seja number, irá verificar o valor máximo definido na prop
-                    // caso não, não fará nada
-                    max:
-                        type === 'date'
-                            ? {
-                                  value: maxDate,
-                                  message: 'Data posterior ao dia atual',
-                              }
-                            : type === 'number'
-                            ? {
-                                  value: max,
-                                  message: `Valor máximo: ${max}`,
-                              }
-                            : undefined,
-
-                    // verifica a quantidade mínima de caracteres
-                    minLength: {
-                        value: minLength,
-                        message: `Mínimo de ${minLength} caracteres`,
-                    },
-                    validate: validateEqualPassword,
-                    value,
-                })}
-            />
             {/* container onde as mensagens de erro serão exibidas, de acordo com a prioridade (de cima para baixo) */}
             <div>
                 {errors[id] &&
