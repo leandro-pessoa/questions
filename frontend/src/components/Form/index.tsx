@@ -1,8 +1,9 @@
 import styled from 'styled-components'
-import { FormProvider, useForm } from 'react-hook-form'
+import { FormProvider, useForm, type FieldValues } from 'react-hook-form'
 
 interface IFormProps {
 	children: React.ReactNode | string | [React.ReactNode | string][]
+	onSubmit: (data: FieldValues) => void
 }
 
 const StyledForm = styled.form`
@@ -10,12 +11,12 @@ const StyledForm = styled.form`
 	flex-direction: column;
 `
 
-const Form = ({ children }: IFormProps) => {
+const Form = ({ children, onSubmit }: IFormProps) => {
 	const methods = useForm()
 
 	return (
 		<FormProvider {...methods}>
-			<StyledForm>
+			<StyledForm onSubmit={methods.handleSubmit(onSubmit)}>
 				{children}
 			</StyledForm>
 		</FormProvider>
