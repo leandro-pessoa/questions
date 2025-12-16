@@ -1,3 +1,10 @@
+import { http } from '@/http'
+import { setToken, setUser } from '@/app/reducers/user'
+import { axiosError } from '@/utils/axiosError'
+import { setIsLoading } from '@/app/reducers/loading'
+import { useNavigate } from 'react-router-dom'
+import { useAppDispatch } from '@/app/hooks'
+
 import Button from '@/components/Button'
 import { CenterContainer } from '@/components/CenterContainer'
 import FormInput from '@/components/Input/FormInput'
@@ -9,13 +16,27 @@ import InputContainer from '@/components/Input/InputContainer'
 import { StyledLink } from '@/components/Link'
 import { Small } from '@/components/Small'
 import ThemeButton from '@/components/Button/ThemeButton'
+
 import type { FieldValues } from 'react-hook-form'
 
-const submitHandle = (data: FieldValues) => {
-	console.log(data)
-}
-
 const Login = () => {
+	const dispatch = useAppDispatch()
+	const navigate = useNavigate()
+
+	const submitHandle = async (data: FieldValues) => {
+		dispatch(setIsLoading(true))
+		try {
+			const res = await http.post('/users/login', { ...data })
+
+			dispatch(setUser(res.data.user))
+			dispatch(setToken(res.data.token))
+			navigate('/')
+		} catch(err) {
+			axiosError(err)
+		}
+		dispatch(setIsLoading(false))
+	}
+
 	return (
 		<CenterContainer>
 			<ThemeButton fixed={true}/>
