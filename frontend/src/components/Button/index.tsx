@@ -4,7 +4,7 @@ import { StyledButton } from './styles'
 interface IButtonProps {
 	children?: React.ReactNode | string | [React.ReactNode | string][]
 	icon?: React.ReactNode
-	onClick: () => void
+	onClick?: () => void
 	style?: CSSProperties
 	backgroundColor?: string
 	type?: 'button' | 'reset' | 'submit'
