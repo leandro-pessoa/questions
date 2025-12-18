@@ -12,11 +12,12 @@ export const Small = styled.small<ISmallProps>`
     // caso seja true, ficará vermelho
     color: ${
 		({ $error = false, ...props }) => $error ? vars.colors.red : props.theme.colors.primaryFontColor };
-    font-size: .9rem;
+	margin-bottom: ${({ $error = false }) => $error ? '6px' : '0'};
+    font-size: .8rem;
     display: block;
     max-width: 400px;
 
     @media screen and (min-width: ${vars.breakpoints.smartphone}) {
-        font-size: 1rem;
+        font-size: .9rem;
     }
 `
