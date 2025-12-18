@@ -30,15 +30,13 @@ export const GlobalStyles = createGlobalStyle`
 	body {
 		line-height: 1;
 		font-family: ${vars.fonts.primaryFont};
-		/* background-color: ${(props) => props.theme.colors.primaryBackgroundColor}; */
 		background: radial-gradient(
 				${(props) => props.theme.colors.tertiaryBackgroundColor},
 				${(props) => props.theme.colors.primaryBackgroundColor},
 				${(props) => props.theme.colors.secondaryBackgroundColor}
-			);
+			) no-repeat center center fixed;
 		color: ${(props) => props.theme.colors.primaryFontColor};
 		height: 100vh;
-		width: 100vw;
 	}
 	ol, ul {
 		list-style: none;
