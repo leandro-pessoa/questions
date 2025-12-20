@@ -21,13 +21,17 @@ const userSlice = createSlice({
 		},
 		setToken: (state, action: PayloadAction<IUserState['token']>) => {
 			state.token = action.payload
+		},
+		logout: (state) => {
+			state.user = null
+			state.token = ''
 		}
 	}
 })
 
 export default userSlice.reducer
 
-export const { setUser, setToken } = userSlice.actions
+export const { setUser, setToken, logout } = userSlice.actions
 
 export const selectUser = (state: RootState) => state.user.user
 export const selectToken = (state: RootState) => state.user.token
