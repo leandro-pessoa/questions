@@ -1,4 +1,9 @@
 import { useNavigate } from 'react-router-dom'
+import { useAppDispatch } from '@/app/hooks'
+import { setIsLoading } from '@/app/reducers/loading'
+import { http } from '@/http'
+import { axiosError } from '@/utils/axiosError'
+import { toast } from 'react-toastify'
 
 import Button from '@/components/Button'
 import ThemeButton from '@/components/Button/ThemeButton'
@@ -15,8 +20,18 @@ import type { FieldValues } from 'react-hook-form'
 
 const UserRegister = () => {
 	const navigate = useNavigate()
-	const submitHandle = (data: FieldValues) => {
-		console.log(data)
+	const dispatch = useAppDispatch()
+
+	const submitHandle = async (data: FieldValues) => {
+		dispatch(setIsLoading(true))
+		try {
+			await http.post('/users', { ...data })
+			navigate('/login')
+			toast.success('Cadastro realizado com sucesso!')
+		} catch (err) {
+			axiosError(err)
+		}
+		dispatch(setIsLoading(false))
 	}
 
 	return (
