@@ -16,9 +16,10 @@ import InputContainer from '@/components/Input/InputContainer'
 import { StyledLink } from '@/components/Link'
 import { Small } from '@/components/Small'
 import ThemeButton from '@/components/Button/ThemeButton'
+import { TitleLink } from '@/components/Title/TitleLink'
+import { Hr } from '@/components/Hr'
 
 import type { FieldValues } from 'react-hook-form'
-import { Hr } from '@/components/Hr'
 
 const Login = () => {
 	const dispatch = useAppDispatch()
@@ -40,6 +41,9 @@ const Login = () => {
 
 	return (
 		<CenterContainer absolutePosition={true}>
+			<TitleLink positionFixed>
+				Questions?
+			</TitleLink>
 			<ThemeButton fixed={true} />
 			<Container $fixedWidth={true}>
 				<Title>Entrar</Title>
