@@ -20,6 +20,8 @@ const ThemeButton = ({ fixed = false }: IThemeButtonProps) => {
 				top: fixed ? '16px' : 'auto',
 				right: fixed ? '16px' : 'auto',
 			}}
+			iconButton
+			title='Mudar tema'
 		>
 			{theme === 'dark' ? <Moon /> : <SunMedium />}
 		</Button>

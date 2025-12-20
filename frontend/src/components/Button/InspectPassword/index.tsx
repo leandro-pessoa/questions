@@ -10,8 +10,11 @@ const InspectPassword = ({ actived, toggleActived }: IInspectPassword) => {
 	return (
 		<Button
 			onClick={toggleActived}
-			backgroundColor='transparent'
-			style={{ position: 'absolute', right: '0', top: '-10%'}}
+			iconButton
+			style={{ position: 'absolute', right: '4px', top: '-6%'}}
+			title={
+				actived ? 'Esconder senha' : 'Mostrar senha'
+			}
 		>
 			{
 				actived ?
