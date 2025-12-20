@@ -1,14 +1,17 @@
+import { useNavigate } from 'react-router-dom'
+
 import Button from '@/components/Button'
 import ThemeButton from '@/components/Button/ThemeButton'
 import { CenterContainer } from '@/components/CenterContainer'
 import Form from '@/components/Form'
-import type { FieldValues } from 'react-hook-form'
 import { RegisterContainer } from './styles'
 import { Container } from '@/components/Container'
 import { Title } from '@/components/Title'
 import InputContainer from '@/components/Input/InputContainer'
 import FormInput from '@/components/Input/FormInput'
-import { useNavigate } from 'react-router-dom'
+import { ArrowLeft } from 'lucide-react'
+
+import type { FieldValues } from 'react-hook-form'
 
 const UserRegister = () => {
 	const navigate = useNavigate()
@@ -21,11 +24,18 @@ const UserRegister = () => {
 			<RegisterContainer>
 				<div className='empty-container'></div>
 				<CenterContainer className='content-container'>
-					<Button onClick={() => navigate(-1)}>Voltar</Button>
+					<Button
+						onClick={() => navigate(-1)}
+						iconButton
+						style={{ alignSelf: 'flex-start', marginLeft: '16px'  }}
+						title='Voltar'
+					>
+						<ArrowLeft />
+					</Button>
 					<ThemeButton fixed={true} />
 					<Container>
 						<Title>Cadastre-se</Title>
-						<Form onSubmit={submitHandle}>
+						<Form onSubmit={submitHandle} grid={true}>
 							<InputContainer>
 								<label htmlFor='completeName'>
 									Nome completo
