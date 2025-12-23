@@ -10,6 +10,7 @@ interface IButtonProps {
 	type?: 'button' | 'reset' | 'submit'
 	iconButton?: boolean
 	title?: string
+	className?: string
 }
 
 const Button = ({
@@ -20,7 +21,8 @@ const Button = ({
 	backgroundColor,
 	type = 'button',
 	iconButton = false,
-	title = ''
+	title = '',
+	className = ''
 }: IButtonProps) => {
 	return (
 		<>
@@ -31,6 +33,7 @@ const Button = ({
 				type={type}
 				$iconButton={iconButton}
 				title={title}
+				className={className}
 			>
 				{icon}
 				{children}
