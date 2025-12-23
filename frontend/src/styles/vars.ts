@@ -26,5 +26,9 @@ export const vars = {
 
 	border: {
 		radius: '10px'
+	},
+
+	sizes: {
+		headerHeight: '60px'
 	}
 }
