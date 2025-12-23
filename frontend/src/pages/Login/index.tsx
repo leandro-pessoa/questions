@@ -40,7 +40,7 @@ const Login = () => {
 	}
 
 	return (
-		<CenterContainer absolutePosition={true}>
+		<CenterContainer $height='center-fixed'>
 			<TitleLink positionFixed>
 				Questions?
 			</TitleLink>
