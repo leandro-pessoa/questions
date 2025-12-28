@@ -1,3 +1,5 @@
+import type { IAlternative } from "./IAlternative"
+
 export interface IQuestion {
 	_id: string
 	subject: string
@@ -6,6 +8,5 @@ export interface IQuestion {
 	instituition?: string
 	position?: string
 	examiningBoard?: string
-	wrongAlternatives: string[]
-	rightAlternative: string
+	alternatives: IAlternative[]
 }

@@ -1,6 +1,7 @@
+import type { IAlternative } from "./IAlternative"
+
 export interface IAnsweredQuestion {
 	questionId: string
-	selectedOption: string
-	correctOption: string
+	selectedOption: IAlternative
 	isCorrectAnswer: boolean
 }
