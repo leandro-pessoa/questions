@@ -6,6 +6,10 @@ import type { IQuestion } from '../../src/types/IQuestion'
 let adminToken: string
 
 const testString = 'a'.repeat(10)
+const testAlternatives = [
+	{_id: '69169cea4b1e3b44ecffde16', right: false, text: 'das', letter: 'C'},
+	{_id: '69169cea4b1e3b44ecffde12', right: true, text: 'dsa', letter: 'E'}
+] as IQuestion['alternatives']
 
 const questionId = '69169cea4b1e3b44ecffde10'
 
@@ -23,10 +27,9 @@ describe('Question POST', () => {
 			.expect(400, {
 				status: 400,
 				message: [
-					'rightAlternative: Alternativa correta obrigatória',
 					'statement: Enunciado da questão é obrigatório',
 					'subject: Disciplina da questão é obrigatória',
-					'wrongAlternatives: Quantidade de alternativas inválida (min: 1, max: 4)',
+					'alternatives: Quantidade de alternativas inválida (min: 2, max: 5)'
 				]
 			})
 	})
@@ -41,8 +44,10 @@ describe('Question POST', () => {
 				instituition: 'a',
 				position: 'a',
 				examiningBoard: 'a',
-				wrongAlternatives: [''],
-				rightAlternative: ''
+				alternatives: [
+					{right: false, text: '', letter: 'C'},
+					{right: true, text: 'dsa', letter: 'E'}
+				]
 			})
 			.set('Authorization', `Bearer ${adminToken}`)
 			.set('Content-Type', 'application/json')
@@ -55,8 +60,7 @@ describe('Question POST', () => {
 					'instituition: A organização deve ter no mínimo 2 caracteres',
 					'position: O cargo deve ter no mínimo 4 caracteres',
 					'examiningBoard: A banca deve ter no mínimo 2 caracteres',
-					'wrongAlternatives: Cada alternativa deve ter no mínimo 1 caractere',
-					'rightAlternative: Alternativa correta obrigatória'
+					'alternatives: Cada alternativa deve ter no mínimo 1 caractere',
 				]
 			})
 	})
@@ -73,8 +77,10 @@ describe('Question POST', () => {
 				instituition: longString,
 				position: longString,
 				examiningBoard: longString,
-				wrongAlternatives: [longString],
-				rightAlternative: longString
+				alternatives: [
+					{right: false, text: longString, letter: 'C'},
+					{right: true, text: 'dsa', letter: 'E'}
+				]
 			})
 			.set('Authorization', `Bearer ${adminToken}`)
 			.set('Content-Type', 'application/json')
@@ -87,9 +93,80 @@ describe('Question POST', () => {
 					'instituition: A organização deve ter no máximo 20 caracteres',
 					'position: O cargo deve ter no máximo 30 caracteres',
 					'examiningBoard: A banca deve ter no máximo 15 caracteres',
-					'wrongAlternatives: Cada alternativa deve ter no máximo 100 caracteres',
-					'rightAlternative: A alternativa deve ter no máximo 100 caracteres'
+					'alternatives: Cada alternativa deve ter no máximo 100 caracteres'
 				]
+			})
+	})
+
+	it('should return an error if question dont have a correct answer', async () => {
+		await request(app)
+			.post('/questions')
+			.send({
+				_id: questionId,
+				subject: testString,
+				statement: testString,
+				year: 2020,
+				instituition: testString,
+				position: testString,
+				examiningBoard: testString,
+				alternatives: [
+					{right: false, text: 'asas', letter: 'C'},
+					{right: false, text: 'dsa', letter: 'E'}
+				]
+			})
+			.set('Authorization', `Bearer ${adminToken}`)
+			.set('Content-Type', 'application/json')
+			.expect(400, {
+				status: 400,
+				message: ['alternatives: Deve haver uma alternativa correta']
+			})
+	})
+
+	it('should return an error if question have two correct answers', async () => {
+		await request(app)
+			.post('/questions')
+			.send({
+				_id: questionId,
+				subject: testString,
+				statement: testString,
+				year: 2020,
+				instituition: testString,
+				position: testString,
+				examiningBoard: testString,
+				alternatives: [
+					{right: true, text: 'asas', letter: 'C'},
+					{right: true, text: 'dsa', letter: 'E'}
+				]
+			})
+			.set('Authorization', `Bearer ${adminToken}`)
+			.set('Content-Type', 'application/json')
+			.expect(400, {
+				status: 400,
+				message: ['alternatives: Não pode haver mais de uma alternativa correta']
+			})
+	})
+
+	it('should return an error if question letter dont is: A, B, C, D or E', async () => {
+		await request(app)
+			.post('/questions')
+			.send({
+				_id: questionId,
+				subject: testString,
+				statement: testString,
+				year: 2020,
+				instituition: testString,
+				position: testString,
+				examiningBoard: testString,
+				alternatives: [
+					{right: false, text: 'asas', letter: 'C'},
+					{right: true, text: 'dsa', letter: 'Z'}
+				]
+			})
+			.set('Authorization', `Bearer ${adminToken}`)
+			.set('Content-Type', 'application/json')
+			.expect(400, {
+				status: 400,
+				message: ['alternatives: A letra de cada alternativa deve ser: A, B, C, D ou E']
 			})
 	})
 
@@ -104,8 +181,7 @@ describe('Question POST', () => {
 				instituition: testString,
 				position: testString,
 				examiningBoard: testString,
-				wrongAlternatives: [testString, testString, testString],
-				rightAlternative: testString
+				alternatives: testAlternatives
 			})
 			.set('Authorization', `Bearer ${adminToken}`)
 			.set('Content-Type', 'application/json')
@@ -116,8 +192,7 @@ describe('Question POST', () => {
 				expect(res.body.year).toEqual(2020)
 				expect(res.body.instituition).toEqual(testString)
 				expect(res.body.examiningBoard).toEqual(testString)
-				expect(res.body.wrongAlternatives).toStrictEqual([testString, testString, testString])
-				expect(res.body.rightAlternative).toEqual(testString)
+				expect(res.body.alternatives).toEqual(testAlternatives)
 			})
 	})
 })
@@ -163,8 +238,7 @@ describe('Question GET', () => {
 						instituition: testString,
 						position: testString,
 						examiningBoard: testString,
-						wrongAlternatives: [testString, testString, testString],
-						rightAlternative: testString
+						alternatives: testAlternatives
 					}
 				)
 			})
@@ -204,12 +278,12 @@ describe('Question UPDATE', () => {
 			.send({
 				year: 50000,
 				statement: 'a',
-				wrongAlternatives: []
+				alternatives: []
 			})
 			.expect(400, {
 				status: 400,
 				message: [
-					'wrongAlternatives: Quantidade de alternativas inválida (min: 1, max: 4)',
+					'alternatives: Quantidade de alternativas inválida (min: 2, max: 5)',
 					'statement: O enunciado deve ter no mínimo 10 caracteres',
 					'year: O ano não pode ser superior a 2025'
 				]
@@ -223,7 +297,10 @@ describe('Question UPDATE', () => {
 				year: 2024,
 				statement: 'dasdsadsadsadsadsadsa',
 				subject: 'dsadsasadas',
-				wrongAlternatives: ['dsadsad', 'dsadsaads']
+				alternatives: [
+					...testAlternatives,
+					{_id: '694eed8915ebefa67c167636', right: false, text: 'dsadas', letter: 'A'}
+				]
 			})
 			.set('Content-Type', 'application/json')
 			.set('Authorization', `Bearer ${adminToken}`)
@@ -236,8 +313,10 @@ describe('Question UPDATE', () => {
 				instituition: testString,
 				position: testString,
 				examiningBoard: testString,
-				wrongAlternatives: ['dsadsad', 'dsadsaads'],
-				rightAlternative: testString
+				alternatives: [
+					...testAlternatives,
+					{_id: '694eed8915ebefa67c167636', right: false, text: 'dsadas', letter: 'A'}
+				]
 			})
 			.expect('Content-Type', /json/)
 	})
@@ -255,8 +334,10 @@ describe('Question DELETE', () => {
 				expect(res.body.year).toEqual(2024)
 				expect(res.body.instituition).toEqual(testString)
 				expect(res.body.examiningBoard).toEqual(testString)
-				expect(res.body.wrongAlternatives).toStrictEqual(['dsadsad', 'dsadsaads'])
-				expect(res.body.rightAlternative).toEqual(testString)
+				expect(res.body.alternatives).toEqual([
+					...testAlternatives,
+					{_id: '694eed8915ebefa67c167636', right: false, text: 'dsadas', letter: 'A'}
+				])
 			})
 	})
 })
