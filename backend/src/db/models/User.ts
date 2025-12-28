@@ -29,8 +29,11 @@ const userSchema = new Schema<IUser>({
 	},
 	answeredQuestions: [{
 		questionId: String,
-		selectedOption: String,
-		correctOption: String,
+		selectedOption: {
+			right: Boolean,
+			text: String,
+			letter: String,
+		},
 		isCorrectAnswer: Boolean
 	}],
 	passwordHash: {

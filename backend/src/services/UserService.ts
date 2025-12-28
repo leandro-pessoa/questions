@@ -5,6 +5,7 @@ import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import BaseError from '@/errors/BaseError'
 import BadRequest from '@/errors/BadRequest'
+import type { IAlternative } from '@/types/IAlternative'
 
 export default class UserService extends CRUDServices<IUser> {
 	constructor() {
@@ -41,17 +42,14 @@ export default class UserService extends CRUDServices<IUser> {
 	async answerQuestion(
 		userId: string,
 		questionId: string,
-		selectedOption: string,
-		correctOption: string,
-		wrongAlternatives: string[]
+		selectedOption: IAlternative,
+		alternatives: IAlternative[]
 	) {
-		const allAlternatives = [...wrongAlternatives, correctOption]
-
 		if (
 			!userId ||
 			!questionId ||
 			!selectedOption ||
-			!allAlternatives.includes(selectedOption)
+			!alternatives.some((alternative) => alternative.text === selectedOption.text)
 		) {
 			throw new BadRequest()
 		}
@@ -71,8 +69,7 @@ export default class UserService extends CRUDServices<IUser> {
 						answeredQuestions: {
 							questionId,
 							selectedOption,
-							correctOption,
-							isCorrectAnswer: selectedOption === correctOption
+							isCorrectAnswer: selectedOption.right
 						}
 					}
 				})
@@ -83,8 +80,7 @@ export default class UserService extends CRUDServices<IUser> {
 					$set: {
 						'answeredQuestions.$.questionId': questionId,
 						'answeredQuestions.$.selectedOption': selectedOption,
-						'answeredQuestions.$.correctOption': correctOption,
-						'answeredQuestions.$.isCorrectAnswer': selectedOption === correctOption
+						'answeredQuestions.$.isCorrectAnswer': selectedOption.right
 					}
 				},
 				{

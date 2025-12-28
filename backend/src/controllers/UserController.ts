@@ -114,7 +114,7 @@ export default class UserController extends Controller<IUser> {
 			}
 
 			await userService.answerQuestion(
-				id, questionId, selectedOption, question.rightAlternative, question.wrongAlternatives
+				id, questionId, selectedOption, question.alternatives
 			)
 			const newUser = await userService.getById(id)
 			res.status(200).json(newUser)
