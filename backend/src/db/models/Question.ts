@@ -1,5 +1,6 @@
 import mongoose, { Schema } from 'mongoose'
 import type { IQuestion } from '@/types/IQuestion'
+import type { IAlternative } from '@/types/IAlternative'
 
 const fullYear = new Date().getFullYear()
 
@@ -36,28 +37,38 @@ const questionSchema = new Schema<IQuestion>({
 		minLength: [2, 'A banca deve ter no mínimo 2 caracteres'],
 		maxLength: [30, 'A banca deve ter no máximo 15 caracteres'],
 	},
-	wrongAlternatives: {
-		type: [String],
+	alternatives: {
+		type: [{
+			right: Boolean,
+			text: String,
+			letter: String,
+		}],
 		validate: [
 			{
-				validator: (value: string[]) => {return !(value.length > 4 || value.length < 1)},
-				message: 'Quantidade de alternativas inválida (min: 1, max: 4)'
+				validator: (value: IAlternative[]) => {return !(value.length > 5 || value.length < 2)},
+				message: 'Quantidade de alternativas inválida (min: 2, max: 5)'
 			},
 			{
-				validator: (value: string[]) => {return value.every(alternative => alternative.length >= 1)},
+				validator: (value: IAlternative[]) => {return value.every(alternative => alternative.text.length >= 1)},
 				message: 'Cada alternativa deve ter no mínimo 1 caractere'
 			},
 			{
-				validator: (value: string[]) => {return value.every(alternative => alternative.length <= 100)},
+				validator: (value: IAlternative[]) => {return value.every(alternative => alternative.text.length <= 100)},
 				message: 'Cada alternativa deve ter no máximo 100 caracteres'
 			},
+			{
+				validator: (value: IAlternative[]) => {return value.some(alternative => alternative.right)},
+				message: 'Deve haver uma alternativa correta'
+			},
+			{
+				validator: (value: IAlternative[]) => {return !(value.filter(alternative => alternative.right).length > 1)},
+				message: 'Não pode haver mais de uma alternativa correta'
+			},
+			{
+				validator: (value: IAlternative[]) => {return value.every(alternative => alternative.letter.match(/[A|B|C|D|E]{1}/g))},
+				message: 'A letra de cada alternativa deve ser: A, B, C, D ou E'
+			}
 		],
-	},
-	rightAlternative: {
-		type: String,
-		required: [true, 'Alternativa correta obrigatória'],
-		minLength: [1, 'A alternativa deve ter no mínimo 1 caractere'],
-		maxLength: [100, 'A alternativa deve ter no máximo 100 caracteres'],
 	}
 })
 
