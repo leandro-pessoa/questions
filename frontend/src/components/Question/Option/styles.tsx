@@ -2,23 +2,20 @@ import { vars } from '@/styles/vars'
 import { flex } from '@/utils/flex'
 import styled from 'styled-components'
 
-interface IStyledButtonProps {
+interface IStyledLiProps {
 	readonly $cutted: boolean
 	readonly $selected: boolean
 }
 
-export const StyledButton = styled.button<IStyledButtonProps>`
-	${flex('row', 'flex-start', 'center', '16px')}
+export const StyledLi = styled.li<IStyledLiProps>`
+	${flex('row', 'center', 'center', '6px')}
 	background-color: ${(props) => props.theme.colors.secondaryBackgroundColor};
-	color: ${(props) => props.theme.colors.primaryFontColor};
 	border: none;
 	border-radius: ${vars.border.radius};
-	padding: 6px 12px;
 	transition: ease 0.2s;
 	text-decoration: ${(props) => (props.$cutted ? 'line-through' : 'none')};
 
 	&:hover {
-		cursor: pointer;
 		background-color: ${(props) =>
 			props.theme.colors.primaryBackgroundColor};
 		transform: translate(5px);
@@ -35,17 +32,58 @@ export const StyledButton = styled.button<IStyledButtonProps>`
 	.option__cut {
 		display: none;
 		padding: 0;
+		margin-left: 12px;
 	}
 
-	.option__letter {
-		border-radius: 50%;
-		border: 2px solid ${vars.colors.blue};
-		padding: 3px 7.5px;
-		background-color: ${(props) =>
-			props.$selected ? vars.colors.blue : 'transparent'};
-		color: ${(props) =>
-			props.$selected
-				? vars.colors.white
-				: props.theme.colors.primaryFontColor};
+	.option__select {
+		${flex('row', 'flex-start', 'center', '16px')}
+		background-color: transparent;
+		color: ${(props) => props.$cutted ? props.theme.colors.primaryBorderColor : props.theme.colors.primaryFontColor};
+		border: none;
+		width: 90%;
+		padding: 8px 12px;
+
+		&:hover {
+			cursor: pointer;
+		}
+
+		.select__letter {
+			${flex('row', 'center', 'center')}
+			border-radius: 50%;
+			border: 2px solid ${vars.colors.blue};
+			width: 25px;
+			height: 25px;
+			background-color: ${(props) =>
+				props.$selected ? vars.colors.blue : 'transparent'};
+			color: ${(props) =>
+				props.$selected
+					? vars.colors.white
+					: props.theme.colors.primaryFontColor};
+		}
+
+		.select__text {
+			${flex('row', 'flex-start')}
+			width: 80%;
+			overflow-wrap: break-word;
+		}
+	}
+
+	@media screen and (min-width: ${vars.breakpoints.smartphone}){
+		.option__select {
+			.select__text {
+				width: 90%;
+			}
+		}
+	}
+
+	@media screen and (min-width: ${vars.breakpoints.tablet}) {
+		.option__select {
+			width: 95%;
+
+			.select__letter {
+				width: 30px;
+				height: 30px
+			}
+		}
 	}
 `
