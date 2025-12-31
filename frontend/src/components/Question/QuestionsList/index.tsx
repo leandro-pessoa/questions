@@ -15,7 +15,6 @@ import Button from '@/components/Button'
 import { RotateCcw } from 'lucide-react'
 
 import type { IQuestion } from '@/types/IQuestion'
-import { shuffleArray } from '@/utils/shuffleArray'
 
 const StyledUl = styled.ul`
 	${flex('column', 'auto', 'center', '16px')}
@@ -45,16 +44,11 @@ const QuesitonsList = () => {
 				return (
 					<StyledUl>
 						{
-							questions?.map((question: IQuestion) => {
-								const randomAlternatives = shuffleArray([
-									...question.wrongAlternatives,
-									question.rightAlternative,
-								])
-
+							questions?.map((question: IQuestion, index) => {
 								return (
 									<Question
 										{...question}
-										randomAlternatives={randomAlternatives}
+										index={index}
 									/>
 								)
 							})
