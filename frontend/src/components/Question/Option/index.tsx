@@ -1,45 +1,59 @@
 import Button from '@/components/Button'
 import { ScissorsLineDashed } from 'lucide-react'
-import { StyledButton } from './styles'
+import { StyledLi } from './styles'
 import { useState } from 'react'
+import type { IAlternative } from '@/types/IAlternative'
 
 interface IOptionProps {
-	alternative: string | number
-	randomAlternatives: string[] | number[]
-	index: number
-	twoAlternatives: string[]
-	multipleAlternatives: string[]
+	alternative: IAlternative
 	selected: boolean
-	setSelected: () => void
+	setSelected: (option: number | null) => void
+	index: number
 }
 
 const Option = ({
 	alternative,
-	randomAlternatives,
-	index,
-	twoAlternatives,
-	multipleAlternatives,
 	selected,
-	setSelected
+	setSelected,
+	index
 }: IOptionProps) => {
 	const [cutted, setCutted] = useState<boolean>(false)
 
+	const selectHandle = () => {
+		if (cutted) {
+			setCutted(false)
+		}
+		setSelected(index)
+	}
+
+	const cutHandle = () => {
+		if (selected) {
+			setSelected(null)
+			setCutted(true)
+		} else {
+			setCutted(!cutted)
+		}
+	}
+
 	return (
-		<StyledButton $cutted={cutted} $selected={selected} onClick={setSelected}>
-			<Button
-				iconButton
-				className='option__cut'
-				onClick={() => setCutted(!cutted)}
-			>
-				<ScissorsLineDashed />
-			</Button>
-			<span className='option__letter'>
-				{randomAlternatives.length < 3
-					? twoAlternatives[index]
-					: multipleAlternatives[index]}
-			</span>
-			{alternative}
-		</StyledButton>
+		<>
+			<StyledLi $cutted={cutted} $selected={cutted ? false : selected}>
+				<Button
+					iconButton
+					className='option__cut'
+					onClick={cutHandle}
+				>
+					<ScissorsLineDashed />
+				</Button>
+				<button onClick={selectHandle} className='option__select'>
+					<span className='select__letter'>
+						<span>{alternative.letter}</span>
+					</span>
+					<p className='select__text'>{alternative.text}</p>
+				</button>
+			</StyledLi>
+		</>
+
 	)
 }
 
