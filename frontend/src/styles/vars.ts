@@ -8,7 +8,7 @@ export const vars = {
 		black: '#0A0E14',
 		darkGray: '#48536B',
 		mediumGray: '#6a707cff',
-		gray: '#ccc',
+		gray: '#e4e6fcff',
 		lightGray: '#F7FBFF',
 		darkBlue: '#0C1018',
 		mediumBlue: '#051426',
