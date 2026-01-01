@@ -17,7 +17,7 @@ import { RotateCcw } from 'lucide-react'
 import type { IQuestion } from '@/types/IQuestion'
 
 const StyledUl = styled.ul`
-	${flex('column', 'auto', 'center', '16px')}
+	${flex('column', 'auto', 'center', '32px')}
 	margin: 3% 0;
 `
 
@@ -49,6 +49,7 @@ const QuesitonsList = () => {
 									<Question
 										{...question}
 										index={index}
+										key={question._id}
 									/>
 								)
 							})
