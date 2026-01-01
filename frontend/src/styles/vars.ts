@@ -13,7 +13,8 @@ export const vars = {
 		darkBlue: '#0C1018',
 		mediumBlue: '#051426',
 		blue: '#027AF2',
-		red: '#ec4a4a'
+		red: '#ec4a4a',
+		green: '#7cbe7c'
 	},
 
 	breakpoints: {
