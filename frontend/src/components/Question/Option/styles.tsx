@@ -5,6 +5,7 @@ import styled from 'styled-components'
 interface IStyledLiProps {
 	readonly $cutted: boolean
 	readonly $selected: boolean
+	readonly $isAnswered: boolean
 }
 
 export const StyledLi = styled.li<IStyledLiProps>`
@@ -15,18 +16,23 @@ export const StyledLi = styled.li<IStyledLiProps>`
 	transition: ease 0.2s;
 	text-decoration: ${(props) => (props.$cutted ? 'line-through' : 'none')};
 
-	&:hover {
-		background-color: ${(props) =>
-			props.theme.colors.primaryBackgroundColor};
-		transform: translate(5px);
+	${(props) => !props.$isAnswered && `
+			&:hover {
+				background-color: ${props.theme.colors.primaryBackgroundColor};
+				transform: translate(5px);
 
-		.option__cut {
-			display: flex;
-		}
-	}
+				.option__cut {
+					display: flex;
+				}
+			}
 
-	&:active {
-		transform: translate(3px);
+			&:active {
+				transform: translate(3px);
+			}
+		`}
+
+	&:last-child {
+		margin-bottom: 20px;
 	}
 
 	.option__cut {

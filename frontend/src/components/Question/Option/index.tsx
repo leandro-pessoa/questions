@@ -7,37 +7,45 @@ import type { IAlternative } from '@/types/IAlternative'
 interface IOptionProps {
 	alternative: IAlternative
 	selected: boolean
-	setSelected: (option: number | null) => void
-	index: number
+	setSelected: (option: IAlternative | null) => void
+	isAnswered: boolean
 }
 
 const Option = ({
 	alternative,
 	selected,
 	setSelected,
-	index
+	isAnswered
 }: IOptionProps) => {
 	const [cutted, setCutted] = useState<boolean>(false)
 
 	const selectHandle = () => {
-		if (cutted) {
-			setCutted(false)
+		if (!isAnswered) {
+			if (cutted) {
+				setCutted(false)
+			}
+			setSelected(alternative)
 		}
-		setSelected(index)
 	}
 
 	const cutHandle = () => {
-		if (selected) {
-			setSelected(null)
-			setCutted(true)
-		} else {
-			setCutted(!cutted)
+		if (!isAnswered) {
+			if (selected) {
+				setSelected(null)
+				setCutted(true)
+			} else {
+				setCutted(!cutted)
+			}
 		}
 	}
 
 	return (
 		<>
-			<StyledLi $cutted={cutted} $selected={cutted ? false : selected}>
+			<StyledLi
+				$cutted={cutted}
+				$selected={cutted ? false : selected}
+				$isAnswered={isAnswered}
+			>
 				<Button
 					iconButton
 					className='option__cut'
