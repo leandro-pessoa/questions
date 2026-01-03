@@ -17,7 +17,7 @@ export const StyledButton = styled.button<IStyledButtonProps>`
 	border: none;
 
 	&:hover {
-		background-color: ${(props) => props.$backgroundColor || vars.colors.blue}dd;
+		background-color: ${(props) => props.$backgroundColor || vars.colors.blue}66;
 		cursor: pointer;
 	}
 
