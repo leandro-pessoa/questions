@@ -14,7 +14,6 @@ const ThemeButton = ({ fixed = false }: IThemeButtonProps) => {
 	return (
 		<Button
 			onClick={() => dispatch(toggleTheme())}
-			backgroundColor='transparent'
 			style={{
 				position: fixed ? 'fixed' : 'static',
 				top: fixed ? '16px' : 'auto',
