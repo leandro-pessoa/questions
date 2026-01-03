@@ -25,13 +25,15 @@ export const pagination = async (
 		}
 
 		if (limit > 0 && page > 0) {
+			const totalValues = (await result.find({})).length
+			const totalPages = Math.ceil(totalValues / limit)
 			const pageResult = await result
 				.find({})
 				.sort({ _id: order })
 				.skip((page - 1) * limit)
 				.limit(limit)
 
-			res.status(200).json(pageResult)
+			res.status(200).json({ pageResult, totalPages })
 		} else {
 			next(new BadRequest())
 		}
