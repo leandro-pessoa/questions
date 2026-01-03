@@ -34,7 +34,7 @@ describe('pagination middleware tests', () => {
 			.get('/questions?limit=5')
 			.expect(200)
 			.then(res => {
-				expect(res.body).toHaveLength(5)
+				expect(res.body.pageResult).toHaveLength(5)
 			})
 	})
 })

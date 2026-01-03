@@ -208,8 +208,8 @@ describe('User GET', () => {
 			.set('Authorization', `Bearer ${adminToken}`)
 			.expect(200)
 			.then(res => {
-				expect(res.body[0].completeName).toBeDefined()
-				expect(res.body[0].email).toBeDefined()
+				expect(res.body.pageResult[0].completeName).toBeDefined()
+				expect(res.body.pageResult[0].email).toBeDefined()
 			})
 	})
 
