@@ -6,6 +6,7 @@ import {
 	fetchQuestions,
 	selectQuestions,
 	selectQuestionsStatus,
+	selectTotalQuestionPages,
 } from '@/app/reducers/question'
 
 import Question from '..'
@@ -13,6 +14,7 @@ import { Loading } from '@/components/Loading'
 import { CenterContainer } from '@/components/CenterContainer'
 import Button from '@/components/Button'
 import { RotateCcw } from 'lucide-react'
+import Pagination from '@/components/Pagination'
 
 import type { IQuestion } from '@/types/IQuestion'
 
@@ -25,6 +27,7 @@ const QuesitonsList = () => {
 	const dispatch = useAppDispatch()
 	const questionsFetchStatus = useAppSelector(selectQuestionsStatus)
 	const questions = useAppSelector(selectQuestions)
+	const totalQuestionPages = useAppSelector(selectTotalQuestionPages)
 
 	useEffect(() => {
 		dispatch(fetchQuestions())
@@ -70,7 +73,13 @@ const QuesitonsList = () => {
 		}
 	}
 
-	return renderQuestions()
+	return (
+		<>
+			<Pagination fetchFunc={fetchQuestions} totalPages={totalQuestionPages} limit={10}/>
+			{renderQuestions()}
+		</>
+	)
+
 }
 
 export default QuesitonsList
