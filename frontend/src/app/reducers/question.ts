@@ -7,11 +7,13 @@ import type { RootState } from '../store'
 interface IQuestionState {
 	status: 'idle' | 'succeeded' | 'pending' | 'failed'
 	questions: IQuestion[] | null
+	totalQuestionPages: number
 }
 
 const initialState: IQuestionState = {
 	status: 'idle',
-	questions: null
+	questions: null,
+	totalQuestionPages: 0
 }
 
 const questionSlice = createSlice({
@@ -36,7 +38,8 @@ const questionSlice = createSlice({
 
                 // preenche o state questions caso a resposta não seja um falsy value
                 if (action.payload) {
-                    state.questions = [...action.payload]
+                    state.questions = [...action.payload.pageResult]
+					state.totalQuestionPages = action.payload.totalPages
                 }
             })
 
@@ -50,10 +53,13 @@ const questionSlice = createSlice({
 // obtém os dados da api dos questions (index)
 export const fetchQuestions = createAsyncThunk(
     'question/fetchQuestions',
-    async () => {
+    async (pagination?: {page?: number, limit?: number}) => {
         // tenta obter os dados e retorna eles
         try {
-            const questions = await http.get<IQuestion[]>('/questions')
+            const questions =
+				await http.get<{pageResult: IQuestion[], totalPages: number}>(
+					`/questions?page=${pagination?.page ? pagination?.page : 1}&limit=${pagination?.limit ? pagination?.limit : 10}`
+				)
             return questions.data
         } catch (err) {
             // exibe o erro na tela e retorna uma reject
@@ -67,6 +73,7 @@ export default questionSlice.reducer
 
 export const selectQuestions = (state: RootState) => state.question.questions
 export const selectQuestionsStatus = (state: RootState) => state.question.status
+export const selectTotalQuestionPages = (state: RootState) => state.question.totalQuestionPages
 
 
 
