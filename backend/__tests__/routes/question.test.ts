@@ -89,7 +89,7 @@ describe('Question POST', () => {
 				message: [
 					'subject: O enunciado deve ter no máximo 20 caracteres',
 					'statement: O enunciado deve ter no máximo 500 caracteres',
-					'year: O ano não pode ser superior a 2025',
+					`year: O ano não pode ser superior a ${new Date().getFullYear()}`,
 					'instituition: A organização deve ter no máximo 20 caracteres',
 					'position: O cargo deve ter no máximo 30 caracteres',
 					'examiningBoard: A banca deve ter no máximo 15 caracteres',
@@ -285,7 +285,7 @@ describe('Question UPDATE', () => {
 				message: [
 					'alternatives: Quantidade de alternativas inválida (min: 2, max: 5)',
 					'statement: O enunciado deve ter no mínimo 10 caracteres',
-					'year: O ano não pode ser superior a 2025'
+					`year: O ano não pode ser superior a ${new Date().getFullYear()}`
 				]
 			})
 	})
