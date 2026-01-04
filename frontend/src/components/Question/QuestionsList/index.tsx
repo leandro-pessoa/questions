@@ -23,7 +23,7 @@ const StyledUl = styled.ul`
 	margin: 3% 0;
 `
 
-const QuesitonsList = () => {
+const QuestionsList = () => {
 	const dispatch = useAppDispatch()
 	const questionsFetchStatus = useAppSelector(selectQuestionsStatus)
 	const questions = useAppSelector(selectQuestions)
@@ -75,11 +75,11 @@ const QuesitonsList = () => {
 
 	return (
 		<>
-			<Pagination fetchFunc={fetchQuestions} totalPages={totalQuestionPages} limit={10}/>
 			{renderQuestions()}
+			<Pagination fetchFunc={fetchQuestions} totalPages={totalQuestionPages} limit={10}/>
 		</>
 	)
 
 }
 
-export default QuesitonsList
+export default QuestionsList
