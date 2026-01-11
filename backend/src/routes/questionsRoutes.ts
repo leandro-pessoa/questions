@@ -11,6 +11,7 @@ const questionController = new QuestionController()
 // GET
 router.get('/questions', (req, res, next) => questionController.index(req, res, next), pagination)
 router.get('/questions/:id', (req, res, next) => questionController.show(req, res, next))
+router.get('/column', (req, res, next) => questionController.columnIndex(req, res, next))
 
 // POST
 router.post('/questions', loginRequired, adminRequired, (req, res, next) => questionController.store(req, res, next))

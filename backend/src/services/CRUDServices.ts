@@ -8,6 +8,13 @@ export default class CRUDServices<T> {
 		return this.model.find({})
 	}
 
+	// obtém valores distintos da coluna especificada
+	async getDistinctColumn(column: string) {
+		return this.model.find({})
+			.select(column)
+			.distinct(column)
+	}
+
 	// obtém um valor do documento
 	async getById(id: string): Promise<T | null> {
 		return this.model.findById(id)
