@@ -29,12 +29,11 @@ export default class QuestionController extends Controller<IQuestion> {
 	}
 
 	async filteredQuestionsIndex(req: Request, res: Response, next: NextFunction) {
-		const { subject, year, instituition, position, examiningBoard } = req.body
+		// query = {subject, year, instituition, position, examiningBoard}
+		const query = req.query
 
 		try {
-			const questions = await questionService.getFilteredQuestions(
-				{subject, year, instituition, position, examiningBoard}
-			)
+			const questions = await questionService.getFilteredQuestions(query)
 
 			if (questions.length === 0) next(new NotFound('Questões inexistentes com esses filtros'))
 
