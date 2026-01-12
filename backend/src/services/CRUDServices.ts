@@ -1,11 +1,11 @@
-import mongoose, { type AnyObject, type UpdateQuery } from "mongoose"
+import mongoose, { type AnyObject, type MongooseBaseQueryOptions, type UpdateQuery } from "mongoose"
 
 export default class CRUDServices<T> {
 	constructor(public model: mongoose.Model<T>) {}
 
 	// obtém todos os valores do documento
-	async getAll(): Promise<T[]> {
-		return this.model.find({})
+	async getAll(filters?: MongooseBaseQueryOptions): Promise<T[]> {
+		return this.model.find(filters ? { ...filters } : {})
 	}
 
 	// obtém valores distintos da coluna especificada
