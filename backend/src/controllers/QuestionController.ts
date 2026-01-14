@@ -13,7 +13,7 @@ export default class QuestionController extends Controller<IQuestion> {
 	}
 
 	async columnIndex(req: Request, res: Response, next: NextFunction) {
-		const { selectedColumn } = req.body
+		const { selectedColumn } = req.query
 
 		try {
 			if (!selectedColumn || typeof selectedColumn !== 'string') {
