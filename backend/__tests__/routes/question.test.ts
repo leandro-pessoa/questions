@@ -205,13 +205,31 @@ describe('Question GET', () => {
 			.expect('Content-Type', /json/)
 	})
 
+	it('should return an error if filtered questions is not found', async () => {
+		await request(app)
+			.get('/filteredQuestions?year=["2200"]&subject=["Matemática", "Português"]')
+			.expect(404, {
+				status: 404,
+				message: 'Questões inexistentes com esses filtros'
+			})
+	})
+
+	it('should return an error if url query is invalid', async () => {
+		await request(app)
+			.get('/filteredQuestions?year=["2025", "2026"]&subject=["Matemática')
+			.expect(500, {
+				status: 500,
+				message: 'Erro interno do servidor'
+			})
+	})
+
 	it('should return an error if format of id is invalid', async () => {
 		await request(app)
-			.get(`/questions/${questionId}aaa`)
-			.expect(400, {
-				status: 400,
-				message: 'Requisição inválida'
-			})
+		.get(`/questions/${questionId}aaa`)
+		.expect(400, {
+			status: 400,
+			message: 'Requisição inválida'
+		})
 	})
 
 	it('should return an error if the question is not found', async () => {
@@ -220,6 +238,25 @@ describe('Question GET', () => {
 			.expect(404, {
 				status: 404,
 				message: 'Valor não encontrado'
+			})
+	})
+
+	it('should return an bad request error if selectedColumn is not sent',async () => {
+		await request(app)
+			.get('/column?selectedColumn=')
+			.expect(400, {
+				status: 400,
+				message: 'Requisição inválida'
+			})
+	})
+
+	it('should return filtered questions if url query is valid and found a question', async () => {
+		await request(app)
+			.get('/filteredQuestions?year=["2026"]&subject=["Matemática"]')
+			.expect('Content-Type', /json/)
+			.then(res => {
+				expect(res.body[0].subject).toEqual('Matemática')
+				expect(res.body[0].year).toEqual(2026)
 			})
 	})
 
@@ -241,6 +278,15 @@ describe('Question GET', () => {
 						alternatives: testAlternatives
 					}
 				)
+			})
+	})
+
+	it('should return the values of the column', async () => {
+		await request(app)
+			.get('/column?selectedColumn=subject')
+			.expect(200)
+			.then(res => {
+				expect(res.body.length).toBeGreaterThanOrEqual(1)
 			})
 	})
 })
