@@ -16,11 +16,7 @@ export const StyledSection = styled.section<IStyledSectionProps>`
 	.filters__content {
 		height: ${(props) => props.$display ? '100px' : '0'};
 		transition: height .3s;
-		overflow: hidden;
-
-		div {
-			padding: 24px 0;
-		}
+		overflow: ${(props) => props.$display ? 'visible' : 'hidden'};
 	}
 
 	@media screen and (min-width: ${vars.breakpoints.tablet}) {
