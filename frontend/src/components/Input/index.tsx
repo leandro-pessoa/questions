@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 interface IInputProps {
 	readonly $error?: boolean
+	readonly $width?: 'auto' | 'hundredPercent'
 }
 
 const xPadding = 14
@@ -13,7 +14,10 @@ const Input = styled.input<IInputProps>`
 	color: ${(props) => props.theme.colors.primaryFontColor};
 	border-radius: ${vars.border.radius};
 	padding: 6px ${xPadding}px;
-	width: calc(100% - ${xPadding * 2}px);
+	width: ${
+		({ $width = 'hundredPercent'}) =>
+			$width === 'auto' ? 'auto' : `calc(100% - ${xPadding * 2}px)`
+	};
 
 	&:hover {
 		transition: ease .1s;
