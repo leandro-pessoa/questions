@@ -15,6 +15,7 @@ import { CenterContainer } from '@/components/CenterContainer'
 import Button from '@/components/Button'
 import { RotateCcw } from 'lucide-react'
 import Pagination from '@/components/Pagination'
+import Filters from '@/components/Filters'
 
 import type { IQuestion } from '@/types/IQuestion'
 
@@ -45,19 +46,22 @@ const QuestionsList = () => {
 				)
 			case 'succeeded':
 				return (
-					<StyledUl>
-						{
-							questions?.map((question: IQuestion, index) => {
-								return (
-									<Question
-										{...question}
-										index={index}
-										key={question._id}
-									/>
-								)
-							})
-						}
-					</StyledUl>
+					<>
+						<Filters />
+						<StyledUl>
+							{
+								questions?.map((question: IQuestion, index) => {
+									return (
+										<Question
+											{...question}
+											index={index}
+											key={question._id}
+										/>
+									)
+								})
+							}
+						</StyledUl>
+					</>
 				)
 			case 'failed':
 				return (
