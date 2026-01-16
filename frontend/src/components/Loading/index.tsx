@@ -6,6 +6,8 @@ import { selectIsLoading } from '@/app/reducers/loading'
 
 interface ILoadingProps {
     readonly $overlay?: boolean
+	readonly $size?: string
+	readonly $borderSize?: string
 }
 
 // componente geral de loading
@@ -27,11 +29,13 @@ export const Loading = styled.div<ILoadingProps>`
     backdrop-filter: blur(4px);
 
     div {
-        border: 4px solid ${(props) => props.theme.colors.secondaryBackgroundColor};
+        border: ${
+			(props) =>
+				props.$borderSize || '4px'} solid ${(props) => props.theme.colors.secondaryBackgroundColor};
         border-radius: 50%;
-        border-top: 8px solid ${vars.colors.blue};
-        width: 40px;
-        height: 40px;
+        border-top: ${(props) => props.$borderSize || '4px'} solid ${vars.colors.blue};
+        width: ${(props) => props.$size || '40px'};
+        height: ${(props) => props.$size || '40px'};
         animation: spinner 1s linear infinite;
     }
 
@@ -46,9 +50,9 @@ export const Loading = styled.div<ILoadingProps>`
 
     @media screen and (min-width: ${vars.breakpoints.notebook}) {
         div {
-            width: 60px;
-            height: 60px;
-            border-width: 8px;
+            width: ${(props) => props.$size || '60px'};
+            height: ${(props) => props.$size || '60px'};
+            border-width: ${(props) => props.$borderSize || '8px'};
         }
     }
 `
