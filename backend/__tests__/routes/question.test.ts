@@ -369,6 +369,16 @@ describe('Question UPDATE', () => {
 })
 
 describe('Question DELETE', () => {
+	it('should return an error if question is not found', async () => {
+		await request(app)
+			.delete('/questions/69169cea4b1e3b44ecffde19')
+			.set('Authorization', `Bearer ${adminToken}`)
+			.expect(404, {
+				status: 404,
+				message: 'Valor não encontrado'
+			})
+	})
+
 	it('should delete one question by id', async () => {
 		await request(app)
 			.delete(`/questions/${questionId}`)
