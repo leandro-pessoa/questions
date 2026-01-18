@@ -1,19 +1,19 @@
 import { useEffect, useRef, useState } from 'react'
 import { StyledDiv } from './styles'
 import { ChevronDown, ChevronUp } from 'lucide-react'
-import Input from '../Input'
+import Input from '../../Input'
 import { http } from '@/http'
 import { axiosError } from '@/utils/axiosError'
-import { Loading } from '../Loading'
-import Checkbox from '../Checkbox'
+import { Loading } from '../../Loading'
+import Checkbox from '../../Checkbox'
 
-interface ISelectProps {
+interface IFiltersSelectProps {
 	topicFetchUrl: string
 	title: string
 	type?: 'checkbox' | 'default'
 }
 
-const Select = ({ topicFetchUrl, title, type = 'default' }: ISelectProps) => {
+const FiltersSelect = ({ topicFetchUrl, title, type = 'default' }: IFiltersSelectProps) => {
 	const [activated, setActivated] = useState<boolean>(false)
 	const [fetchedSelectContent, setFetchedSelectContent] = useState<string[]>([])
 	const [actualSelectContent, setActualSelectContent] = useState<string[]>(fetchedSelectContent)
@@ -66,6 +66,41 @@ const Select = ({ topicFetchUrl, title, type = 'default' }: ISelectProps) => {
 		handleActualSelectContent()
 	}, [searchInputValue, fetchedSelectContent])
 
+	// renderiza a lista de tópicos selecionáveis
+	const renderSelectableElements = () => {
+		// renderiza o loading caso o fetch ainda esteja sendo realizado
+		if(fetchedSelectContent.length === 0) {
+			return <Loading $borderSize='2px' $size='20px'><div></div></Loading>
+		} else if (fetchedSelectContent.length > 0 && actualSelectContent.length === 0) { // renderiza uma mensagem caso nenhum valor tenha sido encontrado na pesquisa
+			return <p style={{ textAlign: 'center', padding: '8px 0'}}>Nenhum valor foi encontrado</p>
+		} else { // senão, renderiza os valores
+			return (
+				<ul className='expand-box__topics-list'>
+					{
+						actualSelectContent.map((topic) =>
+							<li key={topic}>
+								{
+									// troca o tipo de tópico selecionável, de acordo com a prop type
+									type === 'default' ?
+										<button onClick={() => setSelectedTopics(topic)}>
+											{topic}
+										</button>
+									:
+										<Checkbox
+											label={topic}
+											value={topic}
+											topics={selectedTopics as string[]}
+											setSelectedTopics={setSelectedTopics}
+										/>
+								}
+							</li>
+						)
+					}
+				</ul>
+			)
+		}
+	}
+
 	return (
 		<StyledDiv $expandBoxDisplay={activated} ref={ref}>
 			<button className='select__button' onClick={() => setActivated(!activated)}>
@@ -91,35 +126,10 @@ const Select = ({ topicFetchUrl, title, type = 'default' }: ISelectProps) => {
 					onChange={(e) => setSearchInputValue(e.target.value)}
 					value={searchInputValue}
 				/>
-				{
-					fetchedSelectContent.length === 0 ?
-						<Loading $borderSize='2px' $size='20px'><div></div></Loading>
-					:
-					<ul className='expand-box__topics-list'>
-						{
-							actualSelectContent.map((topic) =>
-								<li key={topic}>
-									{
-										type === 'default' ?
-											<button onClick={() => setSelectedTopics(topic)}>
-												{topic}
-											</button>
-										:
-											<Checkbox
-												label={topic}
-												value={topic}
-												topics={selectedTopics as string[]}
-												setSelectedTopics={setSelectedTopics}
-											/>
-									}
-								</li>
-							)
-						}
-					</ul>
-				}
+				{renderSelectableElements()}
 			</div>
 		</StyledDiv>
 	)
 }
 
-export default Select
+export default FiltersSelect
