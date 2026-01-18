@@ -5,17 +5,20 @@ import Input from '../Input'
 import { http } from '@/http'
 import { axiosError } from '@/utils/axiosError'
 import { Loading } from '../Loading'
+import Checkbox from '../Checkbox'
 
 interface ISelectProps {
 	topicFetchUrl: string
 	title: string
+	type?: 'checkbox' | 'default'
 }
 
-const Select = ({ topicFetchUrl, title }: ISelectProps) => {
+const Select = ({ topicFetchUrl, title, type = 'default' }: ISelectProps) => {
 	const [activated, setActivated] = useState<boolean>(false)
 	const [fetchedSelectContent, setFetchedSelectContent] = useState<string[]>([])
 	const [actualSelectContent, setActualSelectContent] = useState<string[]>(fetchedSelectContent)
 	const [searchInputValue, setSearchInputValue] = useState<string>('')
+	const [selectedTopics, setSelectedTopics] = useState<string | string[]>('')
 
 	const ref = useRef<HTMLDivElement>(null)
 
@@ -63,12 +66,16 @@ const Select = ({ topicFetchUrl, title }: ISelectProps) => {
 		handleActualSelectContent()
 	}, [searchInputValue, fetchedSelectContent])
 
-
-
 	return (
 		<StyledDiv $expandBoxDisplay={activated} ref={ref}>
 			<button className='select__button' onClick={() => setActivated(!activated)}>
-				{title}
+				{
+					// muda a legenda caso um tópico seja selecionado no modo default
+					type === 'default' ?
+						selectedTopics || title
+					:
+						title
+				}
 				{
 					// ícones de acordo com o select aberto ou não
 					activated ?
@@ -91,7 +98,21 @@ const Select = ({ topicFetchUrl, title }: ISelectProps) => {
 					<ul className='expand-box__topics-list'>
 						{
 							actualSelectContent.map((topic) =>
-								<li>{topic}</li>
+								<li key={topic}>
+									{
+										type === 'default' ?
+											<button onClick={() => setSelectedTopics(topic)}>
+												{topic}
+											</button>
+										:
+											<Checkbox
+												label={topic}
+												value={topic}
+												topics={selectedTopics as string[]}
+												setSelectedTopics={setSelectedTopics}
+											/>
+									}
+								</li>
 							)
 						}
 					</ul>
