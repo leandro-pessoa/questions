@@ -38,23 +38,33 @@ export const StyledDiv = styled.div<IStyledDivProps>`
 		max-height: 200px;
 
 		.expand-box__topics-list {
-			${flex('column', 'center', 'flex-start', '12px')}
 			padding: 6px;
 			padding-bottom: 0;
 			overflow-y: auto;
 
 			li {
+				${flex('row', 'flex-start', 'center')}
+				border-bottom: 1px solid ${(props) => props.theme.colors.primaryBorderColor};
 				width: calc(100% - 16px);
-				padding: 6px 8px;
-				border-bottom: 1px solid ${vars.colors.blue};
+				padding-left: 12px;
+
+				&:hover {
+					cursor: pointer;
+					background-color: ${(props) => props.theme.colors.tertiaryBackgroundColor};
+				}
 
 				&:last-child {
 					border-bottom: none;
 				}
 
-				&:hover {
+				button {
+					background-color: transparent;
+					border: none;
+					width: 100%;
+					text-align: start;
+					padding: 8px;
+					color: ${(props) => props.theme.colors.primaryFontColor};
 					cursor: pointer;
-					background-color: ${(props) => props.theme.colors.tertiaryBackgroundColor};
 				}
 			}
 		}
