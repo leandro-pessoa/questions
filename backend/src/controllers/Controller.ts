@@ -7,7 +7,8 @@ export default class Controller<T> {
 
 	async index(req: Request, res: Response, next: NextFunction) {
 		try {
-			req.result = this.serviceEntity.model
+			req.paginationModel = this.serviceEntity.model
+
 			next()
 		} catch (err) {
 			next(err)
