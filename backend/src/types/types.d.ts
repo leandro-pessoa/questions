@@ -10,6 +10,7 @@ declare global {
 			completeName: string
 			email: string
 			paginationModel: Model<User | Question>
+			paginationFilters: object
 		}
 
 		export interface Response {
@@ -18,6 +19,7 @@ declare global {
 			completeName: string
 			email: string
 			paginationModel: Model<User | Question>
+			paginationFilters: object
 		}
 	}
 }
