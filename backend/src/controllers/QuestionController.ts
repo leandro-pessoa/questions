@@ -3,7 +3,6 @@ import Controller from './Controller'
 import type { IQuestion } from '@/types/IQuestion'
 import type { Request, Response, NextFunction } from 'express'
 import BadRequest from '@/errors/BadRequest'
-import NotFound from '@/errors/NotFound'
 
 const questionService = new QuestionService()
 
@@ -33,11 +32,12 @@ export default class QuestionController extends Controller<IQuestion> {
 		const query = req.query
 
 		try {
-			const questions = await questionService.getFilteredQuestions(query)
+			const filters = await questionService.getQuestionsFilters(query)
 
-			if (questions.length === 0) next(new NotFound('Questões inexistentes com esses filtros'))
+			req.paginationModel = this.serviceEntity.model
+			req.paginationFilters = filters
 
-			res.status(200).json(questions)
+			next()
 		} catch (err) {
 			next(err)
 		}
