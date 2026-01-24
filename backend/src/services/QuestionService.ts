@@ -12,7 +12,7 @@ export default class QuestionService extends CRUDServices<IQuestion> {
 		return result
 	}
 
-	async getFilteredQuestions({
+	async getQuestionsFilters({
 		subject,
 		year,
 		instituition,
@@ -34,14 +34,14 @@ export default class QuestionService extends CRUDServices<IQuestion> {
 			return JSON.parse(param)
 		}
 
-		const questions = await super.getAll({
+		const questionsFilters = {
 			subject: { $in: parseParamToArray(subject) || anyValueRegexp },
 			year: { $in: parseParamToArray(year) || yearInterval },
 			instituition: { $in: parseParamToArray(instituition) || anyValueRegexp },
 			position: { $in: parseParamToArray(position) || anyValueRegexp },
 			examiningBoard: { $in: parseParamToArray(examiningBoard) || anyValueRegexp },
-		})
+		}
 
-		return questions
+		return questionsFilters
 	}
 }
