@@ -210,7 +210,7 @@ describe('Question GET', () => {
 			.get('/filteredQuestions?year=["2200"]&subject=["Matemática", "Português"]')
 			.expect(404, {
 				status: 404,
-				message: 'Questões inexistentes com esses filtros'
+				message: 'Não foram encontrados resultados'
 			})
 	})
 
@@ -255,8 +255,18 @@ describe('Question GET', () => {
 			.get('/filteredQuestions?year=["2026"]&subject=["Matemática"]')
 			.expect('Content-Type', /json/)
 			.then(res => {
-				expect(res.body[0].subject).toEqual('Matemática')
-				expect(res.body[0].year).toEqual(2026)
+				expect(res.body.pageResult[0].subject).toEqual('Matemática')
+				expect(res.body.pageResult[0].year).toEqual(2026)
+			})
+	})
+
+	it('should return filtered questions with pagination and limit', async () => {
+		await request(app)
+			.get('/filteredQuestions?year=["2025"]&subject=["Português", "Matemática"]&page=1&limit=5&order=-1')
+			.expect('Content-Type', /json/)
+			.then(res => {
+				expect(res.body.totalPages).toBeGreaterThanOrEqual(1)
+				expect(res.body.pageResult).toHaveLength(5)
 			})
 	})
 
