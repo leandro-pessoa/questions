@@ -1,6 +1,6 @@
 import type { Model } from "mongoose"
-import type { IQuestion } from "./IQuestion"
-import type { IUser } from "./IUser"
+import Question from "@/db/models/Question"
+import User from "@/db/models/User"
 
 declare global {
 	namespace Express {
@@ -9,7 +9,7 @@ declare global {
 			role: 'default' | 'admin'
 			completeName: string
 			email: string
-			result: Model<IUser | IQuestion>
+			paginationModel: Model<User | Question>
 		}
 
 		export interface Response {
@@ -17,7 +17,7 @@ declare global {
 			role: 'default' | 'admin'
 			completeName: string
 			email: string
-			result: Model<IUser | IQuestion>
+			paginationModel: Model<User | Question>
 		}
 	}
 }
