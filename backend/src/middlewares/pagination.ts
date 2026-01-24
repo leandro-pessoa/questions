@@ -35,7 +35,7 @@ export const pagination = async (
 				.skip((page - 1) * limit)
 				.limit(limit)
 
-			if (pageResult.length === 0) next(new NotFound())
+			if (pageResult.length === 0) next(new NotFound('Não foram encontrados resultados'))
 
 			res.status(200).json({ pageResult, totalPages })
 		} else {
