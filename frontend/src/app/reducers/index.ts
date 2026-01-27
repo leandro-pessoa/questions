@@ -3,10 +3,12 @@ import themeReducer from './theme'
 import loadingReducer from './loading'
 import userReducer from './user'
 import questionReducer from './question'
+import filtersReducer from './filters'
 
 export const rootReducer = combineReducers({
 	theme: themeReducer,
 	loading: loadingReducer,
 	user: userReducer,
-	question: questionReducer
+	question: questionReducer,
+	filters: filtersReducer
 })
