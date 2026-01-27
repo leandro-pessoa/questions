@@ -9,6 +9,8 @@ interface IStyledDivProps {
 const borderRadius = vars.border.radius
 
 export const StyledDiv = styled.div<IStyledDivProps>`
+	position: relative;
+
 	.select__button {
 		${flex('row', 'space-between', 'center', '8px')}
 		background-color: ${(props) => props.theme.colors.tertiaryBackgroundColor};
@@ -27,15 +29,19 @@ export const StyledDiv = styled.div<IStyledDivProps>`
 	}
 
 	.select__expand-box {
-		position: relative;
+		position: absolute;
 		display: ${(props) => props.$expandBoxDisplay ? 'flex' : 'none'};
 		flex-direction: column;
 		gap: 6px;
 		background-color: ${(props) => props.theme.colors.primaryBackgroundColor};
 		padding: 8px;
+		border: 1px solid ${(props) => props.theme.colors.primaryBorderColor};
 		border-radius: 0 0 ${borderRadius} ${borderRadius};
+		border-top: none;
 		z-index: 10;
 		max-height: 200px;
+		left: 0;
+		right: 0;
 
 		.expand-box__topics-list {
 			padding: 6px;
