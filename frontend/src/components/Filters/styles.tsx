@@ -14,9 +14,18 @@ export const StyledSection = styled.section<IStyledSectionProps>`
 	padding: 0 5%;
 
 	.filters__content {
-		height: ${(props) => props.$display ? '100px' : '0'};
-		transition: height .3s;
+		display: grid;
+		grid-template-columns: 32% 32% 32%;
+		gap: 8px;
+		padding: ${(props) => props.$display ? '16px' : '0'} 0;
+		height: ${(props) => props.$display ? 'auto' : '0'};
 		overflow: ${(props) => props.$display ? 'visible' : 'hidden'};
+
+		.content__filter-button {
+			grid-column: 1;
+			grid-row: revert;
+			margin-top: 6px;
+		}
 	}
 
 	@media screen and (min-width: ${vars.breakpoints.tablet}) {
