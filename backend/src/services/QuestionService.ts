@@ -12,7 +12,7 @@ export default class QuestionService extends CRUDServices<IQuestion> {
 		return result
 	}
 
-	async getQuestionsFilters({
+	async getQuestionsWithFilters({
 		subject,
 		year,
 		instituition,

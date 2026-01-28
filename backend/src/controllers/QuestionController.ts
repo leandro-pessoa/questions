@@ -27,12 +27,12 @@ export default class QuestionController extends Controller<IQuestion> {
 		}
 	}
 
-	async filteredQuestionsIndex(req: Request, res: Response, next: NextFunction) {
+	async index(req: Request, res: Response, next: NextFunction) {
 		// query = {subject, year, instituition, position, examiningBoard}
 		const query = req.query
 
 		try {
-			const filters = await questionService.getQuestionsFilters(query)
+			const filters = await questionService.getQuestionsWithFilters(query)
 
 			req.paginationModel = this.serviceEntity.model
 			req.paginationFilters = filters
