@@ -2,9 +2,26 @@ import { useState } from 'react'
 import { StyledSection } from './styles'
 import Button from '../Button'
 import { FunnelPlus, ChevronUp, ChevronDown } from 'lucide-react'
+import FiltersSelect from './FiltersSelect'
+import { useAppDispatch, useAppSelector } from '@/app/hooks'
+import { selectSelectedFilters } from '@/app/reducers/filters'
+import { fetchQuestions } from '@/app/reducers/question'
 
 const Filters = () => {
+	const dispatch = useAppDispatch()
+	const selectedFilters = useAppSelector(selectSelectedFilters)
 	const [display, setDisplay] = useState<boolean>(false)
+
+	const filterHandle = () => {
+		let filtersString = ''
+
+		selectedFilters.forEach(filter => {
+			if (filter.values.length >= 1) {
+				filtersString += `${filter.topic}=[${filter.values.map(value => `"${value}"`)}]&`
+			}
+		})
+		dispatch(fetchQuestions({filters: filtersString.slice(0, -1)}))
+	}
 
 	return (
 		<StyledSection $display={display}>
@@ -26,9 +43,12 @@ const Filters = () => {
 				}
 			</Button>
 			<div className='filters__content'>
-				<div>
-					dsadas
-				</div>
+				<FiltersSelect title='Disciplina' topicFetchUrl='subject' type='checkbox'/>
+				<FiltersSelect title='Ano' topicFetchUrl='year' type='checkbox'/>
+				<FiltersSelect title='Organização' topicFetchUrl='instituition' type='checkbox'/>
+				<FiltersSelect title='Cargo' topicFetchUrl='position' type='checkbox'/>
+				<FiltersSelect title='Banca' topicFetchUrl='examiningBoard' type='checkbox'/>
+				<Button className='content__filter-button' onClick={filterHandle}>Filtrar</Button>
 			</div>
 		</StyledSection>
 	)
