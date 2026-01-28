@@ -1,8 +1,9 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit"
 import type { RootState } from "../store"
+import type { IFilter } from "@/types/IFilter"
 
 interface IFilters {
-	selectedFilters: {topic: string, values: string[]}[]
+	selectedFilters: IFilter[]
 }
 
 const initialState: IFilters = {
