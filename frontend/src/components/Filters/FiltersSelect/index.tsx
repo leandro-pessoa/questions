@@ -77,20 +77,19 @@ const FiltersSelect = ({ topicFetchUrl, title, type = 'default' }: IFiltersSelec
 			return (
 				<ul className='expand-box__topics-list'>
 					{
-						actualSelectContent.map((topic) =>
-							<li key={topic}>
+						actualSelectContent.map((value) =>
+							<li key={value}>
 								{
 									// troca o tipo de tópico selecionável, de acordo com a prop type
 									type === 'default' ?
-										<button onClick={() => setSelectedTopics(topic)}>
-											{topic}
+										<button onClick={() => setSelectedTopics(value)}>
+											{value}
 										</button>
 									:
 										<Checkbox
-											label={topic}
-											value={topic}
-											topics={selectedTopics as string[]}
-											setSelectedTopics={setSelectedTopics}
+											label={value}
+											value={value}
+											topic={topicFetchUrl}
 										/>
 								}
 							</li>
