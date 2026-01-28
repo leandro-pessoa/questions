@@ -1,9 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
+import { axiosError } from '@/utils/axiosError'
+import { http } from '@/http'
+import { useAppDispatch, useAppSelector } from '@/app/hooks'
+import { selectSelectedFilters, toggleCheckboxFilter } from '@/app/reducers/filters'
+
 import { StyledDiv } from './styles'
 import { ChevronDown, ChevronUp } from 'lucide-react'
 import Input from '../../Input'
-import { http } from '@/http'
-import { axiosError } from '@/utils/axiosError'
 import { Loading } from '../../Loading'
 import Checkbox from '../../Checkbox'
 
@@ -14,6 +17,9 @@ interface IFiltersSelectProps {
 }
 
 const FiltersSelect = ({ topicFetchUrl, title, type = 'default' }: IFiltersSelectProps) => {
+	const dispatch = useAppDispatch()
+
+	const selectedFilters = useAppSelector(selectSelectedFilters)
 	const [activated, setActivated] = useState<boolean>(false)
 	const [fetchedSelectContent, setFetchedSelectContent] = useState<string[]>([])
 	const [actualSelectContent, setActualSelectContent] = useState<string[]>(fetchedSelectContent)
@@ -88,8 +94,16 @@ const FiltersSelect = ({ topicFetchUrl, title, type = 'default' }: IFiltersSelec
 									:
 										<Checkbox
 											label={value}
-											value={value}
-											topic={topicFetchUrl}
+											checkHandle={
+												()=>dispatch(
+													toggleCheckboxFilter({topic: topicFetchUrl, value})
+												)
+											}
+											checked={
+												selectedFilters.find(
+													filter => filter.topic === topicFetchUrl
+												)?.values.includes(value) || false
+											}
 										/>
 								}
 							</li>
