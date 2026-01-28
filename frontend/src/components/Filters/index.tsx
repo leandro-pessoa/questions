@@ -1,11 +1,13 @@
 import { useState } from 'react'
+import { useAppDispatch, useAppSelector } from '@/app/hooks'
+import { selectSelectedFilters } from '@/app/reducers/filters'
+import { fetchQuestions } from '@/app/reducers/question'
+
 import { StyledSection } from './styles'
 import Button from '../Button'
 import { FunnelPlus, ChevronUp, ChevronDown } from 'lucide-react'
 import FiltersSelect from './FiltersSelect'
-import { useAppDispatch, useAppSelector } from '@/app/hooks'
-import { selectSelectedFilters } from '@/app/reducers/filters'
-import { fetchQuestions } from '@/app/reducers/question'
+import SelectedFilters from './SelectedFilters'
 
 const Filters = () => {
 	const dispatch = useAppDispatch()
@@ -43,11 +45,14 @@ const Filters = () => {
 				}
 			</Button>
 			<div className='filters__content'>
-				<FiltersSelect title='Disciplina' topicFetchUrl='subject' type='checkbox'/>
-				<FiltersSelect title='Ano' topicFetchUrl='year' type='checkbox'/>
-				<FiltersSelect title='Organização' topicFetchUrl='instituition' type='checkbox'/>
-				<FiltersSelect title='Cargo' topicFetchUrl='position' type='checkbox'/>
-				<FiltersSelect title='Banca' topicFetchUrl='examiningBoard' type='checkbox'/>
+				<div className='content__selects'>
+					<FiltersSelect title='Disciplina' topicFetchUrl='subject' type='checkbox'/>
+					<FiltersSelect title='Ano' topicFetchUrl='year' type='checkbox'/>
+					<FiltersSelect title='Organização' topicFetchUrl='instituition' type='checkbox'/>
+					<FiltersSelect title='Cargo' topicFetchUrl='position' type='checkbox'/>
+					<FiltersSelect title='Banca' topicFetchUrl='examiningBoard' type='checkbox'/>
+				</div>
+				<SelectedFilters />
 				<Button className='content__filter-button' onClick={filterHandle}>Filtrar</Button>
 			</div>
 		</StyledSection>
