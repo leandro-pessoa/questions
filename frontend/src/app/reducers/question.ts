@@ -53,12 +53,13 @@ const questionSlice = createSlice({
 // obtém os dados da api dos questions (index)
 export const fetchQuestions = createAsyncThunk(
     'question/fetchQuestions',
-    async (pagination?: {page?: number, limit?: number}) => {
+    async (pagination?: {page?: number, limit?: number, filters?: string}) => {
         // tenta obter os dados e retorna eles
         try {
+			// a url get pode receber parâmetros de filtro e paginação
             const questions =
 				await http.get<{pageResult: IQuestion[], totalPages: number}>(
-					`/questions?page=${pagination?.page ? pagination?.page : 1}&limit=${pagination?.limit ? pagination?.limit : 10}`
+					`/questions?page=${pagination?.page ? pagination?.page : 1}&limit=${pagination?.limit ? pagination?.limit : 10}${pagination?.filters ? `&${pagination?.filters}`: ''}`
 				)
             return questions.data
         } catch (err) {
