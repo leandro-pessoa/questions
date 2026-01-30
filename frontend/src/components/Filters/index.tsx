@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { useAppDispatch, useAppSelector } from '@/app/hooks'
 import { selectSelectedFilters } from '@/app/reducers/filters'
 import { fetchQuestions } from '@/app/reducers/question'
+import { useFilter } from '@/app/hooks/useFilter'
+import { toast } from 'react-toastify'
 
 import { StyledSection } from './styles'
 import Button from '../Button'
@@ -13,8 +15,14 @@ const Filters = () => {
 	const dispatch = useAppDispatch()
 	const selectedFilters = useAppSelector(selectSelectedFilters)
 	const [display, setDisplay] = useState<boolean>(false)
+	const { isAnyFilterSelected } = useFilter()
 
 	const filterHandle = () => {
+		if (!isAnyFilterSelected) {
+			toast.error('Selecione ao menos um filtro!')
+			return
+		}
+
 		let filtersString = ''
 
 		selectedFilters.forEach(filter => {
@@ -53,7 +61,13 @@ const Filters = () => {
 					<FiltersSelect title='Banca' topicFetchUrl='examiningBoard' type='checkbox'/>
 				</div>
 				<SelectedFilters />
-				<Button className='content__filter-button' onClick={filterHandle}>Filtrar</Button>
+				<Button
+					className='content__filter-button'
+					onClick={filterHandle}
+					style={{ marginTop: '12px', padding: '6px 32px'}}
+				>
+					Filtrar
+				</Button>
 			</div>
 		</StyledSection>
 	)

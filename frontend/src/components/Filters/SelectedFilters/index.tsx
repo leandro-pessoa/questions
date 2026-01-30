@@ -1,18 +1,21 @@
 import { useAppDispatch, useAppSelector } from '@/app/hooks'
-import { StyledDiv } from './styles'
 import {
 	selectSelectedFilters,
 	toggleCheckboxFilter,
 } from '@/app/reducers/filters'
+import { useFilter } from '@/app/hooks/useFilter'
+
+import { StyledDiv } from './styles'
 import Button from '@/components/Button'
 import { CircleX } from 'lucide-react'
 
 const SelectedFilters = () => {
 	const dispatch = useAppDispatch()
 	const selectedFilters = useAppSelector(selectSelectedFilters)
+	const { isAnyFilterSelected } = useFilter()
 
 	return (
-		<StyledDiv>
+		<StyledDiv style={{ display: isAnyFilterSelected ? 'block' : 'none'}}>
 			<ul>
 				{selectedFilters.map((filter) => {
 					if (filter.values.length >= 1) {
