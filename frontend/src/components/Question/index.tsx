@@ -73,6 +73,7 @@ const Question = ({
 			</div>
 			<p className='question__statement'>{statement}</p>
 			<ol className='question__alternatives'>
+				{/* alternativas da questão */}
 				{alternatives.map((alternative) => {
 					return (
 						<Option
@@ -85,13 +86,20 @@ const Question = ({
 					)
 				})}
 			</ol>
+			{/*
+				verifica três fatores para o button aparecer:
+				- se há opção selecionada
+				- se há user logado
+				- se já foi respondida
+			*/}
 			{selectedOption !== null && user && !isAnswered && (
 				<Button style={{ marginTop: '16px' }} onClick={answerQuestion}>
 					Responder
 				</Button>
 			)}
+			{/* verifica se já foi respondida */}
 			{isAnswered &&
-				(selectedOption?.right ? (
+				(selectedOption?.right ? ( // verifica se a opção selecinada foi a correta, retornando o elemento correspondente
 					<QuestionFeedback correct={true}>
 						Resposta correta!
 					</QuestionFeedback>
