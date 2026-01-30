@@ -15,37 +15,39 @@ const filtersSlice = createSlice({
 	initialState,
 	reducers: {
 		// irá adicionar objetos ou remover valores da lista do objeto adicionado com um clique
-		toggleCheckboxFilter: (state, action: PayloadAction<{topic: string, value: string}>) => {
+		toggleCheckboxFilter: (state, action: PayloadAction<{topic: string, value: string, displayName: string}>) => {
 			// verifica se o tópico (ex: subject, year) já existe na lista
 			const existentTopic =
 				state.selectedFilters.find(
-					filter => filter.topic === action.payload.topic
+					(filter) => filter.topic === action.payload.topic
 				)
 
 			// caso exista, irá manipulá-lo
 			if(existentTopic) {
 				// caso o valor da checkbox exista na lista do tópico
 				if(existentTopic.values.includes(action.payload.value)) {
-					state.selectedFilters = state.selectedFilters.map(filter => {
+					state.selectedFilters = state.selectedFilters.map((filter) => {
 						// verifica se o tópico é o mesmo
 						if(filter.topic === action.payload.topic) {
 							// e remove o valor selecionado da lista
 							return {
 								topic: action.payload.topic,
-								values: filter.values.filter(value => value !== action.payload.value)
+								values: filter.values.filter((value) => value !== action.payload.value),
+								displayName: action.payload.displayName
 							}
 						}
 						// retorna o valor anterior caso não seja o escolhido
 						return filter
 					})
 				} else { // caso o valor da checkbox não exista na lista do tópico
-					state.selectedFilters = state.selectedFilters.map(filter => {
+					state.selectedFilters = state.selectedFilters.map((filter) => {
 						// verifica se é o mesmo tópico
 						if(filter.topic === action.payload.topic) {
 							// adiciona o valor na lista
 							return {
 								topic: action.payload.topic,
-								values: [...filter.values, action.payload.value]
+								values: [...filter.values, action.payload.value],
+								displayName: action.payload.displayName
 							}
 						}
 						// retorna o valor anterior caso não seja o escolhido
@@ -57,7 +59,11 @@ const filtersSlice = createSlice({
 					[
 						...state.selectedFilters,
 						// tópico e o valor selecionado (valor da checkbox)
-						{topic: action.payload.topic, values: [action.payload.value]}
+						{
+							topic: action.payload.topic,
+							values: [action.payload.value],
+							displayName: action.payload.displayName
+						}
 					]
 			}
 		}
