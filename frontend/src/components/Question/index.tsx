@@ -1,14 +1,16 @@
-import { StyledLi } from './styles'
-import type { IQuestion } from '@/types/IQuestion'
-import Button from '../Button'
-import Option from './Option'
+import { selectToken, selectUser } from '@/app/reducers/user'
 import { useState } from 'react'
 import { http } from '@/http'
-import type { IAlternative } from '@/types/IAlternative'
 import { axiosError } from '@/utils/axiosError'
 import { useAppSelector } from '@/app/hooks'
-import { selectToken, selectUser } from '@/app/reducers/user'
+
+import { StyledLi } from './styles'
+import Button from '../Button'
+import Option from './Option'
 import QuestionFeedback from './QuestionFeedback'
+
+import type { IAlternative } from '@/types/IAlternative'
+import type { IQuestion } from '@/types/IQuestion'
 
 interface IQuestionProps {
 	index: number
@@ -32,10 +34,14 @@ const Question = ({
 	)
 	const [isAnswered, setIsAnswered] = useState<boolean>(false)
 
+	// atualiza o user logado com a questão e opção selecinada
 	const answerQuestion = async () => {
+		// caso não haja user, não faça nada
 		if (!user) return
 
 		try {
+			// faz a requisição put com o id da questão respondida, opção selecionada
+			// e o token do user logado
 			await http
 				.put(
 					'/users/answerQuestion',
@@ -45,7 +51,7 @@ const Question = ({
 					},
 					{ headers: { Authorization: token && `Bearer ${token}` } },
 				)
-				.then(() => setIsAnswered(true))
+				.then(() => setIsAnswered(true)) // atualiza o state, atualizando a interface
 		} catch (err) {
 			axiosError(err)
 		}

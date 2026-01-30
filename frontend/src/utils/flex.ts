@@ -1,3 +1,4 @@
+// facilitador para um display flex nos styles
 export const flex = (
 	direction: 'row' | 'column' = 'row',
 	justify: string = 'auto',
