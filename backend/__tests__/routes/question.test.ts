@@ -207,7 +207,7 @@ describe('Question GET', () => {
 
 	it('should return an error if filtered questions is not found', async () => {
 		await request(app)
-			.get('/filteredQuestions?year=["2200"]&subject=["Matemática", "Português"]')
+			.get('/questions?year=["2200"]&subject=["Matemática", "Português"]')
 			.expect(404, {
 				status: 404,
 				message: 'Não foram encontrados resultados'
@@ -216,7 +216,7 @@ describe('Question GET', () => {
 
 	it('should return an error if url query is invalid', async () => {
 		await request(app)
-			.get('/filteredQuestions?year=["2025", "2026"]&subject=["Matemática')
+			.get('/questions?year=["2025", "2026"]&subject=["Matemática')
 			.expect(500, {
 				status: 500,
 				message: 'Erro interno do servidor'
@@ -252,7 +252,7 @@ describe('Question GET', () => {
 
 	it('should return filtered questions if url query is valid and found a question', async () => {
 		await request(app)
-			.get('/filteredQuestions?year=["2026"]&subject=["Matemática"]')
+			.get('/questions?year=["2026"]&subject=["Matemática"]')
 			.expect('Content-Type', /json/)
 			.then(res => {
 				expect(res.body.pageResult[0].subject).toEqual('Matemática')
@@ -262,7 +262,7 @@ describe('Question GET', () => {
 
 	it('should return filtered questions with pagination and limit', async () => {
 		await request(app)
-			.get('/filteredQuestions?year=["2025"]&subject=["Português", "Matemática"]&page=1&limit=5&order=-1')
+			.get('/questions?year=["2025"]&subject=["Português", "Matemática"]&page=1&limit=5&order=-1')
 			.expect('Content-Type', /json/)
 			.then(res => {
 				expect(res.body.totalPages).toBeGreaterThanOrEqual(1)
