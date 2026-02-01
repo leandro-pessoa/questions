@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import { axiosError } from '@/utils/axiosError'
 import { http } from '@/http'
 import { useAppDispatch, useAppSelector } from '@/app/hooks'
@@ -6,23 +6,31 @@ import { selectSelectedFilters, toggleCheckboxFilter } from '@/app/reducers/filt
 
 import { StyledDiv } from './styles'
 import { ChevronDown, ChevronUp } from 'lucide-react'
-import Input from '../../Input'
-import { Loading } from '../../Loading'
-import Checkbox from '../../Checkbox'
+import Input from '@/components/Input'
+import { Loading } from '@/components/Loading'
+import Checkbox from '@/components/Checkbox'
 
 interface IFiltersSelectProps {
-	topicFetchUrl: string
+	topicFetchUrl?: string
 	title: string
 	type?: 'checkbox' | 'default'
+	defaultContent?: string[]
+	style?: CSSProperties
 }
 
-const FiltersSelect = ({ topicFetchUrl, title, type = 'default' }: IFiltersSelectProps) => {
+const FiltersSelect = ({
+	topicFetchUrl,
+	title,
+	type = 'default',
+	defaultContent = [],
+	style
+}: IFiltersSelectProps) => {
 	const dispatch = useAppDispatch()
 
 	const selectedFilters = useAppSelector(selectSelectedFilters)
 	const [activated, setActivated] = useState<boolean>(false)
-	const [fetchedSelectContent, setFetchedSelectContent] = useState<string[]>([])
-	const [actualSelectContent, setActualSelectContent] = useState<string[]>(fetchedSelectContent)
+	const [selectContent, setSelectContent] = useState<string[]>(defaultContent)
+	const [actualSelectContent, setActualSelectContent] = useState<string[]>(defaultContent)
 	const [searchInputValue, setSearchInputValue] = useState<string>('')
 	const [selectedTopics, setSelectedTopics] = useState<string | string[]>('')
 
@@ -42,7 +50,7 @@ const FiltersSelect = ({ topicFetchUrl, title, type = 'default' }: IFiltersSelec
 		const fetchContent = async () => {
 			try {
 				const res = await http.get<string[]>(`/column?selectedColumn=${topicFetchUrl}`)
-				setFetchedSelectContent(res.data)
+				setSelectContent(res.data)
 				setActualSelectContent(res.data)
 			} catch(err) {
 				axiosError(err)
@@ -50,19 +58,19 @@ const FiltersSelect = ({ topicFetchUrl, title, type = 'default' }: IFiltersSelec
 		}
 
 		// somente executa o fetch caso não tenha sido executado antes
-		if (activated === true && fetchedSelectContent.length === 0) {
+		if (activated === true && selectContent.length === 0 && topicFetchUrl) {
 			fetchContent()
 		}
-    }, [activated, setActivated, fetchedSelectContent, topicFetchUrl])
+    }, [activated, setActivated, selectContent, topicFetchUrl, setSelectContent])
 
 	useEffect(() => {
 		// altera o state que exibe os tópicos conforme o searchInputValue
 		const handleActualSelectContent = () => {
 			if(!searchInputValue) { // caso esteja vazio, exibe todos os elementos retornados pelo fetch
-				setActualSelectContent(fetchedSelectContent)
+				setActualSelectContent(selectContent)
 			} else { // caso seja preenchido, irá setar o state os tópicos que passem no teste de regexp
 				setActualSelectContent(
-					fetchedSelectContent.filter(
+					selectContent.filter(
 						(topic) => new RegExp(searchInputValue, 'i').test(topic)
 					)
 				)
@@ -70,14 +78,21 @@ const FiltersSelect = ({ topicFetchUrl, title, type = 'default' }: IFiltersSelec
 		}
 		// executa a função caso o searchInputValue seja alterado
 		handleActualSelectContent()
-	}, [searchInputValue, fetchedSelectContent])
+	}, [searchInputValue, selectContent])
+
+	// handle para o select default
+	// fecha o content quando algo é selecionado
+	const buttonClickHandle = (value: string) => {
+		setSelectedTopics(value)
+		setActivated(false)
+	}
 
 	// renderiza a lista de tópicos selecionáveis
 	const renderSelectableElements = () => {
 		// renderiza o loading caso o fetch ainda esteja sendo realizado
-		if(fetchedSelectContent.length === 0) {
+		if(selectContent.length === 0 && topicFetchUrl) {
 			return <Loading $borderSize='2px' $size='20px'><div></div></Loading>
-		} else if (fetchedSelectContent.length > 0 && actualSelectContent.length === 0) { // renderiza uma mensagem caso nenhum valor tenha sido encontrado na pesquisa
+		} else if (selectContent.length > 0 && actualSelectContent.length === 0) { // renderiza uma mensagem caso nenhum valor tenha sido encontrado na pesquisa
 			return <p style={{ textAlign: 'center', padding: '8px 0'}}>Nenhum valor foi encontrado</p>
 		} else { // senão, renderiza os valores
 			return (
@@ -88,7 +103,7 @@ const FiltersSelect = ({ topicFetchUrl, title, type = 'default' }: IFiltersSelec
 								{
 									// troca o tipo de tópico selecionável, de acordo com a prop type
 									type === 'default' ?
-										<button onClick={() => setSelectedTopics(value)}>
+										<button onClick={() => buttonClickHandle(value)}>
 											{value}
 										</button>
 									:
@@ -96,7 +111,12 @@ const FiltersSelect = ({ topicFetchUrl, title, type = 'default' }: IFiltersSelec
 											label={value}
 											checkHandle={
 												()=>dispatch(
-													toggleCheckboxFilter({topic: topicFetchUrl, value})
+													toggleCheckboxFilter(
+														{
+															topic: topicFetchUrl || '',
+															value,
+															displayName: title}
+													)
 												)
 											}
 											checked={
@@ -115,7 +135,7 @@ const FiltersSelect = ({ topicFetchUrl, title, type = 'default' }: IFiltersSelec
 	}
 
 	return (
-		<StyledDiv $expandBoxDisplay={activated} ref={ref}>
+		<StyledDiv $expandBoxDisplay={activated} ref={ref} style={style}>
 			<button className='select__button' onClick={() => setActivated(!activated)}>
 				{
 					// muda a legenda caso um tópico seja selecionado no modo default
