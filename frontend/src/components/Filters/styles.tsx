@@ -1,4 +1,5 @@
 import { vars } from '@/styles/vars'
+import { flex } from '@/utils/flex'
 import styled from 'styled-components'
 
 interface IStyledSectionProps {
@@ -24,17 +25,16 @@ export const StyledSection = styled.section<IStyledSectionProps>`
 			gap: 8px;
 		}
 
-		.content__filter-button {
-			grid-column: 1;
-			grid-row: revert;
-			margin-top: 6px;
+		.content__bottom {
+			${flex('row', 'space-between', 'center', '12px')}
+			margin-top: 12px;
 		}
 	}
 
 	@media screen and (min-width: ${vars.breakpoints.smallSmartphone}) {
 		.filters__content {
 			.content__selects {
-				grid-template-columns: 49% 49%;
+				grid-template-columns: auto auto;
 			}
 		}
 	}
@@ -44,7 +44,7 @@ export const StyledSection = styled.section<IStyledSectionProps>`
 
 		.filters__content {
 			.content__selects {
-				grid-template-columns: 32% 32% 32%;
+				grid-template-columns: auto auto auto;
 			}
 		}
 	}

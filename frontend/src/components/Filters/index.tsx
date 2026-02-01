@@ -61,13 +61,19 @@ const Filters = () => {
 					<FiltersSelect title='Banca' topicFetchUrl='examiningBoard' type='checkbox'/>
 				</div>
 				<SelectedFilters />
-				<Button
-					className='content__filter-button'
-					onClick={filterHandle}
-					style={{ marginTop: '12px', padding: '6px 32px'}}
-				>
-					Filtrar
-				</Button>
+				<div className='content__bottom'>
+					<Button
+						onClick={filterHandle}
+						style={{ padding: '6px 32px'}}
+					>
+						Filtrar
+					</Button>
+					<FiltersSelect
+						title='Qtde resultados'
+						defaultContent={['5', '10', '15', '20', '30']}
+						style={{width: '210px'}}
+					/>
+				</div>
 			</div>
 		</StyledSection>
 	)
