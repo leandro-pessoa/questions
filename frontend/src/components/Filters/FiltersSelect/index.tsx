@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import { axiosError } from '@/utils/axiosError'
 import { http } from '@/http'
 import { useAppDispatch, useAppSelector } from '@/app/hooks'
-import { selectSelectedFilters, toggleCheckboxFilter } from '@/app/reducers/filters'
+import { selectSelectedFilters, setLimit, toggleCheckboxFilter } from '@/app/reducers/filters'
 
 import { StyledDiv } from './styles'
 import { ChevronDown, ChevronUp } from 'lucide-react'
@@ -84,6 +84,7 @@ const FiltersSelect = ({
 	// fecha o content quando algo é selecionado
 	const buttonClickHandle = (value: string) => {
 		setSelectedTopics(value)
+		dispatch(setLimit(Number(value)))
 		setActivated(false)
 	}
 

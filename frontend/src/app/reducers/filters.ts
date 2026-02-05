@@ -4,10 +4,12 @@ import type { IFilter } from "@/types/IFilter"
 
 interface IFilters {
 	selectedFilters: IFilter[]
+	limit: number
 }
 
 const initialState: IFilters = {
-	selectedFilters: []
+	selectedFilters: [],
+	limit: 10
 }
 
 const filtersSlice = createSlice({
@@ -66,12 +68,17 @@ const filtersSlice = createSlice({
 						}
 					]
 			}
+		},
+
+		setLimit: (state, action: PayloadAction<number>) => {
+			state.limit = action.payload
 		}
 	}
 })
 
 export default filtersSlice.reducer
 
-export const { toggleCheckboxFilter } = filtersSlice.actions
+export const { toggleCheckboxFilter, setLimit } = filtersSlice.actions
 
 export const selectSelectedFilters = (state: RootState) => state.filters.selectedFilters
+export const selectLimit = (state: RootState) => state.filters.limit

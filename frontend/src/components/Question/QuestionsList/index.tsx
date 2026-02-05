@@ -8,6 +8,7 @@ import {
 	selectQuestionsStatus,
 	selectTotalQuestionPages,
 } from '@/app/reducers/question'
+import { selectLimit } from '@/app/reducers/filters'
 
 import Question from '..'
 import { Loading } from '@/components/Loading'
@@ -29,6 +30,7 @@ const QuestionsList = () => {
 	const questionsFetchStatus = useAppSelector(selectQuestionsStatus)
 	const questions = useAppSelector(selectQuestions)
 	const totalQuestionPages = useAppSelector(selectTotalQuestionPages)
+	const limit = useAppSelector(selectLimit)
 
 	useEffect(() => {
 		dispatch(fetchQuestions())
@@ -80,7 +82,7 @@ const QuestionsList = () => {
 	return (
 		<>
 			{renderQuestions()}
-			<Pagination fetchFunc={fetchQuestions} totalPages={totalQuestionPages} limit={10}/>
+			<Pagination fetchFunc={fetchQuestions} totalPages={totalQuestionPages} limit={limit}/>
 		</>
 	)
 
