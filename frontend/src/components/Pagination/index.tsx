@@ -69,6 +69,10 @@ const Pagination = ({ totalPages, limit, fetchFunc }: IPaginationProps) => {
 			numbersArray = numbersArray.slice(0, actualPage + 4)
 		} else if (actualPage === 2) { // mostra a página 1, 2 e três a frente
 			numbersArray = numbersArray.slice(0, actualPage + 3)
+		} else if (actualPage === totalPages - 1) { // mostra a penúltima página, 3 atrás e uma a frente
+			numbersArray = numbersArray.slice(actualPage - 4, actualPage + 1)
+		} else if (actualPage === totalPages) {  // mostra a última página e 4 atrás
+			numbersArray = numbersArray.slice(actualPage - 5, actualPage)
 		} else { // mostra a página atual ao meio e mais duas na frente e atrás
 			numbersArray = numbersArray.slice(actualPage - 3, actualPage + 2)
 		}
