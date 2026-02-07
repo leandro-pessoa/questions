@@ -2,8 +2,6 @@ import { useState } from 'react'
 import { useAppDispatch, useAppSelector } from '@/app/hooks'
 import { selectLimit, selectSelectedFilters } from '@/app/reducers/filters'
 import { fetchQuestions } from '@/app/reducers/question'
-import { useFilter } from '@/app/hooks/useFilter'
-import { toast } from 'react-toastify'
 
 import { StyledSection } from './styles'
 import Button from '../Button'
@@ -16,14 +14,8 @@ const Filters = () => {
 	const selectedFilters = useAppSelector(selectSelectedFilters)
 	const limit = useAppSelector(selectLimit)
 	const [display, setDisplay] = useState<boolean>(false)
-	const { isAnyFilterSelected } = useFilter()
 
 	const filterHandle = () => {
-		if (!isAnyFilterSelected && limit === 10) {
-			toast.error('Selecione ao menos um filtro!')
-			return
-		}
-
 		let filtersString = ''
 
 		selectedFilters.forEach(filter => {
