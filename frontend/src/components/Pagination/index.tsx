@@ -32,6 +32,11 @@ const Pagination = ({ totalPages, limit, fetchFunc }: IPaginationProps) => {
 		window.scrollTo(0, 0)
 	}, [actualPage])
 
+	useEffect(() => {
+		// eslint-disable-next-line react-hooks/set-state-in-effect
+		setActualPage(1)
+	}, [limit])
+
 	// troca a página para a informada no parâmetro, fazendo o fetch e setando o state local
 	const changePage = (page: number) => {
 		// caso a página selecionada for a atual, não faz nada
