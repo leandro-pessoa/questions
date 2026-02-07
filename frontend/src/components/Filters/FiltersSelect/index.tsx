@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import { axiosError } from '@/utils/axiosError'
 import { http } from '@/http'
 import { useAppDispatch, useAppSelector } from '@/app/hooks'
-import { selectSelectedFilters, setLimit, toggleCheckboxFilter } from '@/app/reducers/filters'
+import { selectLimit, selectSelectedFilters, setLimit, toggleCheckboxFilter } from '@/app/reducers/filters'
 
 import { StyledDiv } from './styles'
 import { ChevronDown, ChevronUp } from 'lucide-react'
@@ -28,6 +28,8 @@ const FiltersSelect = ({
 	const dispatch = useAppDispatch()
 
 	const selectedFilters = useAppSelector(selectSelectedFilters)
+	const limit = useAppSelector(selectLimit)
+
 	const [activated, setActivated] = useState<boolean>(false)
 	const [selectContent, setSelectContent] = useState<string[]>(defaultContent)
 	const [actualSelectContent, setActualSelectContent] = useState<string[]>(defaultContent)
@@ -83,6 +85,10 @@ const FiltersSelect = ({
 	// handle para o select default
 	// fecha o content quando algo é selecionado
 	const buttonClickHandle = (value: string) => {
+		if (Number(value) === limit) {
+			return
+		}
+
 		setSelectedTopics(value)
 		dispatch(setLimit(Number(value)))
 		setActivated(false)
@@ -104,8 +110,12 @@ const FiltersSelect = ({
 								{
 									// troca o tipo de tópico selecionável, de acordo com a prop type
 									type === 'default' ?
-										<button onClick={() => buttonClickHandle(value)}>
+										<button
+											onClick={() => buttonClickHandle(value)}
+											disabled={limit === Number(value)}
+										>
 											{value}
+												{limit === Number(value) && ' - Atual'}
 										</button>
 									:
 										<Checkbox
