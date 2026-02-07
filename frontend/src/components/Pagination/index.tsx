@@ -1,26 +1,16 @@
 import { useAppDispatch } from '@/app/hooks'
 import { useEffect, useState } from 'react'
+import { vars } from '@/styles/vars'
 
 import { StyledUl } from './styles'
 import { ChevronRight, ChevronLeft, ChevronsRight, ChevronsLeft } from 'lucide-react'
 import Button from '../Button'
 
-import type { AsyncThunkAction, AsyncThunkConfig, AsyncThunkDispatchConfig } from '@reduxjs/toolkit'
-import { vars } from '@/styles/vars'
-
 interface IPaginationProps {
 	totalPages: number
 	limit: number
-	fetchFunc(arg?: {
-		page?: number;
-		limit?: number;
-	} | undefined, config?: AsyncThunkDispatchConfig): AsyncThunkAction<{
-		pageResult: object[];
-		totalPages: number;
-	}, {
-		page?: number;
-		limit?: number;
-	} | undefined, AsyncThunkConfig>
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	fetchFunc: (args?: { page?: number; limit?: number; filters?: string }) =>  any
 }
 
 const Pagination = ({ totalPages, limit, fetchFunc }: IPaginationProps) => {
