@@ -4,9 +4,10 @@ import styled from 'styled-components'
 import { useAppDispatch, useAppSelector } from '@/app/hooks'
 import {
 	fetchQuestions,
+	selectActualPage,
 	selectQuestions,
 	selectQuestionsStatus,
-	selectTotalQuestionPages,
+	selectTotalQuestionPages
 } from '@/app/reducers/question'
 import { selectLimit } from '@/app/reducers/filters'
 
@@ -30,6 +31,7 @@ const QuestionsList = () => {
 	const questionsFetchStatus = useAppSelector(selectQuestionsStatus)
 	const questions = useAppSelector(selectQuestions)
 	const totalQuestionPages = useAppSelector(selectTotalQuestionPages)
+	const actualPage = useAppSelector(selectActualPage)
 	const limit = useAppSelector(selectLimit)
 
 	useEffect(() => {
@@ -53,10 +55,18 @@ const QuestionsList = () => {
 						<StyledUl>
 							{
 								questions?.map((question: IQuestion, index) => {
+									const indexPlus: number = index + 1
+
 									return (
 										<Question
 											{...question}
-											index={index}
+											index={ // verifica se é a primeira página
+												actualPage === 1 ?
+													indexPlus // index do array + 1
+												:
+													// cálculo para gerar valores do restante das páginas
+													(limit * (actualPage - 1)) + indexPlus
+											}
 											key={question._id}
 										/>
 									)
