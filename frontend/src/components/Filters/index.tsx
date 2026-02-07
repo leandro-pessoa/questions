@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import { useAppDispatch, useAppSelector } from '@/app/hooks'
-import { selectLimit, selectSelectedFilters } from '@/app/reducers/filters'
+import { selectLimit, selectPreviousLimit, selectSelectedFilters, setLimit } from '@/app/reducers/filters'
 import { fetchQuestions } from '@/app/reducers/question'
+import { useFilter } from '@/app/hooks/useFilter'
+import { toast } from 'react-toastify'
 
 import { StyledSection } from './styles'
 import Button from '../Button'
@@ -13,16 +15,24 @@ const Filters = () => {
 	const dispatch = useAppDispatch()
 	const selectedFilters = useAppSelector(selectSelectedFilters)
 	const limit = useAppSelector(selectLimit)
+	const previousLimit = useAppSelector(selectPreviousLimit)
 	const [display, setDisplay] = useState<boolean>(false)
+	const { isAnyFilterSelected } = useFilter()
 
 	const filterHandle = () => {
 		let filtersString = ''
+
+		if (!isAnyFilterSelected && limit === previousLimit) {
+			toast.error('Selecione ao menos um filtro!')
+			return
+		}
 
 		selectedFilters.forEach(filter => {
 			if (filter.values.length >= 1) {
 				filtersString += `${filter.topic}=[${filter.values.map(value => `"${value}"`)}]&`
 			}
 		})
+		dispatch(setLimit(limit))
 		dispatch(fetchQuestions({filters: filtersString.slice(0, -1), limit}))
 	}
 
