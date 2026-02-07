@@ -8,12 +8,16 @@ interface IQuestionState {
 	status: 'idle' | 'succeeded' | 'pending' | 'failed'
 	questions: IQuestion[] | null
 	totalQuestionPages: number
+	totalQuestions: number
+	actualPage: number
 }
 
 const initialState: IQuestionState = {
 	status: 'idle',
 	questions: null,
-	totalQuestionPages: 0
+	totalQuestionPages: 0,
+	totalQuestions: 0,
+	actualPage: 0
 }
 
 const questionSlice = createSlice({
@@ -38,8 +42,10 @@ const questionSlice = createSlice({
 
                 // preenche o state questions caso a resposta não seja um falsy value
                 if (action.payload) {
-                    state.questions = [...action.payload.pageResult]
-					state.totalQuestionPages = action.payload.totalPages
+                    state.questions = [...action.payload.data.pageResult]
+					state.totalQuestionPages = action.payload.data.totalPages
+					state.totalQuestions = action.payload.data.totalValues
+					state.actualPage = Number(action.payload.config.url?.match(/(?<=page=)\d+/))
                 }
             })
 
@@ -58,10 +64,11 @@ export const fetchQuestions = createAsyncThunk(
         try {
 			// a url get pode receber parâmetros de filtro e paginação
             const questions =
-				await http.get<{pageResult: IQuestion[], totalPages: number}>(
+				await http.get<{pageResult: IQuestion[], totalPages: number, totalValues: number}>(
 					`/questions?page=${pagination?.page ? pagination?.page : 1}&limit=${pagination?.limit ? pagination?.limit : 10}${pagination?.filters ? `&${pagination?.filters}`: ''}`
 				)
-            return questions.data
+
+            return questions
         } catch (err) {
             // exibe o erro na tela e retorna uma reject
             axiosError(err)
@@ -75,6 +82,8 @@ export default questionSlice.reducer
 export const selectQuestions = (state: RootState) => state.question.questions
 export const selectQuestionsStatus = (state: RootState) => state.question.status
 export const selectTotalQuestionPages = (state: RootState) => state.question.totalQuestionPages
+export const selectTotalQuestions = (state: RootState) => state.question.totalQuestions
+export const selectActualPage = (state: RootState) => state.question.actualPage
 
 
 
