@@ -60,7 +60,7 @@ const Question = ({
 	return (
 		<StyledLi>
 			<div className='question__header'>
-				<span className='header__number'>{index + 1}</span>
+				<span className='header__number'>{index}</span>
 				<span className='header__subject header__element'>
 					{subject}
 				</span>
