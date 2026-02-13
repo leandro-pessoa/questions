@@ -42,10 +42,10 @@ const questionSlice = createSlice({
 
                 // preenche o state questions caso a resposta não seja um falsy value
                 if (action.payload) {
-                    state.questions = [...action.payload.data.pageResult]
-					state.totalQuestionPages = action.payload.data.totalPages
-					state.totalQuestions = action.payload.data.totalValues
-					state.actualPage = Number(action.payload.config.url?.match(/(?<=page=)\d+/))
+                    state.questions = [...action.payload.pageResult]
+					state.totalQuestionPages = action.payload.totalPages
+					state.totalQuestions = action.payload.totalValues
+					state.actualPage = action.payload.actualPage
                 }
             })
 
@@ -64,11 +64,16 @@ export const fetchQuestions = createAsyncThunk(
         try {
 			// a url get pode receber parâmetros de filtro e paginação
             const questions =
-				await http.get<{pageResult: IQuestion[], totalPages: number, totalValues: number}>(
+				await http.get<{
+					pageResult: IQuestion[],
+					totalPages: number,
+					totalValues: number,
+					actualPage: number
+				}>(
 					`/questions?page=${pagination?.page ? pagination?.page : 1}&limit=${pagination?.limit ? pagination?.limit : 10}${pagination?.filters ? `&${pagination?.filters}`: ''}`
 				)
 
-            return questions
+            return questions.data
         } catch (err) {
             // exibe o erro na tela e retorna uma reject
             axiosError(err)
