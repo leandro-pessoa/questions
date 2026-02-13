@@ -20,7 +20,7 @@ const SelectedFilters = () => {
 				{selectedFilters.map((filter) => {
 					if (filter.values.length >= 1) {
 						return (
-							<li>
+							<li key={filter.displayName}>
 								<span className='filters__topic'>
 									{filter.displayName}
 								</span>
