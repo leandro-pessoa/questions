@@ -29,12 +29,15 @@ describe('pagination middleware tests', () => {
 			})
 	})
 
-	it('should return five results for page', async () => {
+	it('should return five results per page and return frontend auxiliar values', async () => {
 		await request(app)
 			.get('/questions?limit=5')
 			.expect(200)
 			.then(res => {
 				expect(res.body.pageResult).toHaveLength(5)
+				expect(res.body.totalPages).toBeGreaterThanOrEqual(1)
+				expect(res.body.totalValues).toBeGreaterThanOrEqual(5)
+				expect(res.body.actualPage).toBe(1)
 			})
 	})
 })
