@@ -5,7 +5,7 @@ import { axiosError } from '@/utils/axiosError'
 import { useAppSelector } from '@/app/hooks'
 
 import { StyledLi } from './styles'
-import Button from '../../../components/Button'
+import Button from '@/components/Button'
 import Option from './Option'
 import QuestionFeedback from './QuestionFeedback'
 
