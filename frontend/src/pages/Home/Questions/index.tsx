@@ -1,38 +1,33 @@
-import { flex } from '@/utils/flex'
 import { useEffect } from 'react'
-import styled from 'styled-components'
 import { useAppDispatch, useAppSelector } from '@/app/hooks'
 import {
 	fetchQuestions,
 	selectActualPage,
+	selectFetchLimit,
 	selectQuestions,
 	selectQuestionsStatus,
 	selectTotalQuestionPages
 } from '@/app/reducers/question'
-import { selectLimit } from '@/app/reducers/filters'
+import { selectLimit, selectPreviousLimit, selectSelectedFilters } from '@/app/reducers/filters'
 
-import Question from '..'
 import { Loading } from '@/components/Loading'
 import { CenterContainer } from '@/components/CenterContainer'
 import Button from '@/components/Button'
 import { RotateCcw } from 'lucide-react'
 import Pagination from '@/components/Pagination'
 import Filters from '@/components/Filters'
+import QuestionsList from './QuestionsList'
 
-import type { IQuestion } from '@/types/IQuestion'
-
-const StyledUl = styled.ul`
-	${flex('column', 'auto', 'center', '32px')}
-	margin: 3% 0;
-`
-
-const QuestionsList = () => {
+const Questions = () => {
 	const dispatch = useAppDispatch()
 	const questionsFetchStatus = useAppSelector(selectQuestionsStatus)
 	const questions = useAppSelector(selectQuestions)
 	const totalQuestionPages = useAppSelector(selectTotalQuestionPages)
 	const actualPage = useAppSelector(selectActualPage)
 	const limit = useAppSelector(selectLimit)
+	const previousLimit = useAppSelector(selectPreviousLimit)
+	const selectedFilters = useAppSelector(selectSelectedFilters)
+	const fetchLimit = useAppSelector(selectFetchLimit)
 
 	useEffect(() => {
 		dispatch(fetchQuestions())
@@ -51,28 +46,17 @@ const QuestionsList = () => {
 			case 'succeeded':
 				return (
 					<>
-						<Filters />
-						<StyledUl>
-							{
-								questions?.map((question: IQuestion, index) => {
-									const indexPlus: number = index + 1
-
-									return (
-										<Question
-											{...question}
-											index={ // verifica se é a primeira página
-												actualPage === 1 ?
-													indexPlus // index do array + 1
-												:
-													// cálculo para gerar valores do restante das páginas
-													(limit * (actualPage - 1)) + indexPlus
-											}
-											key={question._id}
-										/>
-									)
-								})
-							}
-						</StyledUl>
+						<Filters
+							limit={limit}
+							previousLimit={previousLimit}
+							// isAnyFilterSelected={isAnyFilterSelected}
+							selectedFilters={selectedFilters}
+						/>
+						<QuestionsList
+							questions={questions}
+							actualPage={actualPage}
+							limit={fetchLimit}
+						/>
 					</>
 				)
 			case 'failed':
@@ -98,4 +82,4 @@ const QuestionsList = () => {
 
 }
 
-export default QuestionsList
+export default Questions
