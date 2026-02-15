@@ -10,6 +10,7 @@ interface IQuestionState {
 	totalQuestionPages: number
 	totalQuestions: number
 	actualPage: number
+	fetchLimit: number
 }
 
 const initialState: IQuestionState = {
@@ -17,7 +18,8 @@ const initialState: IQuestionState = {
 	questions: null,
 	totalQuestionPages: 0,
 	totalQuestions: 0,
-	actualPage: 0
+	actualPage: 0,
+	fetchLimit: 10
 }
 
 const questionSlice = createSlice({
@@ -40,12 +42,13 @@ const questionSlice = createSlice({
             .addCase(fetchQuestions.fulfilled, (state, action) => {
                 state.status = 'succeeded'
 
-                // preenche o state questions caso a resposta não seja um falsy value
+                // preenche o states referentes à requisição caso a resposta não seja um falsy value
                 if (action.payload) {
                     state.questions = [...action.payload.pageResult]
 					state.totalQuestionPages = action.payload.totalPages
 					state.totalQuestions = action.payload.totalValues
 					state.actualPage = action.payload.actualPage
+					state.fetchLimit = action.payload.limit
                 }
             })
 
@@ -68,7 +71,8 @@ export const fetchQuestions = createAsyncThunk(
 					pageResult: IQuestion[],
 					totalPages: number,
 					totalValues: number,
-					actualPage: number
+					actualPage: number,
+					limit: number
 				}>(
 					`/questions?page=${pagination?.page ? pagination?.page : 1}&limit=${pagination?.limit ? pagination?.limit : 10}${pagination?.filters ? `&${pagination?.filters}`: ''}`
 				)
@@ -89,6 +93,7 @@ export const selectQuestionsStatus = (state: RootState) => state.question.status
 export const selectTotalQuestionPages = (state: RootState) => state.question.totalQuestionPages
 export const selectTotalQuestions = (state: RootState) => state.question.totalQuestions
 export const selectActualPage = (state: RootState) => state.question.actualPage
+export const selectFetchLimit = (state: RootState) => state.question.fetchLimit
 
 
 
