@@ -38,6 +38,7 @@ describe('pagination middleware tests', () => {
 				expect(res.body.totalPages).toBeGreaterThanOrEqual(1)
 				expect(res.body.totalValues).toBeGreaterThanOrEqual(5)
 				expect(res.body.actualPage).toBe(1)
+				expect(res.body.limit).toBe(5)
 			})
 	})
 })
