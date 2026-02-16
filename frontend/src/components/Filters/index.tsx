@@ -1,8 +1,5 @@
 import { useState } from 'react'
-import { useAppDispatch, useAppSelector } from '@/app/hooks'
-import { selectLimit, selectPreviousLimit, selectSelectedFilters, setLimit } from '@/app/reducers/filters'
-import { fetchQuestions } from '@/app/reducers/question'
-import { useFilter } from '@/app/hooks/useFilter'
+import { useAppDispatch } from '@/app/hooks'
 import { toast } from 'react-toastify'
 
 import { StyledSection } from './styles'
@@ -11,13 +8,34 @@ import { FunnelPlus, ChevronUp, ChevronDown } from 'lucide-react'
 import FiltersSelect from './FiltersSelect'
 import SelectedFilters from './SelectedFilters'
 
-const Filters = () => {
+import type { IFilter } from '@/types/IFilter'
+import type { UnknownAction } from 'redux'
+import type { FetchUrl } from '@/types/FetchUrl'
+
+// melhorar performance do componente Question (está demorando demais para renderizar)
+// verificar a funcionalidade de nenhum filtro encontrado
+
+interface IFiltersProps<T> {
+	limit: number
+	previousLimit: number
+	isAnyFilterSelected: boolean
+	selectedFilters: IFilter[]
+	setLimit: (arg: number) => UnknownAction
+	fetchFunc: FetchUrl<T>
+	children: React.ReactNode | string | [React.ReactNode | string][]
+}
+
+const Filters = <T,>({
+	limit,
+	previousLimit,
+	selectedFilters,
+	isAnyFilterSelected,
+	setLimit,
+	fetchFunc,
+	children
+}: IFiltersProps<T>) => {
 	const dispatch = useAppDispatch()
-	const selectedFilters = useAppSelector(selectSelectedFilters)
-	const limit = useAppSelector(selectLimit)
-	const previousLimit = useAppSelector(selectPreviousLimit)
 	const [display, setDisplay] = useState<boolean>(false)
-	const { isAnyFilterSelected } = useFilter()
 
 	const filterHandle = () => {
 		let filtersString = ''
@@ -33,7 +51,7 @@ const Filters = () => {
 			}
 		})
 		dispatch(setLimit(limit))
-		dispatch(fetchQuestions({filters: filtersString.slice(0, -1), limit}))
+		dispatch(fetchFunc({filters: filtersString.slice(0, -1), limit}))
 	}
 
 	return (
@@ -57,13 +75,12 @@ const Filters = () => {
 			</Button>
 			<div className='filters__content'>
 				<div className='content__selects'>
-					<FiltersSelect title='Disciplina' topicFetchUrl='subject' type='checkbox'/>
-					<FiltersSelect title='Ano' topicFetchUrl='year' type='checkbox'/>
-					<FiltersSelect title='Organização' topicFetchUrl='instituition' type='checkbox'/>
-					<FiltersSelect title='Cargo' topicFetchUrl='position' type='checkbox'/>
-					<FiltersSelect title='Banca' topicFetchUrl='examiningBoard' type='checkbox'/>
+					{children}
 				</div>
-				<SelectedFilters />
+				<SelectedFilters
+					selectedFilters={selectedFilters}
+					isAnyFilterSelected={isAnyFilterSelected}
+				/>
 				<div className='content__bottom'>
 					<Button
 						onClick={filterHandle}

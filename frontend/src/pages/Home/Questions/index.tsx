@@ -8,7 +8,8 @@ import {
 	selectQuestionsStatus,
 	selectTotalQuestionPages
 } from '@/app/reducers/question'
-import { selectLimit, selectPreviousLimit, selectSelectedFilters } from '@/app/reducers/filters'
+import { selectLimit, selectPreviousLimit, selectSelectedFilters, setLimit } from '@/app/reducers/filters'
+import { useFilter } from '@/app/hooks/useFilter'
 
 import { Loading } from '@/components/Loading'
 import { CenterContainer } from '@/components/CenterContainer'
@@ -17,6 +18,7 @@ import { RotateCcw } from 'lucide-react'
 import Pagination from '@/components/Pagination'
 import Filters from '@/components/Filters'
 import QuestionsList from './QuestionsList'
+import FiltersSelect from '@/components/Filters/FiltersSelect'
 
 const Questions = () => {
 	const dispatch = useAppDispatch()
@@ -28,6 +30,8 @@ const Questions = () => {
 	const previousLimit = useAppSelector(selectPreviousLimit)
 	const selectedFilters = useAppSelector(selectSelectedFilters)
 	const fetchLimit = useAppSelector(selectFetchLimit)
+
+	const { isAnyFilterSelected } = useFilter()
 
 	useEffect(() => {
 		dispatch(fetchQuestions())
@@ -49,9 +53,17 @@ const Questions = () => {
 						<Filters
 							limit={limit}
 							previousLimit={previousLimit}
-							// isAnyFilterSelected={isAnyFilterSelected}
+							isAnyFilterSelected={isAnyFilterSelected}
 							selectedFilters={selectedFilters}
-						/>
+							setLimit={setLimit}
+							fetchFunc={fetchQuestions}
+						>
+							<FiltersSelect title='Disciplina' topicFetchUrl='subject' type='checkbox'/>
+							<FiltersSelect title='Ano' topicFetchUrl='year' type='checkbox'/>
+							<FiltersSelect title='Organização' topicFetchUrl='instituition' type='checkbox'/>
+							<FiltersSelect title='Cargo' topicFetchUrl='position' type='checkbox'/>
+							<FiltersSelect title='Banca' topicFetchUrl='examiningBoard' type='checkbox'/>
+						</Filters>
 						<QuestionsList
 							questions={questions}
 							actualPage={actualPage}
