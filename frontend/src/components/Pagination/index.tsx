@@ -5,13 +5,14 @@ import { vars } from '@/styles/vars'
 import { StyledUl } from './styles'
 import { ChevronRight, ChevronLeft, ChevronsRight, ChevronsLeft } from 'lucide-react'
 import Button from '../Button'
+import type { FetchUrl } from '@/types/FetchUrl'
+import type { IQuestion } from '@/types/IQuestion'
 
 interface IPaginationProps {
 	totalPages: number
 	limit: number
 	actualPage: number
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	fetchFunc: (args?: { page?: number; limit?: number; filters?: string }) =>  any
+	fetchFunc: FetchUrl<IQuestion>
 }
 
 const Pagination = ({ totalPages, limit, fetchFunc, actualPage }: IPaginationProps) => {
