@@ -57,6 +57,12 @@ const Questions = () => {
 							actualPage={actualPage}
 							limit={fetchLimit}
 						/>
+						<Pagination
+							fetchFunc={fetchQuestions}
+							totalPages={totalQuestionPages}
+							limit={limit}
+							actualPage={actualPage}
+						/>
 					</>
 				)
 			case 'failed':
@@ -76,7 +82,6 @@ const Questions = () => {
 	return (
 		<>
 			{renderQuestions()}
-			<Pagination fetchFunc={fetchQuestions} totalPages={totalQuestionPages} limit={limit}/>
 		</>
 	)
 

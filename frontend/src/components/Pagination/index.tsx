@@ -1,5 +1,5 @@
 import { useAppDispatch } from '@/app/hooks'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { vars } from '@/styles/vars'
 
 import { StyledUl } from './styles'
@@ -9,30 +9,24 @@ import Button from '../Button'
 interface IPaginationProps {
 	totalPages: number
 	limit: number
+	actualPage: number
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	fetchFunc: (args?: { page?: number; limit?: number; filters?: string }) =>  any
 }
 
-const Pagination = ({ totalPages, limit, fetchFunc }: IPaginationProps) => {
+const Pagination = ({ totalPages, limit, fetchFunc, actualPage }: IPaginationProps) => {
 	const dispatch = useAppDispatch()
-	const [actualPage, setActualPage] = useState<number>(1)
 
 	// move o scroll para o início da página ao trocar de página
 	useEffect(() => {
 		window.scrollTo(0, 0)
 	}, [actualPage])
 
-	useEffect(() => {
-		// eslint-disable-next-line react-hooks/set-state-in-effect
-		setActualPage(1)
-	}, [limit])
-
 	// troca a página para a informada no parâmetro, fazendo o fetch e setando o state local
 	const changePage = (page: number) => {
 		// caso a página selecionada for a atual, não faz nada
 		if (page === actualPage) return
 		dispatch(fetchFunc({ page, limit }))
-		setActualPage(page)
 	}
 
 	// função para avançar ou retroceder a alguma página, a partir da atual
