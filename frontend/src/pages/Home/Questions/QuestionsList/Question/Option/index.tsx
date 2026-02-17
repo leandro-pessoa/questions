@@ -1,7 +1,9 @@
+import { useState } from 'react'
+
 import Button from '@/components/Button'
 import { ScissorsLineDashed } from 'lucide-react'
 import { StyledLi } from './styles'
-import { useState } from 'react'
+
 import type { IAlternative } from '@/types/IAlternative'
 
 interface IOptionProps {
@@ -40,28 +42,25 @@ const Option = ({
 	}
 
 	return (
-		<>
-			<StyledLi
-				$cutted={cutted}
-				$selected={cutted ? false : selected}
-				$isAnswered={isAnswered}
+		<StyledLi
+			$cutted={cutted}
+			$selected={cutted ? false : selected}
+			$isAnswered={isAnswered}
+		>
+			<Button
+				iconButton
+				className='option__cut'
+				onClick={cutHandle}
 			>
-				<Button
-					iconButton
-					className='option__cut'
-					onClick={cutHandle}
-				>
-					<ScissorsLineDashed />
-				</Button>
-				<button onClick={selectHandle} className='option__select'>
-					<span className='select__letter'>
-						<span>{alternative.letter}</span>
-					</span>
-					<p className='select__text'>{alternative.text}</p>
-				</button>
-			</StyledLi>
-		</>
-
+				<ScissorsLineDashed />
+			</Button>
+			<button onClick={selectHandle} className='option__select'>
+				<span className='select__letter'>
+					<span>{alternative.letter}</span>
+				</span>
+				<p className='select__text'>{alternative.text}</p>
+			</button>
+		</StyledLi>
 	)
 }
 

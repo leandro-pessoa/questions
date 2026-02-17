@@ -74,17 +74,15 @@ const Question = ({
 			<p className='question__statement'>{statement}</p>
 			<ol className='question__alternatives'>
 				{/* alternativas da questão */}
-				{alternatives.map((alternative) => {
-					return (
-						<Option
-							alternative={alternative}
-							selected={selectedOption === alternative}
-							setSelected={(option) => setSelectedOption(option)}
-							key={alternative._id}
-							isAnswered={isAnswered}
-						/>
-					)
-				})}
+				{alternatives.map((alternative) =>
+					<Option
+						alternative={alternative}
+						selected={selectedOption === alternative}
+						setSelected={(option) => setSelectedOption(option)}
+						key={alternative._id}
+						isAnswered={isAnswered}
+					/>
+				)}
 			</ol>
 			{/*
 				verifica três fatores para o button aparecer:
