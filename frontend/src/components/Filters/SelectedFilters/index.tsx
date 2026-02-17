@@ -1,18 +1,20 @@
-import { useAppDispatch, useAppSelector } from '@/app/hooks'
-import {
-	selectSelectedFilters,
-	toggleCheckboxFilter,
-} from '@/app/reducers/filters'
-import { useFilter } from '@/app/hooks/useFilter'
+import { useAppDispatch } from '@/app/hooks'
 
 import { StyledDiv } from './styles'
 import Button from '@/components/Button'
 import { CircleX } from 'lucide-react'
 
-const SelectedFilters = () => {
+import type { IFilter } from '@/types/IFilter'
+import type { ActionCreatorWithPayload } from '@reduxjs/toolkit'
+
+interface ISelectedFiltersProps {
+	selectedFilters: IFilter[]
+	isAnyFilterSelected: boolean
+	removeSelectedFunc: ActionCreatorWithPayload<{ topic: string; value: string; displayName: string; }>
+}
+
+const SelectedFilters = ({ selectedFilters, isAnyFilterSelected, removeSelectedFunc }: ISelectedFiltersProps) => {
 	const dispatch = useAppDispatch()
-	const selectedFilters = useAppSelector(selectSelectedFilters)
-	const { isAnyFilterSelected } = useFilter()
 
 	return (
 		<StyledDiv style={{ display: isAnyFilterSelected ? 'block' : 'none'}}>
@@ -26,18 +28,18 @@ const SelectedFilters = () => {
 								</span>
 								:{' '}
 								{filter.values.map((value) => (
-									<span className='filters__value'>
+									<span className='filters__value' key={value}>
 										{value}
 										<Button
 											iconButton
 											onClick={() =>
 												dispatch(
-													toggleCheckboxFilter({
+													removeSelectedFunc({
 														topic: filter.topic,
 														value,
 														displayName:
 															filter.displayName,
-													}),
+													})
 												)
 											}
 										>

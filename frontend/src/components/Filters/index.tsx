@@ -10,9 +10,9 @@ import SelectedFilters from './SelectedFilters'
 import type { IFilter } from '@/types/IFilter'
 import type { UnknownAction } from 'redux'
 import type { FetchUrl } from '@/types/FetchUrl'
+import type { ActionCreatorWithPayload } from '@reduxjs/toolkit'
 
 // melhorar performance do componente Question (está demorando demais para renderizar)
-// verificar a funcionalidade de nenhum filtro encontrado
 
 interface IFiltersProps<T> {
 	limit: number
@@ -21,6 +21,7 @@ interface IFiltersProps<T> {
 	setLimit: (arg: number) => UnknownAction
 	fetchFunc: FetchUrl<T>
 	children: React.ReactNode | string | [React.ReactNode | string][]
+	removeSelectedFunc: ActionCreatorWithPayload<{ topic: string; value: string; displayName: string; }>
 }
 
 const Filters = <T,>({
@@ -29,7 +30,8 @@ const Filters = <T,>({
 	isAnyFilterSelected,
 	setLimit,
 	fetchFunc,
-	children
+	children,
+	removeSelectedFunc
 }: IFiltersProps<T>) => {
 	const dispatch = useAppDispatch()
 	const [display, setDisplay] = useState<boolean>(false)
@@ -72,6 +74,7 @@ const Filters = <T,>({
 				<SelectedFilters
 					selectedFilters={selectedFilters}
 					isAnyFilterSelected={isAnyFilterSelected}
+					removeSelectedFunc={removeSelectedFunc}
 				/>
 				<div className='content__bottom'>
 					<Button

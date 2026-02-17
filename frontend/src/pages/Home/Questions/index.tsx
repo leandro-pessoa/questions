@@ -8,7 +8,7 @@ import {
 	selectQuestionsStatus,
 	selectTotalQuestionPages
 } from '@/app/reducers/question'
-import { selectLimit, selectSelectedFilters, setLimit } from '@/app/reducers/filters'
+import { selectLimit, selectSelectedFilters, setLimit, toggleCheckboxFilter } from '@/app/reducers/filters'
 import { useFilter } from '@/app/hooks/useFilter'
 
 import { Loading } from '@/components/Loading'
@@ -55,6 +55,7 @@ const Questions = () => {
 							selectedFilters={selectedFilters}
 							setLimit={setLimit}
 							fetchFunc={fetchQuestions}
+							removeSelectedFunc={toggleCheckboxFilter}
 						>
 							<FiltersSelect title='Disciplina' topicFetchUrl='subject' type='checkbox'/>
 							<FiltersSelect title='Ano' topicFetchUrl='year' type='checkbox'/>
