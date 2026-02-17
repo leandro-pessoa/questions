@@ -8,7 +8,7 @@ import {
 	selectQuestionsStatus,
 	selectTotalQuestionPages
 } from '@/app/reducers/question'
-import { selectLimit, selectPreviousLimit, selectSelectedFilters, setLimit } from '@/app/reducers/filters'
+import { selectLimit, selectSelectedFilters, setLimit } from '@/app/reducers/filters'
 import { useFilter } from '@/app/hooks/useFilter'
 
 import { Loading } from '@/components/Loading'
@@ -27,7 +27,6 @@ const Questions = () => {
 	const totalQuestionPages = useAppSelector(selectTotalQuestionPages)
 	const actualPage = useAppSelector(selectActualPage)
 	const limit = useAppSelector(selectLimit)
-	const previousLimit = useAppSelector(selectPreviousLimit)
 	const selectedFilters = useAppSelector(selectSelectedFilters)
 	const fetchLimit = useAppSelector(selectFetchLimit)
 
@@ -52,7 +51,6 @@ const Questions = () => {
 					<>
 						<Filters
 							limit={limit}
-							previousLimit={previousLimit}
 							isAnyFilterSelected={isAnyFilterSelected}
 							selectedFilters={selectedFilters}
 							setLimit={setLimit}

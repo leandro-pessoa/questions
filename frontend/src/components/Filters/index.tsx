@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { useAppDispatch } from '@/app/hooks'
-import { toast } from 'react-toastify'
 
 import { StyledSection } from './styles'
 import Button from '../Button'
@@ -17,7 +16,6 @@ import type { FetchUrl } from '@/types/FetchUrl'
 
 interface IFiltersProps<T> {
 	limit: number
-	previousLimit: number
 	isAnyFilterSelected: boolean
 	selectedFilters: IFilter[]
 	setLimit: (arg: number) => UnknownAction
@@ -27,7 +25,6 @@ interface IFiltersProps<T> {
 
 const Filters = <T,>({
 	limit,
-	previousLimit,
 	selectedFilters,
 	isAnyFilterSelected,
 	setLimit,
@@ -39,11 +36,6 @@ const Filters = <T,>({
 
 	const filterHandle = () => {
 		let filtersString = ''
-
-		if (!isAnyFilterSelected && limit === previousLimit) {
-			toast.error('Selecione ao menos um filtro!')
-			return
-		}
 
 		selectedFilters.forEach(filter => {
 			if (filter.values.length >= 1) {
