@@ -69,13 +69,13 @@ const Login = () => {
 					</InputContainer>
 					<Small style={{ textAlign: 'center', marginTop: '8px' }}>
 						Esqueceu sua senha?{' '}
-						<StyledLink to='/' decoration={true}>
+						<StyledLink to='/' $decoration>
 							Altere aqui
 						</StyledLink>
 					</Small>
 					<Hr />
 					<Small style={{ textAlign: 'center' }}>
-						<StyledLink to='/usuario/cadastro' decoration={true}>
+						<StyledLink to='/usuario/cadastro' $decoration>
 							Cadastre-se aqui
 						</StyledLink>
 					</Small>
