@@ -95,7 +95,6 @@ const Questions = () => {
 			{renderQuestions()}
 		</>
 	)
-
 }
 
 export default Questions

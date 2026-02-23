@@ -94,6 +94,3 @@ export const selectTotalQuestionPages = (state: RootState) => state.question.tot
 export const selectTotalQuestions = (state: RootState) => state.question.totalQuestions
 export const selectActualPage = (state: RootState) => state.question.actualPage
 export const selectFetchLimit = (state: RootState) => state.question.fetchLimit
-
-
-

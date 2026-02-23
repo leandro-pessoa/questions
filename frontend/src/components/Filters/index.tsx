@@ -12,8 +12,6 @@ import type { UnknownAction } from 'redux'
 import type { FetchUrl } from '@/types/FetchUrl'
 import type { ActionCreatorWithPayload } from '@reduxjs/toolkit'
 
-// melhorar performance do componente Question (está demorando demais para renderizar)
-
 interface IFiltersProps<T> {
 	limit: number
 	isAnyFilterSelected: boolean
@@ -67,29 +65,32 @@ const Filters = <T,>({
 						<ChevronDown />
 				}
 			</Button>
-			<div className='filters__content'>
-				<div className='content__selects'>
-					{children}
-				</div>
-				<SelectedFilters
-					selectedFilters={selectedFilters}
-					isAnyFilterSelected={isAnyFilterSelected}
-					removeSelectedFunc={removeSelectedFunc}
-				/>
-				<div className='content__bottom'>
-					<Button
-						onClick={filterHandle}
-						style={{ padding: '6px 32px'}}
-					>
-						Filtrar
-					</Button>
-					<FiltersSelect
-						title='Qtde resultados'
-						defaultContent={['5', '10', '15', '20', '30']}
-						style={{width: '210px'}}
-					/>
-				</div>
-			</div>
+			{
+				display &&
+					<div className='filters__content'>
+						<div className='content__selects'>
+							{children}
+						</div>
+						<SelectedFilters
+							selectedFilters={selectedFilters}
+							isAnyFilterSelected={isAnyFilterSelected}
+							removeSelectedFunc={removeSelectedFunc}
+						/>
+						<div className='content__bottom'>
+							<Button
+								onClick={filterHandle}
+								style={{ padding: '6px 32px'}}
+							>
+								Filtrar
+							</Button>
+							<FiltersSelect
+								title='Qtde resultados'
+								defaultContent={['5', '10', '15', '20', '30']}
+								style={{width: '210px'}}
+							/>
+						</div>
+					</div>
+			}
 		</StyledSection>
 	)
 }

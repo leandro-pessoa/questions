@@ -19,6 +19,7 @@ const Option = ({
 	setSelected,
 	isAnswered
 }: IOptionProps) => {
+	const [cutDisplay, setCutDisplay] = useState<boolean>(false)
 	const [cutted, setCutted] = useState<boolean>(false)
 
 	const selectHandle = () => {
@@ -46,14 +47,20 @@ const Option = ({
 			$cutted={cutted}
 			$selected={cutted ? false : selected}
 			$isAnswered={isAnswered}
+			onMouseEnter={() => setCutDisplay(true)}
 		>
-			<Button
-				iconButton
-				className='option__cut'
-				onClick={cutHandle}
-			>
-				<ScissorsLineDashed />
-			</Button>
+			{
+				// só irá existir após o primeiro hover, para não carregar juntamente com a questão
+				// melhora a performance
+				cutDisplay &&
+					<Button
+						iconButton
+						className='option__cut'
+						onClick={cutHandle}
+					>
+						<ScissorsLineDashed />
+					</Button>
+			}
 			<button onClick={selectHandle} className='option__select'>
 				<span className='select__letter'>
 					<span>{alternative.letter}</span>
