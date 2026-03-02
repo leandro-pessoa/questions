@@ -23,7 +23,7 @@ export default class UserController extends Controller<IUser> {
 		}
 
 		try {
-			const emailExists = await userService.getOneByEmail(email)
+			const emailExists = await userService.getOne({ email })
 
 			if (emailExists) {
 				next(new BadRequest('E-mail já cadastrado', 409))
@@ -47,7 +47,7 @@ export default class UserController extends Controller<IUser> {
 			return
 		}
 
-		const user = await userService.getOneByEmail(email)
+		const user = await userService.getOne({ email })
 
 		if (!user) {
 			next(invalidCredentials)
@@ -80,7 +80,7 @@ export default class UserController extends Controller<IUser> {
 
 		try {
 			const user = await userService.getById(id)
-			const emailExists = await userService.getOneByEmail(email)
+			const emailExists = await userService.getOne({ email })
 
 			if (emailExists) {
 				next(new BadRequest('E-mail já cadastrado', 409))
