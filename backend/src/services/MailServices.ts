@@ -1,6 +1,14 @@
 import nodemailer from 'nodemailer'
+import CRUDServices from './CRUDServices'
+import Token from '@/db/models/Token'
 
-export default class MailServices {
+import type { IToken } from '@/types/IToken'
+
+export default class MailServices extends CRUDServices<IToken> {
+	constructor() {
+		super(Token)
+	}
+
 	static async sendEmail(
 		email: string,
 		emailPassword: string,
@@ -22,5 +30,14 @@ export default class MailServices {
 			subject,
 			html: message
 		})
+	}
+
+	async createToken(userId: string, token: string) {
+		await super.addOne({userId, token})
+	}
+
+	async getToken(userId: string) {
+		const result = await super.getOne({ userId })
+		return result
 	}
 }
