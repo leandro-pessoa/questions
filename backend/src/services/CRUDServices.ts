@@ -20,6 +20,11 @@ export default class CRUDServices<T> {
 		return this.model.findById(id)
 	}
 
+	// obtém um valor de acordo com os filtros
+	async getOne(filters: MongooseBaseQueryOptions): Promise<T | null> {
+		return this.model.findOne({ ...filters })
+	}
+
 	// adiciona um valor no documento
 	async addOne<U>(value: U) {
 		return this.model.create(value)

@@ -12,10 +12,6 @@ export default class UserService extends CRUDServices<IUser> {
 		super(User)
 	}
 
-	async getOneByEmail(email: string) {
-		return await User.findOne({ email })
-	}
-
 	async verifyLogin(user: IUser, password: string) {
 		const verifyPassword = await bcrypt.compare(password ,user.passwordHash)
 
