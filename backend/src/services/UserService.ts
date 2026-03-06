@@ -4,6 +4,7 @@ import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import BaseError from '@/errors/BaseError'
 import BadRequest from '@/errors/BadRequest'
+import NotFound from '@/errors/NotFound'
 
 import type { IUser } from '@/types/IUser'
 import type { IAlternative } from '@/types/IAlternative'
@@ -78,9 +79,10 @@ export default class UserService extends CRUDServices<IUser> {
 		// verifica se o user existe
 		const user = await User.findById(userId)
 
-		// ------
-		// fazer verificação se ele não existe
-		// ------
+		// caso não exista, retorna um erro 404
+		if (!user) {
+			throw new NotFound('Usuário não encontrado')
+		}
 
 		// verifica se a questão já foi respondida anteriormente
 		// busca a questão atual no banco de questões dos usuários
