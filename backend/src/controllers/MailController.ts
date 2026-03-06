@@ -42,6 +42,12 @@ export default class MailController {
 				`
 			)
 
+			const tokenAlreadyExists = await mailService.getOne({ userId: user._id })
+
+			if (tokenAlreadyExists) {
+				await mailService.deleteOne(tokenAlreadyExists._id)
+			}
+
 			await mailService.createToken(user._id, code)
 
 			res.status(200).json({
