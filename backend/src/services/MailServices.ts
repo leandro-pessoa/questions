@@ -9,6 +9,13 @@ export default class MailServices extends CRUDServices<IToken> {
 		super(Token)
 	}
 
+	// service para encaminhar um email para um destinatário específico
+	// parâmetros:
+	// email remetente
+	// senha do email remetente
+	// email destinatário
+	// assunto do email
+	// mensagem (corpo) do email (em html)
 	static async sendEmail(
 		email: string,
 		emailPassword: string,
@@ -16,6 +23,7 @@ export default class MailServices extends CRUDServices<IToken> {
 		subject: string,
 		message: string
 	) {
+		// transportador com o serviço e o email remetente
 		const transporter = nodemailer.createTransport({
 			service: 'gmail',
 			auth: {
@@ -24,6 +32,7 @@ export default class MailServices extends CRUDServices<IToken> {
 			}
 		})
 
+		// envia a mensagem para o destinatário
 		await transporter.sendMail({
 			from: `"Não responda" <${email}>`,
 			to: destinationEmail,
@@ -32,10 +41,12 @@ export default class MailServices extends CRUDServices<IToken> {
 		})
 	}
 
+	// cria um documento contendo principalmente o token enviado no email e o id do user em questão
 	async createToken(userId: string, token: string) {
 		await super.addOne({userId, token})
 	}
 
+	// obtém um documento com base no user
 	async getToken(userId: string) {
 		const result = await super.getOne({ userId })
 		return result
