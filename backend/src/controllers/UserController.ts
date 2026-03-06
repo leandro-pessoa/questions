@@ -45,7 +45,6 @@ export default class UserController extends Controller<IUser> {
 	// lógica para realizar um login
 	async login(req: Request, res: Response, next: NextFunction) {
 		const invalidCredentials = new BadRequest('Credenciais inválidas', 401)
-
 		const { email, password } = req.body
 
 		// verifica se o email e senha foram enviados
@@ -55,19 +54,16 @@ export default class UserController extends Controller<IUser> {
 			return
 		}
 
-		// verifica se o user está cadastrado
-		// -----
-		// inserir essa operação no bloco try
-		// -----
-		const user = await userService.getOne({ email })
-
-		// caso não, retorna um erro 401
-		if (!user) {
-			next(invalidCredentials)
-			return
-		}
-
 		try {
+			// verifica se o user está cadastrado
+			const user = await userService.getOne({ email })
+
+			// caso não, retorna um erro 401
+			if (!user) {
+				next(invalidCredentials)
+				return
+			}
+
 			// verifica o login por meio do service verifyLogin
 			const token = await userService.verifyLogin(user, password)
 			// retorna o token e alguns dados do user para serem utilizados no frontend
