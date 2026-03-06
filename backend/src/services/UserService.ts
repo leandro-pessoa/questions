@@ -87,7 +87,7 @@ export default class UserService extends CRUDServices<IUser> {
 		// verifica se a questão já foi respondida anteriormente
 		// busca a questão atual no banco de questões dos usuários
 		const isAlreadyAnswered =
-			user?.answeredQuestions?.find(
+			user.answeredQuestions?.find(
 				(value) => value.questionId === questionId
 			)
 
