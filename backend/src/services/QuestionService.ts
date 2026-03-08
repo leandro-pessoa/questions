@@ -7,11 +7,6 @@ export default class QuestionService extends CRUDServices<IQuestion> {
 		super(Question)
 	}
 
-	async getQuestionFilterColumn(column: string) {
-		const result = await super.getDistinctColumn(column)
-		return result
-	}
-
 	async getQuestionsWithFilters({
 		subject,
 		year,

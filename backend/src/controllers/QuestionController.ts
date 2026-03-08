@@ -20,7 +20,7 @@ export default class QuestionController extends Controller<IQuestion> {
 				return
 			}
 
-			const column = await questionService.getQuestionFilterColumn(selectedColumn)
+			const column = await questionService.getDistinctColumn(selectedColumn)
 			res.status(200).json(column)
 		} catch (err) {
 			next(err)
