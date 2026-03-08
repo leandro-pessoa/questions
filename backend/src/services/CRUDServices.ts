@@ -9,6 +9,8 @@ export default class CRUDServices<T> {
 	}
 
 	// obtém valores distintos da coluna especificada
+	// ex:
+	// obtém todos os anos disponíveis e retorna somente os anos diferentes
 	async getDistinctColumn(column: string) {
 		return this.model.find({})
 			.select(column)
