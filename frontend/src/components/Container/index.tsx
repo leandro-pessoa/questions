@@ -4,6 +4,7 @@ import { flex } from '@/utils/flex'
 
 interface IContainerProps {
 	readonly $fixedWidth?: boolean
+	readonly $relativeWidth?: string
 }
 
 const xPadding = 16
@@ -16,6 +17,13 @@ export const Container = styled.main<IContainerProps>`
 	border: 1px solid ${(props) => props.theme.colors.primaryBorderColor};
 	border-radius: ${vars.border.radius};
 	width: calc(80% - ${xPadding * 2}px);
+
+	${({ $relativeWidth = '80%' }) =>
+		$relativeWidth !== '80%' && `
+		@media screen and (min-width: ${vars.breakpoints.tablet}) {
+			width: ${$relativeWidth};
+		}
+	`}
 
 	${({ $fixedWidth = false }) =>
 		$fixedWidth &&
