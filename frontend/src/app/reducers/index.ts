@@ -4,11 +4,13 @@ import loadingReducer from './loading'
 import userReducer from './user'
 import questionReducer from './question'
 import filtersReducer from './filters'
+import changePasswordReducer from './changePassword'
 
 export const rootReducer = combineReducers({
 	theme: themeReducer,
 	loading: loadingReducer,
 	user: userReducer,
 	question: questionReducer,
-	filters: filtersReducer
+	filters: filtersReducer,
+	changePassword: changePasswordReducer
 })

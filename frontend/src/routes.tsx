@@ -3,6 +3,9 @@ import DefaultPage from './pages/DefaultPage'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import UserRegister from './pages/UserRegister'
+import SendPasswordCode from './pages/ChangePassword/SendPasswordCode'
+import ConfirmPasswordCode from './pages/ChangePassword/ConfirmPasswordCode'
+import ChangePass from './pages/ChangePassword/ChangePass'
 
 const AppRoutes = () => {
 	return (
@@ -14,6 +17,11 @@ const AppRoutes = () => {
 
 					<Route path='/usuario'>
 						<Route path='cadastro' element={ <UserRegister /> }/>
+						<Route path='esqueci-minha-senha'>
+							<Route path='enviar-codigo' element={ <SendPasswordCode /> }/>
+							<Route path='confirmar-codigo' element={ <ConfirmPasswordCode /> }/>
+							<Route path='alterar-senha' element={ <ChangePass /> }/>
+						</Route>
 					</Route>
 				</Route>
 			</Routes>
