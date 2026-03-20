@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
-import { useAppDispatch } from '@/app/hooks'
-import { setIsLoading } from '@/app/reducers/loading'
+import { useAppDispatch, useAppSelector } from '@/app/hooks'
+import { selectIsLoading, setIsLoading } from '@/app/reducers/loading'
 import { http } from '@/http'
 import { axiosError } from '@/utils/axiosError'
 import { toast } from 'react-toastify'
@@ -19,9 +19,12 @@ const UserRegister = () => {
 	const navigate = useNavigate()
 	const dispatch = useAppDispatch()
 
+	const isLoading = useAppSelector(selectIsLoading)
+
 	const submitHandle = async (data: FieldValues) => {
-		dispatch(setIsLoading(true))
+		if (isLoading) return
 		try {
+			dispatch(setIsLoading(true))
 			await http.post('/users', { ...data })
 			navigate('/login')
 			toast.success('Cadastro realizado com sucesso!')

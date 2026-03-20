@@ -1,9 +1,9 @@
 import { http } from '@/http'
 import { setToken, setUser } from '@/app/reducers/user'
 import { axiosError } from '@/utils/axiosError'
-import { setIsLoading } from '@/app/reducers/loading'
+import { selectIsLoading, setIsLoading } from '@/app/reducers/loading'
 import { useNavigate } from 'react-router-dom'
-import { useAppDispatch } from '@/app/hooks'
+import { useAppDispatch, useAppSelector } from '@/app/hooks'
 
 import Button from '@/components/Button'
 import { CenterContainer } from '@/components/CenterContainer'
@@ -25,9 +25,12 @@ const Login = () => {
 	const dispatch = useAppDispatch()
 	const navigate = useNavigate()
 
+	const isLoading = useAppSelector(selectIsLoading)
+
 	const submitHandle = async (data: FieldValues) => {
-		dispatch(setIsLoading(true))
+		if (isLoading) return
 		try {
+			dispatch(setIsLoading(true))
 			const res = await http.post('/users/login', { ...data })
 
 			dispatch(setUser(res.data.user))
