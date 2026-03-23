@@ -19,6 +19,7 @@ router.post('/users/login', (req, res, next) => userController.login(req, res, n
 // PUT
 router.put('/users', loginRequired, (req, res, next) => userController.userUpdate(req, res, next))
 router.put('/users/answerQuestion', loginRequired, (req, res, next) => userController.addAnsweredQuestion(req, res, next))
+router.put('/users/updateUserPassword', (req, res, next) => userController.updateUserPassword(req, res, next))
 router.put('/users/:id', loginRequired, adminRequired, (req, res, next) => userController.update(req, res, next))
 
 // DELETE

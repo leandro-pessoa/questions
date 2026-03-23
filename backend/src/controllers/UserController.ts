@@ -5,6 +5,8 @@ import type { IUser } from '@/types/IUser'
 import type { Request, Response, NextFunction } from 'express'
 import BadRequest from '@/errors/BadRequest'
 import NotFound from '@/errors/NotFound'
+import BaseError from '@/errors/BaseError'
+import jwt from 'jsonwebtoken'
 
 const userService = new UserService()
 const questionService = new QuestionService()
@@ -148,6 +150,56 @@ export default class UserController extends Controller<IUser> {
 			const newUser = await userService.getById(id)
 			res.status(200).json(newUser)
 		} catch(err) {
+			next(err)
+		}
+	}
+
+	// atualiza a senha de um usuário específico
+	// só irá funcionar quando o usuário confirmar o código que foi enviado no email
+	// conforme o método confirmPasswordCode do MailController
+	async updateUserPassword(req: Request, res: Response, next: NextFunction) {
+		const { password } = req.body
+		const { authorization } = req.headers
+
+		// verifica se o token foi enviado nos headers
+		if (!authorization) {
+			next(new BadRequest('Token inválido', 401))
+			return
+		}
+
+		// obtém o token do Bearer
+		const [, token] = authorization.split(' ')
+
+		// caso o token não exista, retorna o erro 401
+		if (!token) {
+			next(new BadRequest('Token inválido', 401))
+			return
+		}
+
+		// verifica se a variável de ambiente de configuração do token existe
+		// caso não, retorna erro 500
+		if (!process.env.TOKEN_SECRET) {
+			console.error('Chave secreta do token inválida')
+			next(new BaseError())
+			return
+		}
+
+		// decodifica o token e retorna o id do user caso exista
+		const user = jwt.verify(token, process.env.TOKEN_SECRET)
+
+		// verifica se a permissão é inválida e retorna um erro 401 caso seja
+		if (!user) {
+			next(new BadRequest('Acesso negado. Reenvie o código de verificação', 401))
+			return
+		}
+
+		// obtém o id do user
+		const { userId } = user as { userId: string }
+
+		try {
+			await userService.updateOne(userId, { password })
+			res.status(200).json({ message: 'Senha alterada com sucesso!' })
+		} catch (err) {
 			next(err)
 		}
 	}
