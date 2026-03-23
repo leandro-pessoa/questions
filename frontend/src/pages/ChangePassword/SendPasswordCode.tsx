@@ -14,11 +14,12 @@ import InputContainer from '@/components/Input/InputContainer'
 import SideScreen from '@/components/SideScreen'
 import { Title } from '@/components/Title'
 
-import type { FieldValues } from 'react-hook-form'
+import { useForm, type FieldValues } from 'react-hook-form'
 
 const SendPasswordCode = () => {
 	const navigate = useNavigate()
 	const dispatch = useAppDispatch()
+	const { reset } = useForm()
 	const isLoading = useAppSelector(selectIsLoading)
 
 	const sendCodeSubmitHandle = async (data: FieldValues) => {
@@ -35,6 +36,7 @@ const SendPasswordCode = () => {
 			axiosError(err)
 		}
 		dispatch(setIsLoading(false))
+		reset()
 	}
 
 	return (
@@ -50,6 +52,7 @@ const SendPasswordCode = () => {
 							placeholder='Ex: exemplo@dominio.com'
 							id='email'
 							name='E-mail'
+							autoFocus
 						/>
 					</InputContainer>
 					<Button
