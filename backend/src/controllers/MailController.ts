@@ -4,6 +4,7 @@ import NotFound from '@/errors/NotFound'
 import MailServices from '@/services/MailServices'
 import UserService from '@/services/UserService'
 import { generateRandomCode } from '@/utils/generateRandomCode'
+import jwt from 'jsonwebtoken'
 
 import type { Request, Response, NextFunction } from 'express'
 
@@ -95,8 +96,23 @@ export default class MailController {
 				return
 			}
 
+			// chave secreta para o json web token
+			const secretKey = process.env.TOKEN_SECRET
+
+			// verifica se o token está declarado no arquivo .env
+			// caso não, retorna um erro 500
+			if (!secretKey) {
+				console.error('Chave secreta do token inválida')
+				next(new BaseError())
+				return
+			}
+
+			// cria um token para validar a alteração no UserController
+			// o token expira em 2 minutos
+			const token = jwt.sign({ userId: user._id }, secretKey, {expiresIn: 120})
+
 			// resposta
-			res.status(200).json({isCorrectCode: true})
+			res.status(200).json({ isCorrectCode: true, token })
 
 			// remove o documento contendo o token da base de dados
 			await mailService.deleteOne(result._id)
