@@ -9,6 +9,7 @@ interface InputProps {
     name: string
     type?: HTMLInputTypeAttribute
     placeholder?: string
+	autoFocus?: boolean
     value?: string | number
     required?: boolean
     maxLength?: number
@@ -26,6 +27,7 @@ interface InputProps {
 const FormInput = ({
     type = 'text',
     placeholder,
+	autoFocus = false,
     id,
     value,
     required = false,
@@ -106,6 +108,7 @@ const FormInput = ({
 						type
 					}
 					placeholder={placeholder}
+					autoFocus={autoFocus}
 					id={id}
 					maxLength={maxLength}
 					autoComplete='on'
