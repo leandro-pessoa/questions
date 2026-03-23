@@ -3,7 +3,7 @@ import { axiosError } from '@/utils/axiosError'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { useAppDispatch, useAppSelector } from '@/app/hooks'
-import { selectEmail } from '@/app/reducers/changePassword'
+import { selectEmail, setToken } from '@/app/reducers/changePassword'
 import { selectIsLoading, setIsLoading } from '@/app/reducers/loading'
 
 import Button from '@/components/Button'
@@ -14,11 +14,12 @@ import InputContainer from '@/components/Input/InputContainer'
 import SideScreen from '@/components/SideScreen'
 import { Title } from '@/components/Title'
 
-import type { FieldValues } from 'react-hook-form'
+import { useForm, type FieldValues } from 'react-hook-form'
 
 const ConfirmPasswordCode = () => {
 	const navigate = useNavigate()
 	const dispatch = useAppDispatch()
+	const { reset } = useForm()
 	const email = useAppSelector(selectEmail)
 	const isLoading = useAppSelector(selectIsLoading)
 
@@ -29,6 +30,7 @@ const ConfirmPasswordCode = () => {
 			await http.post('/confirmPasswordCode', { code: data.code, email })
 				.then(res => {
 					if (res.data.isCorrectCode) {
+						dispatch(setToken(res.data.token))
 						navigate('/usuario/esqueci-minha-senha/alterar-senha')
 					} else {
 						toast.error('Código incorreto. Tente novamente nos próximos 5 minutos')
@@ -39,6 +41,7 @@ const ConfirmPasswordCode = () => {
 			axiosError(err)
 		}
 		dispatch(setIsLoading(false))
+		reset()
 	}
 
 	return (
@@ -52,6 +55,7 @@ const ConfirmPasswordCode = () => {
 							required
 							id='code'
 							name='Código'
+							autoFocus
 						/>
 					</InputContainer>
 					<Button
