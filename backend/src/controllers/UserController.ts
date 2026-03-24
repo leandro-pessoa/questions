@@ -162,8 +162,8 @@ export default class UserController extends Controller<IUser> {
 		const { authorization } = req.headers
 
 		// verifica se o token foi enviado nos headers
-		if (!authorization) {
-			next(new BadRequest('Token inválido', 401))
+		if (!authorization || !password) {
+			next(new BadRequest())
 			return
 		}
 
@@ -186,12 +186,6 @@ export default class UserController extends Controller<IUser> {
 
 		// decodifica o token e retorna o id do user caso exista
 		const user = jwt.verify(token, process.env.TOKEN_SECRET)
-
-		// verifica se a permissão é inválida e retorna um erro 401 caso seja
-		if (!user) {
-			next(new BadRequest('Acesso negado. Reenvie o código de verificação', 401))
-			return
-		}
 
 		// obtém o id do user
 		const { userId } = user as { userId: string }
