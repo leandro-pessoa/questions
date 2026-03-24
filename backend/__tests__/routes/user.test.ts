@@ -304,6 +304,40 @@ describe('User UPDATE', () => {
 			})
 	})
 
+	it('should return an error if authorization was not sent at updateUserPassword', async () => {
+		await request(app)
+			.put('/users/updateUserPassword')
+			.send({ password: '123456@Tes' })
+			.expect(400, {
+				status: 400,
+				message: 'Requisição inválida'
+			})
+	})
+
+	it('should return an error if authorization was sent without the token at updateUserPassword', async () => {
+		await request(app)
+			.put('/users/updateUserPassword')
+			.send({ password: '123456@Tes' })
+			.set('Authorization', `Bearer`)
+			.expect(401, {
+				status: 401,
+				message: 'Token inválido'
+			})
+	})
+
+	it('should return an error if the token doesnt return an valid user at updateUserPassword', async () => {
+		const testToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2OTE1M2Y1OWNjMjk0YTY3MjFmZmFhOGIiLCJjb21wbGV0ZU5hbWUiOiJBZG1pbiIsImVtYWlsIjoibGVhbmRyb3Blc3NvYXJlaXNAZ21haWwuY29tIiwicn9sZSI6ImFkbWluIiwiaWF0IjoxNzc0MjMxMDQzLCJleHAiOjE3NzQ4MzU4NDN9.lvXORESr2QtFCm91hSfozMJ8sLAyvXP8Ntx8jiFF3ua'
+
+		await request(app)
+			.put('/users/updateUserPassword')
+			.send({ password: '123456@Tes' })
+			.set('Authorization', `Bearer ${testToken}`)
+			.expect(401, {
+				status: 401,
+				message: 'Token expirado ou inválido'
+			})
+	})
+
 	it('should return the user with correct answered question', async () => {
 		await login(email, password)
 			.then(async res => {
