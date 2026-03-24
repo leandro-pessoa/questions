@@ -33,8 +33,10 @@ const Questions = () => {
 	const { isAnyFilterSelected } = useFilter()
 
 	useEffect(() => {
-		dispatch(fetchQuestions())
-	}, [dispatch])
+		if (!questions) {
+			dispatch(fetchQuestions())
+		}
+	}, [dispatch, questions])
 
 	const renderQuestions = () => {
 		switch (questionsFetchStatus) {
