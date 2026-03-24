@@ -3,7 +3,7 @@ import mongoose from 'mongoose'
 import BadRequest from '@/errors/BadRequest'
 import BaseError from '@/errors/BaseError'
 import NotFound from '@/errors/NotFound'
-import { JsonWebTokenError } from 'jsonwebtoken'
+import jwt from 'jsonwebtoken'
 
 import type { MongooseError } from 'mongoose'
 import type { NextFunction, Request, Response } from 'express'
@@ -16,7 +16,7 @@ const errors = (err: MongooseError, req: Request, res: Response, next: NextFunct
 		new BadRequest().sendResponse(res)
 	} else if (err instanceof mongoose.Error.ValidationError) { // erros de validação dos models
 		new ValidationError(err).sendResponse(res)
-	} else if (err instanceof JsonWebTokenError) { // erro do jsonwebtoken
+	} else if (err instanceof jwt.JsonWebTokenError) { // erro do jsonwebtoken
 		new BadRequest('Token expirado ou inválido', 401).sendResponse(res)
 	} else if (err instanceof NotFound) { // not found
 		err.sendResponse(res)
