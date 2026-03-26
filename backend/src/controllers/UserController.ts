@@ -62,8 +62,7 @@ export default class UserController extends Controller<IUser> {
 
 			// caso não, retorna um erro 401
 			if (!user) {
-				next(invalidCredentials)
-				return
+				throw invalidCredentials
 			}
 
 			// verifica o login por meio do service verifyLogin
@@ -77,7 +76,13 @@ export default class UserController extends Controller<IUser> {
 					completeName: user.completeName,
 				},
 			})
-		} catch (err) {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		} catch (err: any) {
+			// caso seja erro de credenciais inválidas
+			if (err.msg === 'Credenciais inválidas') {
+				// executa o service que irá verificar a quantidade de tentativas
+				await userService.loginLimiter(email)
+			}
 			next(err)
 		}
 	}

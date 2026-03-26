@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken'
 import BaseError from '@/errors/BaseError'
 import BadRequest from '@/errors/BadRequest'
 import NotFound from '@/errors/NotFound'
+import LoginLimiter from '@/db/models/LoginLimiter'
 
 import type { IUser } from '@/types/IUser'
 import type { IAlternative } from '@/types/IAlternative'
@@ -41,6 +42,16 @@ export default class UserService extends CRUDServices<IUser> {
 			if(secretKey) {
 				// realiza a criação do token, com expiração de 7 dias
 				const token = jwt.sign(data, secretKey, {expiresIn: '7d'})
+
+				const limiter = await LoginLimiter.findOne({ email })
+
+				// verifica se a quantidade máxima de tentativas foi atingida
+				if (limiter && limiter.count >= 5) {
+					// caso sim, não permite o user realizar o login
+					// mesmo que a senha esteja correta
+					throw new BadRequest('Quantidade máxima de tentativas excedidas. Aguarde 5 minutos', 401)
+				}
+
 				// retorna o token
 				return token
 			} else { // caso não exista, exite um erro no terminal e retona um erro 500
@@ -122,5 +133,29 @@ export default class UserService extends CRUDServices<IUser> {
 				}
 			)
 		 }
+	}
+
+	// irá limitar a quantidade de tentativas que um usuário pode fazer o login
+	// adiciona no contador cada vez que tentar realizar o login e falhar (verficado no controller)
+	// parâmetros:
+	// email do user que está tentando realizar o login
+	async loginLimiter(email: IUser['email']) {
+		// encontra o documento na base de dados
+		// ele expira em 5 minutos
+		const limiter = await LoginLimiter.findOne({ email })
+
+		// caso já exista
+		if (limiter) { // verifica se a contagem já chegou no limite
+			if (limiter.count >= 5) { // lança um erro caso sim
+				throw new BadRequest('Quantidade máxima de tentativas excedidas. Aguarde 5 minutos', 401)
+			}
+
+			// caso não, adiciona um na contagem
+			await LoginLimiter.updateOne({ email }, { count: limiter.count += 1})
+			return
+		}
+
+		// caso não exista, irá criar um novo documento
+		await LoginLimiter.create({ email, count: 1 })
 	}
 }
