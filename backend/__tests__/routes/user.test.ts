@@ -10,6 +10,7 @@ import {
 	createTestUser
 } from '../testUtils/testUsers'
 import { getAdminToken } from '../testUtils/getAdminToken'
+import { generateRandomCode } from '../../src/utils/generateRandomCode'
 import type { IAnsweredQuestion } from '../../src/types/IAnsweredQuestion'
 
 let adminToken: string
@@ -161,6 +162,35 @@ describe('User POST', () => {
 				status: 401,
 				message: 'Credenciais inválidas'
 			})
+	})
+
+	it('should return an error if maximum of attempts is reached at login', async () => {
+		const testEmail = `teste${generateRandomCode(6)}@gmail.com`
+
+		for (let i = 0; i <= 5; i++) {
+			if (i === 5) {
+				await request(app)
+				.post('/users/login')
+				.set('Content-Type', 'application/json')
+				.send({
+					email: testEmail,
+					password: '123456'
+				}).expect(401, {
+					message: 'Quantidade máxima de tentativas excedidas. Aguarde 5 minutos',
+					status: 401
+				})
+				break
+			}
+
+			await request(app)
+				.post('/users/login')
+				.set('Content-Type', 'application/json')
+				.send({
+					email: testEmail,
+					password: '123456'
+				})
+		}
+
 	})
 
 	it('should return a token and user when you log in', async () => {
