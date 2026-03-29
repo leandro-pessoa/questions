@@ -232,6 +232,34 @@ describe('User GET', () => {
 			})
 	})
 
+	it('should return user answered questions at getUserAnsweredQuestions', async () => {
+		await login(email, password)
+			.then(async res => {
+				await request(app)
+					.put('/users/answerQuestion')
+					.send({
+						questionId: '68fcc7310f020b7ccf14cdd7',
+						selectedOption: {right: true, text: 'Eu', letter: 'B'}
+					})
+					.set('Authorization', `Bearer ${res.body.token}`)
+					.set('Content-Type', 'application/json')
+		})
+
+		await login(email, password)
+			.then(async res => {
+				await request(app)
+					.get('/users/getAnsweredQuestions')
+					.set('Authorization', `Bearer ${res.body.token}`)
+					.then((res: {body: {answeredQuestions: IAnsweredQuestion[]}}) => {
+						expect(res.body.answeredQuestions[0].questionId).toEqual('68fcc7310f020b7ccf14cdd7')
+						expect(res.body.answeredQuestions[0].selectedOption).toEqual(
+							{right: true, text: 'Eu', letter: 'B'}
+						)
+						expect(res.body.answeredQuestions[0].isCorrectAnswer).toBeTruthy()
+					})
+			})
+	})
+
 	it('return the users on get', async () => {
 		await request(app)
 			.get('/users')
