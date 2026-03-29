@@ -16,6 +16,30 @@ export default class UserController extends Controller<IUser> {
 		super(userService)
 	}
 
+	// obtém as questões respondidas de um usuário
+	async getUserAnsweredQuestions(req: Request, res: Response, next: NextFunction) {
+		// id que está na sessão
+		const id = req._id
+
+		try {
+			// busca o user baseado no id
+			const user = await userService.getById(id)
+
+			// caso não encontre, responde com um notfound
+			if (!user) {
+				next(new NotFound('Usuário não encontrado'))
+				return
+			}
+
+			// resposta com as questões respondidas
+			res.status(200).json({
+				answeredQuestions: user.answeredQuestions
+			})
+		} catch (err) {
+			next(err)
+		}
+	}
+
 	// cria um novo usuário
 	async userStore(req: Request, res: Response, next: NextFunction) {
 		const { email } = req.body
