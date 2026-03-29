@@ -6,6 +6,7 @@ import UserRegister from './pages/UserRegister'
 import SendPasswordCode from './pages/ChangePassword/SendPasswordCode'
 import ConfirmPasswordCode from './pages/ChangePassword/ConfirmPasswordCode'
 import ChangePass from './pages/ChangePassword/ChangePass'
+import User from './pages/User'
 
 const AppRoutes = () => {
 	return (
@@ -16,6 +17,7 @@ const AppRoutes = () => {
 					<Route path='login' element={ <Login /> }/>
 
 					<Route path='/usuario'>
+						<Route index element={ <User /> } />
 						<Route path='cadastro' element={ <UserRegister /> }/>
 						<Route path='esqueci-minha-senha'>
 							<Route path='enviar-codigo' element={ <SendPasswordCode /> }/>
