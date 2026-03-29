@@ -13,7 +13,7 @@ const App = () => {
 	return (
 		<ThemeProvider theme={theme === 'dark' ? darkTheme : lightTheme}>
 			<GlobalStyles />
-			<ToastContainer theme={theme} position='top-center'/>
+			<ToastContainer theme={theme} position='top-center' limit={2} autoClose={2000} />
 			<GlobalLoading />
 			<AppRoutes />
 		</ThemeProvider>
