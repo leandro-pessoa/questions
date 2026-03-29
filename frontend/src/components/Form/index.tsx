@@ -2,9 +2,11 @@ import styled from 'styled-components'
 import { FormProvider, useForm, type FieldValues } from 'react-hook-form'
 import { vars } from '@/styles/vars'
 
+import type { BaseSyntheticEvent } from 'react'
+
 interface IFormProps {
 	children: React.ReactNode | string | [React.ReactNode | string][]
-	onSubmit: (data: FieldValues) => void
+	onSubmit: (data: FieldValues, e: BaseSyntheticEvent<object> | undefined) => void
 	grid?: boolean
 }
 
