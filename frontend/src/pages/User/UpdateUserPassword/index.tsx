@@ -10,7 +10,8 @@ import Form from "@/components/Form"
 import FormInput from "@/components/Input/FormInput"
 import InputContainer from "@/components/Input/InputContainer"
 
-import type { FieldValues } from "react-hook-form"
+import { type FieldValues } from "react-hook-form"
+import { type BaseSyntheticEvent } from "react"
 
 const UpdateUserPassword = () => {
 	const dispatch = useAppDispatch()
@@ -18,7 +19,10 @@ const UpdateUserPassword = () => {
 	const isLoading = useAppSelector(selectIsLoading)
 
 	// irá fazer a requisição para o servidor com os dados do formulário
-	const submitHandle = async (data: FieldValues) => {
+	const submitHandle = async (data: FieldValues, e: BaseSyntheticEvent<object> | undefined) => {
+		// target do evento
+		const target = e?.target as HTMLFormElement
+
 		// não faz nada caso esteja no loading
 		if (isLoading) return
 
@@ -32,8 +36,9 @@ const UpdateUserPassword = () => {
 				{ ...data },
 				{ headers: { Authorization: token && `Bearer ${token}` } }
 			)
-				.then(() => { // feedback de sucesso
+				.then(() => { // feedback de sucesso e reset do form
 					toast.success('Senha alterada com sucesso!')
+					target.reset()
 				})
 		} catch (err) { // handle dos erros
 			axiosError(err)
