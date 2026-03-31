@@ -20,11 +20,11 @@ const UpdateUserPassword = () => {
 
 	// irá fazer a requisição para o servidor com os dados do formulário
 	const submitHandle = async (data: FieldValues, e: BaseSyntheticEvent<object> | undefined) => {
-		// target do evento
-		const target = e?.target as HTMLFormElement
-
 		// não faz nada caso esteja no loading
 		if (isLoading) return
+
+		// target do evento
+		const target = e?.target as HTMLFormElement
 
 		try {
 			// loading

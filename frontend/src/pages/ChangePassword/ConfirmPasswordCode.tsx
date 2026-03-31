@@ -14,17 +14,20 @@ import InputContainer from '@/components/Input/InputContainer'
 import SideScreen from '@/components/SideScreen'
 import { Title } from '@/components/Title'
 
-import { useForm, type FieldValues } from 'react-hook-form'
+import type { FieldValues } from 'react-hook-form'
+import type { BaseSyntheticEvent } from 'react'
 
 const ConfirmPasswordCode = () => {
 	const navigate = useNavigate()
 	const dispatch = useAppDispatch()
-	const { reset } = useForm()
 	const email = useAppSelector(selectEmail)
 	const isLoading = useAppSelector(selectIsLoading)
 
-	const confirmCodeHandle = async (data: FieldValues) => {
+	const confirmCodeHandle = async (data: FieldValues, e: BaseSyntheticEvent<object> | undefined) => {
 		if (isLoading) return
+
+		const target = e?.target as HTMLFormElement
+
 		try {
 			dispatch(setIsLoading(true))
 			await http.post('/confirmPasswordCode', { code: data.code, email })
@@ -41,7 +44,7 @@ const ConfirmPasswordCode = () => {
 			axiosError(err)
 		}
 		dispatch(setIsLoading(false))
-		reset()
+		target.reset()
 	}
 
 	return (
