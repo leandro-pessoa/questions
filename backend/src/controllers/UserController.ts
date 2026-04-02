@@ -26,14 +26,23 @@ export default class UserController extends Controller<IUser> {
 			const user = await userService.getById(id)
 
 			// caso não encontre, responde com um notfound
+			// narrowing para a constante user
 			if (!user) {
 				next(new NotFound('Usuário não encontrado'))
 				return
 			}
 
+			// contabilização de questões corretas e incorretas do user
+			const correct =
+				user.answeredQuestions?.filter((question) => question.isCorrectAnswer) || []
+			const incorrect =
+				user.answeredQuestions?.filter((question) => !question.isCorrectAnswer) || []
+
 			// resposta com as questões respondidas
 			res.status(200).json({
-				answeredQuestions: user.answeredQuestions
+				answeredQuestions: user.answeredQuestions,
+				correct: correct.length,
+				incorrect: incorrect.length
 			})
 		} catch (err) {
 			next(err)
