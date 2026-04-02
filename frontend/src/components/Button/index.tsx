@@ -11,6 +11,7 @@ interface IButtonProps {
 	iconButton?: boolean
 	title?: string
 	className?: string
+	disabled?: boolean
 }
 
 const Button = ({
@@ -22,7 +23,8 @@ const Button = ({
 	type = 'button',
 	iconButton = false,
 	title = '',
-	className = ''
+	className = '',
+	disabled = false
 }: IButtonProps) => {
 	return (
 		<>
@@ -34,6 +36,7 @@ const Button = ({
 				$iconButton={iconButton}
 				title={title}
 				className={className}
+				disabled={disabled}
 			>
 				{icon}
 				{children}
