@@ -8,6 +8,7 @@ import { StyledLi } from './styles'
 import Button from '@/components/Button'
 import Option from './Option'
 import QuestionFeedback from './QuestionFeedback'
+import { Loading } from '@/components/Loading'
 
 import type { IAlternative } from '@/types/IAlternative'
 import type { IQuestion } from '@/types/IQuestion'
@@ -33,6 +34,7 @@ const Question = ({
 		null,
 	)
 	const [isAnswered, setIsAnswered] = useState<boolean>(false)
+	const [isLoading, setIsLoading] = useState<boolean>(false)
 
 	// atualiza o user logado com a questão e opção selecinada
 	const answerQuestion = async () => {
@@ -40,6 +42,8 @@ const Question = ({
 		if (!user) return
 
 		try {
+			// loading
+			setIsLoading(true)
 			// faz a requisição put com o id da questão respondida, opção selecionada
 			// e o token do user logado
 			await http
@@ -55,6 +59,8 @@ const Question = ({
 		} catch (err) {
 			axiosError(err)
 		}
+		// loading
+		setIsLoading(false)
 	}
 
 	return (
@@ -91,7 +97,17 @@ const Question = ({
 				- se já foi respondida
 			*/}
 			{selectedOption !== null && user && !isAnswered && (
-				<Button style={{ marginTop: '16px' }} onClick={answerQuestion}>
+				<Button
+					style={{ marginTop: '16px' }}
+					onClick={answerQuestion}
+					disabled={isLoading}
+				>
+					{	// exibe o loading ao responder uma questão
+						isLoading &&
+							<Loading $overlay={false} $size='15px' $borderSize='2px'>
+								<div></div>
+							</Loading>
+					}
 					Responder
 				</Button>
 			)}
