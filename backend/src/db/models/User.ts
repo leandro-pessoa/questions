@@ -1,6 +1,7 @@
 import mongoose, { Schema } from 'mongoose'
 import bcrypt from 'bcryptjs'
 import type { IUser } from '@/types/IUser'
+import { answeredQuestionSchema } from './AnsweredQuestion'
 
 const userSchema = new Schema<IUser>({
 	role: {
@@ -27,15 +28,7 @@ const userSchema = new Schema<IUser>({
 			message: 'E-mail inválido',
 		},
 	},
-	answeredQuestions: [{
-		questionId: String,
-		selectedOption: {
-			right: Boolean,
-			text: String,
-			letter: String,
-		},
-		isCorrectAnswer: Boolean
-	}],
+	answeredQuestions: [answeredQuestionSchema],
 	passwordHash: {
 		type: String,
 	},
