@@ -4,6 +4,6 @@ export interface IAnsweredQuestion {
 	questionId: string
 	selectedOption: IAlternative
 	isCorrectAnswer: boolean
-	createdAt: string,
-	updatedAt: string
+	createdAt: Date,
+	updatedAt: Date
 }
