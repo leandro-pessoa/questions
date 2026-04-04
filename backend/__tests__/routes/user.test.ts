@@ -254,7 +254,7 @@ describe('User GET', () => {
 				await request(app)
 					.get('/users/getAnsweredQuestions')
 					.set('Authorization', `Bearer ${res.body.token}`)
-					.then((res: {body: {answeredQuestions: IAnsweredQuestion[], correct: number, incorrect: number}}) => {
+					.then((res: {body: {answeredQuestions: IAnsweredQuestion[], correct: number, incorrect: number, weeklyAnsweredQuestions: number[]}}) => {
 						expect(res.body.answeredQuestions[0].questionId).toEqual('68fcc7310f020b7ccf14cdd7')
 						expect(res.body.answeredQuestions[0].selectedOption).toEqual(
 							{right: true, text: 'Eu', letter: 'B'}
@@ -264,6 +264,7 @@ describe('User GET', () => {
 						expect(res.body.answeredQuestions[0].updatedAt).toMatch(timeRegexp)
 						expect(res.body.correct).toEqual(1)
 						expect(res.body.incorrect).toEqual(0)
+						expect(res.body.weeklyAnsweredQuestions).toHaveLength(7)
 					})
 			})
 	})
