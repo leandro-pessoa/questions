@@ -233,6 +233,10 @@ describe('User GET', () => {
 	})
 
 	it('should return user answered questions at getUserAnsweredQuestions', async () => {
+		// matching example
+		// 2026-04-03T20:33:39.712Z
+		const timeRegexp = /^\d{4}-\d{2}-\d{2}T(\d{2}:){2}\d{2}\.\d{3}Z$/
+
 		await login(email, password)
 			.then(async res => {
 				await request(app)
@@ -256,6 +260,8 @@ describe('User GET', () => {
 							{right: true, text: 'Eu', letter: 'B'}
 						)
 						expect(res.body.answeredQuestions[0].isCorrectAnswer).toBeTruthy()
+						expect(res.body.answeredQuestions[0].createdAt).toMatch(timeRegexp)
+						expect(res.body.answeredQuestions[0].updatedAt).toMatch(timeRegexp)
 						expect(res.body.correct).toEqual(1)
 						expect(res.body.incorrect).toEqual(0)
 					})
