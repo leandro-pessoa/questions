@@ -5,8 +5,8 @@ import { vars } from '@/styles/vars'
 import { useEffect, useState } from 'react'
 import { axiosError } from '@/utils/axiosError'
 
-import { Pie } from 'react-chartjs-2'
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
+import { Line, Pie } from 'react-chartjs-2'
+import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointElement, LineElement, Title } from 'chart.js'
 import { Loading } from '@/components/Loading'
 
 import type { IAnsweredQuestion } from '@/types/IAnsweredQuestion'
@@ -15,6 +15,7 @@ type IUserAnsweredQuestions = {
 	answeredQuestions: IAnsweredQuestion[],
 	correct: number,
 	incorrect: number
+	weeklyAnsweredQuestions: number[]
 }
 
 const UserStatistics = () => {
@@ -28,14 +29,24 @@ const UserStatistics = () => {
 		useState<IUserAnsweredQuestions>({
 			answeredQuestions: [],
 			correct: 0,
-			incorrect: 0
+			incorrect: 0,
+			weeklyAnsweredQuestions: []
 		})
 
 	// state do loading local
 	const [loading, setLoading] = useState<boolean>(false)
 
 	// configuração do chartjs
-	ChartJS.register(ArcElement, Tooltip, Legend)
+	ChartJS.register(
+		ArcElement,
+		CategoryScale,
+		LinearScale,
+		PointElement,
+		LineElement,
+		Title,
+		Tooltip,
+		Legend
+	)
 
 	useEffect(() => {
 		// obtém as questões respondidas do user da API
@@ -82,6 +93,36 @@ const UserStatistics = () => {
 		],
 	}
 
+	const lineData = {
+		labels: ['teste', 'teste', 'teste', 'teste', 'teste', 'teste', 'teste'],
+		datasets: [
+			{
+				label: 'Questões',
+				data: userAnsweredQuestions.weeklyAnsweredQuestions,
+				borderColor: 'rgb(53, 162, 235)',
+				backgroundColor: 'rgba(53, 162, 235, 0.5)',
+			},
+		],
+	}
+
+	const lineOptions = {
+		elements: {
+			point: {
+				hitRadius: 100
+			}
+		},
+		scales: {
+			y: {
+				beginAtZero: true,
+				ticks: {
+					callback: function(val: number | string) {
+						return Number.isInteger(val) ? val : ''
+					}
+				}
+			}
+		}
+	}
+
 	return (
 		<>
 			{	// caso o state loading seja true, exibe o componente de loading
@@ -95,7 +136,10 @@ const UserStatistics = () => {
 									Nenhuma questão foi respondida ainda.
 								</p>
 							:  	// caso exista, exibe o gráfico com as configurações
-								<Pie data={pieData} />
+								<>
+									<Pie data={pieData} />
+									<Line data={lineData} options={lineOptions} />
+								</>
 						}
 					</>
 			}
