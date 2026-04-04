@@ -3,4 +3,6 @@ export interface IAnsweredQuestion {
 	selectedOption: string
 	correctOption: string
 	isCorrectAnswer: boolean
+	createdAt: string,
+	updatedAt: string
 }
