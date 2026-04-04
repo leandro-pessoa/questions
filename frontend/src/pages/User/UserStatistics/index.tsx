@@ -63,16 +63,21 @@ const UserStatistics = () => {
 
 	// configuração do gráfico que será exibido
 	// legendas, dados e cores
-	const data = {
+	const pieData = {
 		labels: ['Acertos', 'Erros'],
 		datasets: [
 			{
 				label: 'Questões',
 				data: [userAnsweredQuestions.correct, userAnsweredQuestions.incorrect],
 				backgroundColor: [
+					`${vars.colors.green}88`,
+					`${vars.colors.red}88`
+				],
+				borderColor: [
 					vars.colors.green,
 					vars.colors.red
-				]
+				],
+				borderWidth: 2
 			},
 		],
 	}
@@ -90,7 +95,7 @@ const UserStatistics = () => {
 									Nenhuma questão foi respondida ainda.
 								</p>
 							:  	// caso exista, exibe o gráfico com as configurações
-								<Pie data={data} />
+								<Pie data={pieData} />
 						}
 					</>
 			}
