@@ -158,4 +158,54 @@ export default class UserService extends CRUDServices<IUser> {
 		// caso não exista, irá criar um novo documento
 		await LoginLimiter.create({ email, count: 1 })
 	}
+
+	// obtém o número de questões respondidas do dia atual e dos 6 anteriores
+	// o retorno será um array em que cada elemento corresponderá a quantidade de questões respondidas no dia (ex: [0, 2, 5, 10, 1, 2, 9])
+	// parâmetros:
+	// usuário
+	async getWeeklyAnsweredQuestions(user: IUser) {
+		// um dia em milisegundos para facilitar o cálculo dos dias
+		const dayInMilliseconds = 86400000
+
+		// constantes para datas
+		const date = new Date()
+		const time = date.getTime() // data atual em milisegundos
+
+		// irá obter a data do dia atual e dos 6 anteriores em milisegundos
+		const recentDays = [
+			time - dayInMilliseconds * 6,
+			time - dayInMilliseconds * 5,
+			time - dayInMilliseconds * 4,
+			time - dayInMilliseconds * 3,
+			time - dayInMilliseconds * 2,
+			time - dayInMilliseconds,
+			time,
+		]
+
+		// array que será retornado
+		const data: number[] = []
+
+		// para cada data do array recentDays, irá filtrar as questões do user em que o updatedAt coincida com a data e irá guardar a lenght no array data
+		recentDays.forEach((day) => {
+			// data do dia da semana em isostring (ex: 2026-04-04)
+			const isoDate = new Date(day).toISOString().slice(0, 10)
+
+			// filtra as questões respondidas do user de acordo com a data do loop
+			const equalDateQuestions = user.answeredQuestions?.filter((question) => {
+				// data do updatedAt de cada questão em isostring (ex: 2026-04-04)
+				const questionUpdateDate = question.updatedAt.toISOString().slice(0, 10)
+
+				// verifica se as datas coincidem
+				if (questionUpdateDate === isoDate) { // caso sim, guarda no array de retorno do filter
+					return question
+				}
+			})
+
+			// armazena a length do equalDateQuestions para cada dia de recentDays
+			// caso não tenha nenhum valor, armazena um zero
+			data.push(equalDateQuestions?.length || 0)
+		})
+
+		return data
+	}
 }

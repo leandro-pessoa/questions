@@ -38,11 +38,15 @@ export default class UserController extends Controller<IUser> {
 			const incorrect =
 				user.answeredQuestions?.filter((question) => !question.isCorrectAnswer) || []
 
+			// obtém o número de questões respondidas do dia atual e dos 6 anteriores
+			const weeklyAnsweredQuestions = await userService.getWeeklyAnsweredQuestions(user)
+
 			// resposta com as questões respondidas
 			res.status(200).json({
 				answeredQuestions: user.answeredQuestions,
 				correct: correct.length,
-				incorrect: incorrect.length
+				incorrect: incorrect.length,
+				weeklyAnsweredQuestions
 			})
 		} catch (err) {
 			next(err)
