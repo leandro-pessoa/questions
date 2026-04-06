@@ -119,11 +119,12 @@ const UserStatistics = () => {
 		return weekDaysLabels[new Date(day).getDay()]
 	})
 
+	// dados do gráfico em linha
 	const lineData = {
 		labels: [...weekDays],
 		datasets: [
 			{
-				label: 'Questões',
+				label: 'Questões respondidas',
 				data: userAnsweredQuestions.weeklyAnsweredQuestions,
 				borderColor: 'rgb(53, 162, 235)',
 				backgroundColor: 'rgba(53, 162, 235, 0.5)',
@@ -131,16 +132,18 @@ const UserStatistics = () => {
 		],
 	}
 
+	// configurações do gráfico em linha
 	const lineOptions = {
 		elements: {
-			point: {
+			point: { // define o tamanho da área de interação dos pontos do gráfico
 				hitRadius: 100
 			}
 		},
 		scales: {
 			y: {
-				beginAtZero: true,
+				beginAtZero: true, // o início do y deve começar no 0
 				ticks: {
+					// remove os números que não são inteiros do y
 					callback: function(val: number | string) {
 						return Number.isInteger(val) ? val : ''
 					}
