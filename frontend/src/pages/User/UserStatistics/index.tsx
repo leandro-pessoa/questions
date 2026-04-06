@@ -93,8 +93,34 @@ const UserStatistics = () => {
 		],
 	}
 
+	// um dia em milisegundos para facilitar o cálculo dos dias
+	const dayInMilliseconds = 86400000
+
+	// constantes para datas
+	const date = new Date()
+	const time = date.getTime() // data atual em milisegundos
+
+	// irá obter a data do dia atual e dos 6 anteriores em milisegundos
+	const recentDays = [
+		time - dayInMilliseconds * 6,
+		time - dayInMilliseconds * 5,
+		time - dayInMilliseconds * 4,
+		time - dayInMilliseconds * 3,
+		time - dayInMilliseconds * 2,
+		time - dayInMilliseconds,
+		time,
+	]
+
+	// legendas dos dias da semana em português
+	const weekDaysLabels = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado']
+
+	// irá retornar um array com o dia atual e os 6 anteriores com a legenda correta
+	const weekDays = recentDays.map((day) => {
+		return weekDaysLabels[new Date(day).getDay()]
+	})
+
 	const lineData = {
-		labels: ['teste', 'teste', 'teste', 'teste', 'teste', 'teste', 'teste'],
+		labels: [...weekDays],
 		datasets: [
 			{
 				label: 'Questões',
