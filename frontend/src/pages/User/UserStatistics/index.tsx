@@ -4,10 +4,13 @@ import { http } from '@/http'
 import { vars } from '@/styles/vars'
 import { useEffect, useState } from 'react'
 import { axiosError } from '@/utils/axiosError'
+import { selectTheme } from '@/app/reducers/theme'
 
 import { Line, Pie } from 'react-chartjs-2'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointElement, LineElement, Title } from 'chart.js'
 import { Loading } from '@/components/Loading'
+import { StyledDiv } from './styles'
+import { Hr } from '@/components/Hr'
 
 import type { IAnsweredQuestion } from '@/types/IAnsweredQuestion'
 
@@ -20,6 +23,7 @@ type IUserAnsweredQuestions = {
 
 const UserStatistics = () => {
 	const dispatch = useAppDispatch()
+	const theme = useAppSelector(selectTheme)
 
 	// token de sessão do user
 	const token = useAppSelector(selectToken)
@@ -49,6 +53,9 @@ const UserStatistics = () => {
 	)
 
 	useEffect(() => {
+		// alteração das cores dos labels dos gráficos de acordo com o tema
+		ChartJS.defaults.color = theme === 'dark' ? vars.colors.gray : vars.colors.darkGray
+
 		// obtém as questões respondidas do user da API
 		const getUserQuestions = async () => {
 			try {
@@ -70,7 +77,7 @@ const UserStatistics = () => {
 
 		// execução da função de requisição
 		getUserQuestions()
-	}, [token, dispatch])
+	}, [token, dispatch, theme])
 
 	// configuração do gráfico que será exibido
 	// legendas, dados e cores
@@ -143,10 +150,8 @@ const UserStatistics = () => {
 			y: {
 				beginAtZero: true, // o início do y deve começar no 0
 				ticks: {
-					// remove os números que não são inteiros do y
-					callback: function(val: number | string) {
-						return Number.isInteger(val) ? val : ''
-					}
+					// ajusta o intervalo do y para 1
+					stepSize: 1
 				}
 			}
 		}
@@ -164,10 +169,24 @@ const UserStatistics = () => {
 								<p style={{ textAlign: 'center', margin: '32px 0' }}>
 									Nenhuma questão foi respondida ainda.
 								</p>
-							:  	// caso exista, exibe o gráfico com as configurações
+							:  	// caso exista, exibe os gráficos com os dados e o quantitativo de todas as questões respondidas
 								<>
-									<Pie data={pieData} />
-									<Line data={lineData} options={lineOptions} />
+									<p>
+										Total de questões respondidas:
+										<span
+											style={{
+												borderBottom: `2px solid ${vars.colors.blue}`,
+												marginLeft: '6px'
+											}}
+										>
+											{userAnsweredQuestions.answeredQuestions?.length}
+										</span>
+									</p>
+									<Hr />
+									<StyledDiv>
+										<Pie data={pieData} />
+										<Line data={lineData} options={lineOptions} />
+									</StyledDiv>
 								</>
 						}
 					</>
