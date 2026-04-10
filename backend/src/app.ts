@@ -6,6 +6,7 @@ import cors from 'cors'
 import { corsOptions } from './config/corsOptions'
 import helmet from 'helmet'
 import delay from 'express-delay'
+import { limiter } from './middlewares/limiter'
 
 // conexão com o banco de dados
 connectDatabase().then(() => { console.log('Conectado ao banco de dados')})
@@ -20,6 +21,9 @@ app.use(cors(corsOptions))
 
 // helmet, para headers mais seguros
 app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' }}))
+
+// limitar requisões em grandes quantidades
+app.use(limiter)
 
 // rotas
 routes(app)
