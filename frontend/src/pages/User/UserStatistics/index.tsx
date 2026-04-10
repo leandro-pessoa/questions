@@ -52,10 +52,11 @@ const UserStatistics = () => {
 		Legend
 	)
 
-	useEffect(() => {
-		// alteração das cores dos labels dos gráficos de acordo com o tema
-		ChartJS.defaults.color = theme === 'dark' ? vars.colors.gray : vars.colors.darkGray
+	// alteração das cores dos labels dos gráficos de acordo com o tema
+	// eslint-disable-next-line react-hooks/immutability
+	ChartJS.defaults.color = theme === 'dark' ? vars.colors.gray : vars.colors.darkGray
 
+	useEffect(() => {
 		// obtém as questões respondidas do user da API
 		const getUserQuestions = async () => {
 			try {
@@ -77,7 +78,7 @@ const UserStatistics = () => {
 
 		// execução da função de requisição
 		getUserQuestions()
-	}, [token, dispatch, theme])
+	}, [token, dispatch])
 
 	// configuração do gráfico que será exibido
 	// legendas, dados e cores
