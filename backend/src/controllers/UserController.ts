@@ -53,6 +53,15 @@ export default class UserController extends Controller<IUser> {
 		}
 	}
 
+	// retorna o acesso caso passe pelo middleware adminRequired
+	async verifyAdmin(req: Request, res: Response, next: NextFunction) {
+		try {
+			res.status(200).send()
+		} catch (err) {
+			next(err)
+		}
+	}
+
 	// cria um novo usuário
 	async userStore(req: Request, res: Response, next: NextFunction) {
 		const { email } = req.body
