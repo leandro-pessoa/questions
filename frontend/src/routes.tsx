@@ -7,6 +7,8 @@ import SendPasswordCode from './pages/ChangePassword/SendPasswordCode'
 import ConfirmPasswordCode from './pages/ChangePassword/ConfirmPasswordCode'
 import ChangePass from './pages/ChangePassword/ChangePass'
 import User from './pages/User'
+import Admin from './pages/Admin'
+import Menu from './pages/Admin/Menu'
 
 const AppRoutes = () => {
 	return (
@@ -24,6 +26,9 @@ const AppRoutes = () => {
 							<Route path='confirmar-codigo' element={ <ConfirmPasswordCode /> }/>
 							<Route path='alterar-senha' element={ <ChangePass /> }/>
 						</Route>
+					</Route>
+					<Route path='/admin' element={ <Admin /> }>
+						<Route index element={ <Menu /> }/>
 					</Route>
 				</Route>
 			</Routes>
