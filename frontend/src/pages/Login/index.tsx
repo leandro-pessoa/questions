@@ -1,5 +1,5 @@
 import { http } from '@/http'
-import { setToken, setUser } from '@/app/reducers/user'
+import { setAdmin, setToken, setUser } from '@/app/reducers/user'
 import { axiosError } from '@/utils/axiosError'
 import { selectIsLoading, setIsLoading } from '@/app/reducers/loading'
 import { useNavigate } from 'react-router-dom'
@@ -31,10 +31,18 @@ const Login = () => {
 		if (isLoading) return
 		try {
 			dispatch(setIsLoading(true))
-			const res = await http.post('/users/login', { ...data })
+			const loginReq = await http.post('/users/login', { ...data })
 
-			dispatch(setUser(res.data.user))
-			dispatch(setToken(res.data.token))
+			const token = loginReq.data.token
+
+			await http.get('/access',
+				{ headers: { Authorization: token && `Bearer ${token}`}}
+			)
+			.then(() => dispatch(setAdmin(true)))
+			.catch(() => dispatch(setAdmin(false)))
+
+			dispatch(setUser(loginReq.data.user))
+			dispatch(setToken(token))
 			navigate('/')
 		} catch (err) {
 			axiosError(err)
