@@ -24,7 +24,11 @@ const answeredQuestionSchema = new Schema<IAnsweredQuestion>({
 	isCorrectAnswer: {
 		type: Boolean,
 		required: true
+	},
+	updatedAt: {
+		type: Date,
+		default: new Date(Date.now() - 10800000) // - 3horas (fuso horário de São Paulo)
 	}
-}, { timestamps: true })
+}, {timestamps: false})
 
 export { answeredQuestionSchema }

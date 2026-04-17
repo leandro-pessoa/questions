@@ -125,7 +125,8 @@ export default class UserService extends CRUDServices<IUser> {
 					$set: {
 						'answeredQuestions.$.questionId': questionId,
 						'answeredQuestions.$.selectedOption': selectedOption,
-						'answeredQuestions.$.isCorrectAnswer': selectedOption.right
+						'answeredQuestions.$.isCorrectAnswer': selectedOption.right,
+						'answeredQuestions.$.updatedAt': new Date(Date.now() - 10800000) // - 3horas (fuso horário de São Paulo)
 					}
 				},
 				{	// identificador para achar a questão específica a ser alterada
@@ -167,9 +168,8 @@ export default class UserService extends CRUDServices<IUser> {
 		// um dia em milisegundos para facilitar o cálculo dos dias
 		const dayInMilliseconds = 86400000
 
-		// constantes para datas
-		const date = new Date()
-		const time = date.getTime() // data atual em milisegundos
+		// data atual em milisegundos
+		const time = Date.now() - 10800000 // - 3horas (fuso horário de São Paulo)
 
 		// irá obter a data do dia atual e dos 6 anteriores em milisegundos
 		const recentDays = [
