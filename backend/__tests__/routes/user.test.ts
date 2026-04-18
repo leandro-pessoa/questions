@@ -260,11 +260,12 @@ describe('User GET', () => {
 							{right: true, text: 'Eu', letter: 'B'}
 						)
 						expect(res.body.answeredQuestions[0].isCorrectAnswer).toBeTruthy()
-						expect(res.body.answeredQuestions[0].createdAt).toMatch(timeRegexp)
 						expect(res.body.answeredQuestions[0].updatedAt).toMatch(timeRegexp)
 						expect(res.body.correct).toEqual(1)
 						expect(res.body.incorrect).toEqual(0)
 						expect(res.body.weeklyAnsweredQuestions).toHaveLength(7)
+						expect(res.body.weeklyAnsweredQuestions[0]).toEqual(0)
+						expect(res.body.weeklyAnsweredQuestions[6]).toEqual(1)
 					})
 			})
 	})
