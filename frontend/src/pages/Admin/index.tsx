@@ -1,12 +1,24 @@
-import { useAppDispatch, useAppSelector } from "@/app/hooks"
-import { setIsLoading } from "@/app/reducers/loading"
-import { selectToken } from "@/app/reducers/user"
-import { http } from "@/http"
-import { axiosError } from "@/utils/axiosError"
-import { useEffect } from "react"
+import { useAppDispatch, useAppSelector } from '@/app/hooks'
+import { setIsLoading } from '@/app/reducers/loading'
+import { selectToken } from '@/app/reducers/user'
+import { http } from '@/http'
+import { axiosError } from '@/utils/axiosError'
+import { useEffect } from 'react'
+import styled from 'styled-components'
+import { vars } from '@/styles/vars'
+import { flex } from '@/utils/flex'
 
-import Header from "@/components/Header"
-import { Outlet, useNavigate } from "react-router-dom"
+import { Outlet, useNavigate } from 'react-router-dom'
+import AdminNav from './AdminNav'
+import { CenterContainer } from '@/components/CenterContainer'
+
+const StyledDiv = styled.div`
+	${flex('column', 'auto', 'auto')}
+
+	@media screen and (min-width: ${vars.breakpoints.smartphone}) {
+		flex-direction: row;
+	}
+`
 
 const Admin = () => {
 	const dispatch = useAppDispatch()
@@ -22,16 +34,16 @@ const Admin = () => {
 				dispatch(setIsLoading(true))
 
 				// requisição para o server checar o acesso
-				const res =
-					await http.get('/access',
-						{ headers: { Authorization: token && `Bearer ${token}`}}
-					)
+				const res = await http.get('/access', {
+					headers: { Authorization: token && `Bearer ${token}` },
+				})
 
 				// caso dê algum erro, lança ele para o catch
 				if (res.status !== 200) {
 					throw new Error()
 				}
-			} catch (err) { // navega para a para a página de login e exibe a mensagem
+			} catch (err) {
+				// navega para a para a página de login e exibe a mensagem
 				navigate('/login')
 				axiosError(err)
 			}
@@ -44,10 +56,12 @@ const Admin = () => {
 	}, [dispatch, navigate, token])
 
 	return (
-		<>
-			<Header />
-			<Outlet />
-		</>
+		<StyledDiv>
+			<AdminNav />
+			<CenterContainer>
+				<Outlet />
+			</CenterContainer>
+		</StyledDiv>
 	)
 }
 
