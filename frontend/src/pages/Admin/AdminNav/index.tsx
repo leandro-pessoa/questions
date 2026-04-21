@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import NavLink from '@/components/Nav/NavLink'
 import { Users, MessageCircleQuestionMark, ArrowLeft } from 'lucide-react'
 import Button from "@/components/Button"
+import ThemeButton from '@/components/Button/ThemeButton'
 
 export const StyledNav = styled.nav`
 	${flex('row', 'space-around', 'center')}
@@ -37,6 +38,7 @@ const AdminNav = () => {
 					<Users color={vars.colors.white} />
 				</Button>
 			</NavLink>
+			<ThemeButton style={{ color: vars.colors.white }}/>
 		</StyledNav>
 	)
 }
