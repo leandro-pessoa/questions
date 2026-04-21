@@ -98,8 +98,8 @@ export const GlobalStyles = createGlobalStyle`
 
 	@media screen and (min-width: ${vars.breakpoints.desktop}) {
 		svg.lucide {
-			width: 26px;
-			height: 26px;
+			width: 30px;
+			height: 30px;
 		}
 	}
 `
