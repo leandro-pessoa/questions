@@ -4,7 +4,7 @@ import { useAppSelector, useAppDispatch } from '@/app/hooks'
 import { selectUser, logout, selectAdmin } from '@/app/reducers/user'
 import { useNavigate } from 'react-router-dom'
 
-import { StyledNavLink as NavLink } from './NavLink'
+import NavLink from './NavLink'
 import Button from '../Button'
 import { CircleUser, LogIn, UserPlus, LogOut, Settings } from 'lucide-react'
 

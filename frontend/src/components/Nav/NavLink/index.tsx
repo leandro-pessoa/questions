@@ -1,20 +1,28 @@
-import { vars } from '@/styles/vars'
-import { flex } from '@/utils/flex'
-import { NavLink } from 'react-router-dom'
-import styled from 'styled-components'
+import { StyledNavLink } from './styles'
 
-export const StyledNavLink = styled(NavLink)`
-	${flex('row', 'center', 'center')}
-	color: ${(props) => props.theme.colors.primaryFontColor};
-	text-decoration: none;
+// tipagem dos props
+interface NavLinkProps {
+	children:
+		| React.ReactElement
+		| React.ReactElement[]
+		| string
+		| (string | React.ReactElement)[]
+	to: string
+	activeColor?: string
+}
 
-	span {
-		display: none;
-	}
+const NavLink = ({ children, to, activeColor }: NavLinkProps) => {
+	return (
+		<StyledNavLink
+			to={to}
+			className={({ isActive }) =>
+				`${isActive ? 'active' : ''}`
+			}
+			$activeColor={activeColor}
+		>
+			{children}
+		</StyledNavLink>
+	)
+}
 
-	@media screen and (min-width: ${vars.breakpoints.tablet}) {
-		span {
-			display: block;
-		}
-	}
-`
+export default NavLink
