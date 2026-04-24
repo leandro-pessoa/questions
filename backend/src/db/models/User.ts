@@ -31,6 +31,7 @@ const userSchema = new Schema<IUser>({
 	answeredQuestions: [answeredQuestionSchema],
 	passwordHash: {
 		type: String,
+		select: false
 	},
 	password: {
 		type: String,

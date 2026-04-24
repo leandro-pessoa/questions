@@ -46,6 +46,7 @@ export const pagination = async (
 				.sort({ _id: order }) // ordena com base no parâmetro order (1: mais antigo para o mais novo, -1: mais novo para o mais antigo)
 				.skip((page - 1) * limit) // método para criar a paginação
 				.limit(limit) // limite de documentos por página
+				.select('-__v') // remove a versionKey das queries
 
 			// caso o pageResult não tenha nada, irá retornar um erro 404
 			if (pageResult.length === 0) next(new NotFound('Não foram encontrados resultados'))
