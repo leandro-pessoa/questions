@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from '@/app/hooks'
-import { setIsLoading } from '@/app/reducers/loading'
+import { selectIsLoading, setIsLoading } from '@/app/reducers/loading'
 import { selectToken } from '@/app/reducers/user'
 import { http } from '@/http'
 import { axiosError } from '@/utils/axiosError'
@@ -17,6 +17,14 @@ const StyledDiv = styled.div`
 
 	@media screen and (min-width: ${vars.breakpoints.smartphone}) {
 		flex-direction: row;
+
+		.center_container {
+			width: 90%;
+		}
+
+		nav {
+			width: 5%;
+		}
 	}
 `
 
@@ -25,6 +33,7 @@ const Admin = () => {
 	const navigate = useNavigate()
 
 	const token = useAppSelector(selectToken)
+	const loading = useAppSelector(selectIsLoading)
 
 	useEffect(() => {
 		// verifica o acesso do user ao entrar em alguma página de admin
@@ -58,9 +67,12 @@ const Admin = () => {
 	return (
 		<StyledDiv>
 			<AdminNav />
-			<CenterContainer>
-				<Outlet />
-			</CenterContainer>
+			{
+				!loading &&
+				<CenterContainer className='center_container'>
+					<Outlet />
+				</CenterContainer>
+			}
 		</StyledDiv>
 	)
 }
