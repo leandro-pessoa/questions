@@ -16,6 +16,25 @@ export default class UserController extends Controller<IUser> {
 		super(userService)
 	}
 
+	// retorna os users, exceto os admins
+	async indexUsers(req: Request, res: Response, next: NextFunction) {
+		try {
+			// remove os users com a role admin da querie
+			const filters = { 'role': 'default' }
+
+			// repassa o model User para a requisição
+			req.paginationModel = this.serviceEntity.model
+
+			// repassa os filtros informados para a requisição
+			req.paginationFilters = filters
+
+			// continua no middleware pagination
+			next()
+		} catch (err) {
+			next(err)
+		}
+	}
+
 	// obtém as questões respondidas de um usuário
 	async getUserAnsweredQuestions(req: Request, res: Response, next: NextFunction) {
 		// id que está na sessão
