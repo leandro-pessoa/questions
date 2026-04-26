@@ -30,8 +30,7 @@ const userSchema = new Schema<IUser>({
 	},
 	answeredQuestions: [answeredQuestionSchema],
 	passwordHash: {
-		type: String,
-		select: false
+		type: String
 	},
 	password: {
 		type: String,
