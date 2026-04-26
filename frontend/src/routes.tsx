@@ -9,6 +9,8 @@ import ChangePass from './pages/ChangePassword/ChangePass'
 import User from './pages/User'
 import Admin from './pages/Admin'
 import Menu from './pages/Admin/Menu'
+import UsersPage from './pages/Admin/UsersPage'
+import QuestionsPage from './pages/Admin/QuestionsPage'
 
 const AppRoutes = () => {
 	return (
@@ -29,6 +31,8 @@ const AppRoutes = () => {
 					</Route>
 					<Route path='/admin' element={ <Admin /> }>
 						<Route index element={ <Menu /> }/>
+						<Route path='usuarios' element={ <UsersPage /> } />
+						<Route path='questoes' element={ <QuestionsPage /> } />
 					</Route>
 				</Route>
 			</Routes>
