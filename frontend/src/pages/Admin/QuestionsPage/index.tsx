@@ -1,11 +1,12 @@
 import { useAppDispatch, useAppSelector } from '@/app/hooks'
-import { fetchQuestions, selectQuestions } from '@/app/reducers/question'
+import { fetchQuestions, selectQuestions, selectQuestionsStatus } from '@/app/reducers/question'
 import Crud from '@/components/Crud'
 import { useMemo, useState } from 'react'
 
 const QuestionsPage = () => {
 	const dispatch = useAppDispatch()
 	const questions = useAppSelector(selectQuestions)
+	const questionsStatus = useAppSelector(selectQuestionsStatus)
 	// state do loading local
 	const [loading, setLoading] = useState<boolean>(false)
 
@@ -35,6 +36,8 @@ const QuestionsPage = () => {
 			]}
 			localLoading={loading}
 			data={questions || []}
+			dataStatus={questionsStatus}
+			fetchFunc={fetchQuestions}
 		/>
 	)
 }
