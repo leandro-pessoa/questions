@@ -1,8 +1,7 @@
-import { http } from '@/http'
 import type { IQuestion } from '@/types/IQuestion'
-import { axiosError } from '@/utils/axiosError'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import type { RootState } from '../store'
+import { asyncThunkFetchUrl } from '@/utils/asyncThunkFetchUrl'
 
 interface IQuestionState {
 	status: 'idle' | 'succeeded' | 'pending' | 'failed'
@@ -62,28 +61,10 @@ const questionSlice = createSlice({
 // obtém os dados da api dos questions (index)
 export const fetchQuestions = createAsyncThunk(
     'question/fetchQuestions',
-    async (pagination?: {page?: number, limit?: number, filters?: string}) => {
-        // tenta obter os dados e retorna eles
-        try {
-			// a url get pode receber parâmetros de filtro e paginação
-            const questions =
-				await http.get<{
-					pageResult: IQuestion[],
-					totalPages: number,
-					totalValues: number,
-					actualPage: number,
-					limit: number
-				}>(
-					`/questions?page=${pagination?.page ? pagination?.page : 1}&limit=${pagination?.limit ? pagination?.limit : 10}${pagination?.filters ? `&${pagination?.filters}`: ''}`
-				)
-
-            return questions.data
-        } catch (err) {
-            // exibe o erro na tela e retorna uma reject
-            axiosError(err)
-            return Promise.reject()
-        }
-    },
+	async (pagination?: {page?: number, limit?: number, filters?: string}) => {
+		// utiliza função facilitadora
+		return asyncThunkFetchUrl<IQuestion>('/questions', '', pagination)
+	}
 )
 
 export default questionSlice.reducer
