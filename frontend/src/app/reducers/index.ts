@@ -5,6 +5,7 @@ import userReducer from './user'
 import questionReducer from './question'
 import filtersReducer from './filters'
 import changePasswordReducer from './changePassword'
+import adminUsersReducer from './adminUsers'
 
 export const rootReducer = combineReducers({
 	theme: themeReducer,
@@ -12,5 +13,6 @@ export const rootReducer = combineReducers({
 	user: userReducer,
 	question: questionReducer,
 	filters: filtersReducer,
-	changePassword: changePasswordReducer
+	changePassword: changePasswordReducer,
+	adminUsers: adminUsersReducer
 })

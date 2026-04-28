@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import NavLink from './NavLink'
 import Button from '../Button'
 import { CircleUser, LogIn, UserPlus, LogOut, Settings } from 'lucide-react'
+import { clearAdminUsers } from '@/app/reducers/adminUsers'
 
 const StyledNav = styled.nav`
 	${flex('row', 'center', 'center', '16px')}
@@ -22,6 +23,7 @@ const Nav = () => {
 	const logoutHandle = () => {
 		navigate('/login')
 		dispatch(logout())
+		dispatch(clearAdminUsers())
 	}
 
 	return (
