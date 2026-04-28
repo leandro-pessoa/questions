@@ -1,89 +1,130 @@
-import { selectIsLoading } from '@/app/reducers/loading'
-import { useAppSelector } from '@/app/hooks'
+import { useAppDispatch } from '@/app/hooks'
 import { vars } from '@/styles/vars'
 
 import Button from '../Button'
 import { StyledDiv } from './styles'
-import { Trash2, Pencil } from 'lucide-react'
-import { Title } from '../Title'
+import { Trash2, Pencil, RotateCcw } from 'lucide-react'
 import { Loading } from '../Loading'
+import Input from '../Input'
+import FiltersSelect from '../Filters/FiltersSelect'
+import { CenterContainer } from '../CenterContainer'
+import { Title } from '../Title'
 
-interface CrudProps {
+import type { FetchUrl } from '@/types/FetchUrl'
+
+interface CrudProps<T> {
 	data: { _id: string }[]
 	labels: string[]
 	localLoading: boolean
+	dataStatus: 'idle' | 'succeeded' | 'pending' | 'failed'
+	fetchFunc: FetchUrl<T>
 }
 
-const Crud = ({ data, labels, localLoading }: CrudProps) => {
-	const globalLoading = useAppSelector(selectIsLoading)
+const Crud = <T,>({ data, labels, dataStatus, fetchFunc }: CrudProps<T>) => {
+	const dispatch = useAppDispatch()
 
-	return (
-		// enquanto o loading padrão da página admin estiver ativo, não irá exibir a tabela
-		// o local loading irá definir o display do loading da tabela (e não da página)
-		!globalLoading && localLoading ? (
-			<Loading>
-				<div></div>
-			</Loading>
-		) : data.length === 0 ? (
-			<Title style={{ borderBottom: `2px solid ${vars.colors.blue}` }}>
-				Nenhum dado foi encontrado
-			</Title>
-		) : (
-			<StyledDiv>
-				<table>
-					<thead>
-						<tr>
-							<th>Ações</th>
-							{/* titulos da tabela, com base na prop labels */}
-							{labels.map((value: string) => {
-								return <th>{value}</th>
-							})}
-						</tr>
-					</thead>
-					<tbody>
-						{/* irá exibir os dados obtidos do server */}
-						{data.map((value) => {
-							// transforma o objeto em um array em que cada elemento é um array contendo o par chave/valor (ex: [['nome', 'leandro']])
-							const entries = Object.entries(value)
-							return (
-								<tr key={value._id}>
-									<td
-										style={{
-											display: 'flex',
-											gap: '4px',
-											borderBottom: 'none',
-										}}
-									>
-										<Button iconButton>
-											<Pencil />
-										</Button>
-										<Button iconButton>
-											<Trash2 />
-										</Button>
-									</td>
-									{entries.map((entry, index) => {
-										// caso o valor seja um array, retorna a length dele
-										// caso não, retorna o valor
-										const isArray = Array.isArray(entry[1])
-											? entry[1].length
-											: entry[1]
+	const renderData = () => {
+		switch (dataStatus) {
+			case 'pending':
+				return (
+					<Loading>
+						<div></div>
+					</Loading>
+				)
+			case 'succeeded':
+				return data.length === 0 ? (
+					<Title
+						style={{
+							borderBottom: `2px solid ${vars.colors.blue}`,
+						}}
+					>
+						Nenhum dado foi encontrado
+					</Title>
+				) : (
+					<StyledDiv>
+						<div className='filters_wrapper'>
+							<FiltersSelect
+								title='Qtde resultados'
+								defaultContent={['5', '10', '15', '20', '30']}
+							/>
+							<Input
+								className='filters_wrapper__search_input'
+								placeholder='Pesquisar'
+							/>
+						</div>
+						<div className='responsive_table'>
+							<table>
+								<thead>
+									<tr>
+										<th>Ações</th>
+										{/* titulos da tabela, com base na prop labels */}
+										{labels.map((value: string) => {
+											return <th>{value}</th>
+										})}
+									</tr>
+								</thead>
+								<tbody>
+									{/* irá exibir os dados obtidos do server */}
+									{data.map((value) => {
+										// transforma o objeto em um array em que cada elemento é um array contendo o par chave/valor (ex: [['nome', 'leandro']])
+										const entries = Object.entries(value)
 										return (
-											<td
-												key={index}
-												title={String(isArray)}
-											>
-												{isArray}
-											</td>
+											<tr key={value._id}>
+												<td
+													style={{
+														display: 'flex',
+														gap: '4px',
+														borderBottom: 'none',
+													}}
+												>
+													<Button iconButton>
+														<Pencil />
+													</Button>
+													<Button iconButton>
+														<Trash2 />
+													</Button>
+												</td>
+												{entries.map((entry, index) => {
+													// caso o valor seja um array, retorna a length dele
+													// caso não, retorna o valor
+													const isArray =
+														Array.isArray(entry[1])
+															? entry[1].length
+															: entry[1]
+													return (
+														<td
+															key={index}
+															title={String(
+																isArray,
+															)}
+														>
+															{isArray}
+														</td>
+													)
+												})}
+											</tr>
 										)
 									})}
-								</tr>
-							)
-						})}
-					</tbody>
-				</table>
-			</StyledDiv>
-		)
-	)
+								</tbody>
+							</table>
+						</div>
+					</StyledDiv>
+				)
+			case 'failed':
+				return (
+					<CenterContainer $height='header'>
+						<h2>Falha ao tentar carregar os dados</h2>
+						<br />
+						<Button onClick={() => dispatch(fetchFunc())}>
+							<RotateCcw />
+							Recarregar
+						</Button>
+					</CenterContainer>
+				)
+		}
+	}
+
+	return renderData()
 }
 
 export default Crud
