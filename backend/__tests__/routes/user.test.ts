@@ -270,12 +270,13 @@ describe('User GET', () => {
 			})
 	})
 
-	it('return the users on get', async () => {
+	it('return the users on get, except admin users', async () => {
 		await request(app)
 			.get('/users')
 			.set('Authorization', `Bearer ${adminToken}`)
 			.expect(200)
 			.then(res => {
+				expect(res.body.pageResult[0].role).toBe('default')
 				expect(res.body.pageResult[0].completeName).toBeDefined()
 				expect(res.body.pageResult[0].email).toBeDefined()
 			})
