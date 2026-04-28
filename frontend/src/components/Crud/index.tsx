@@ -6,19 +6,25 @@ import Button from '../Button'
 import { StyledDiv } from './styles'
 import { Trash2, Pencil } from 'lucide-react'
 import { Title } from '../Title'
+import { Loading } from '../Loading'
 
 interface CrudProps {
 	data: { _id: string }[]
 	labels: string[]
+	localLoading: boolean
 }
 
-const Crud = ({ data, labels }: CrudProps) => {
-	const loading = useAppSelector(selectIsLoading)
+const Crud = ({ data, labels, localLoading }: CrudProps) => {
+	const globalLoading = useAppSelector(selectIsLoading)
 
 	return (
 		// enquanto o loading padrão da página admin estiver ativo, não irá exibir a tabela
-		!loading &&
-		(data.length === 0 ? (
+		// o local loading irá definir o display do loading da tabela (e não da página)
+		!globalLoading && localLoading ? (
+			<Loading>
+				<div></div>
+			</Loading>
+		) : data.length === 0 ? (
 			<Title style={{ borderBottom: `2px solid ${vars.colors.blue}` }}>
 				Nenhum dado foi encontrado
 			</Title>
@@ -29,7 +35,7 @@ const Crud = ({ data, labels }: CrudProps) => {
 						<tr>
 							<th>Ações</th>
 							{/* titulos da tabela, com base na prop labels */}
-							{labels.map((value) => {
+							{labels.map((value: string) => {
 								return <th>{value}</th>
 							})}
 						</tr>
@@ -76,7 +82,7 @@ const Crud = ({ data, labels }: CrudProps) => {
 					</tbody>
 				</table>
 			</StyledDiv>
-		))
+		)
 	)
 }
 

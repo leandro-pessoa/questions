@@ -13,23 +13,27 @@ const UsersPage = () => {
 
 	const token = useAppSelector(selectToken)
 	const [users, setUsers] = useState<IUser[]>([])
+	// state do loading local
+	const [loading, setLoading] = useState<boolean>(false)
 
 	useEffect(() => {
-		try {
 			// irá obter todos os usuários
 			// requer o token e sessão de admin no server
 			const getUsers = async () => {
-				const res = await http.get('/users', {
-					headers: { Authorization: token && `Bearer ${token}` },
-				})
-				// faz o set no state local
-				setUsers(res.data.pageResult)
+				try {
+					setLoading(true)
+					const res = await http.get('/users', {
+						headers: { Authorization: token && `Bearer ${token}` },
+					})
+					// faz o set no state local
+					setUsers(res.data.pageResult)
+				} catch (err) {
+					axiosError(err)
+				}
+				setLoading(false)
 			}
 
 			getUsers()
-		} catch (err) {
-			axiosError(err)
-		}
 	}, [token, dispatch])
 
 	return (
@@ -41,6 +45,7 @@ const UsersPage = () => {
 				'E-mail',
 				'N° Questões',
 			]}
+			localLoading={loading}
 			data={users || []}
 		/>
 	)
