@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from '@/app/hooks'
 import { selectToken } from '@/app/reducers/user'
 import { useEffect, useState } from 'react'
-import { selectAdminUsersStatus } from '@/app/reducers/adminUsers'
+import { selectActualPage, selectAdminUsersStatus, selectFetchLimit, selectTotalAdminUsersPages } from '@/app/reducers/adminUsers'
 import { fetchAdminUsers, selectAdminUsers } from '@/app/reducers/adminUsers'
 
 import Crud from '@/components/Crud'
@@ -12,6 +12,9 @@ const UsersPage = () => {
 	const token = useAppSelector(selectToken)
 	const users = useAppSelector(selectAdminUsers)
 	const usersStatus = useAppSelector(selectAdminUsersStatus)
+	const adminUsersLimit = useAppSelector(selectFetchLimit)
+	const adminUsersActualPage = useAppSelector(selectActualPage)
+	const adminUsersTotalPages = useAppSelector(selectTotalAdminUsersPages)
 	// state do loading local
 	const [loading, setLoading] = useState<boolean>(false)
 
@@ -40,6 +43,9 @@ const UsersPage = () => {
 			data={users || []}
 			dataStatus={usersStatus}
 			fetchFunc={fetchAdminUsers}
+			actualPage={adminUsersActualPage}
+			limit={adminUsersLimit}
+			totalPages={adminUsersTotalPages}
 		/>
 	)
 }

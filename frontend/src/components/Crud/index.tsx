@@ -11,6 +11,7 @@ import { CenterContainer } from '../CenterContainer'
 import { Title } from '../Title'
 
 import type { FetchUrl } from '@/types/FetchUrl'
+import Pagination from '../Pagination'
 
 interface CrudProps<T> {
 	data: { _id: string }[]
@@ -18,18 +19,31 @@ interface CrudProps<T> {
 	localLoading: boolean
 	dataStatus: 'idle' | 'succeeded' | 'pending' | 'failed'
 	fetchFunc: FetchUrl<T>
+	totalPages: number
+	actualPage: number
+	limit: number
 }
 
-const Crud = <T,>({ data, labels, dataStatus, fetchFunc }: CrudProps<T>) => {
+const Crud = <T,>({
+	data,
+	labels,
+	dataStatus,
+	fetchFunc,
+	totalPages,
+	actualPage,
+	limit,
+}: CrudProps<T>) => {
 	const dispatch = useAppDispatch()
 
 	const renderData = () => {
 		switch (dataStatus) {
 			case 'pending':
 				return (
-					<Loading>
-						<div></div>
-					</Loading>
+					<CenterContainer $height='header'>
+						<Loading>
+							<div></div>
+						</Loading>
+					</CenterContainer>
 				)
 			case 'succeeded':
 				return data.length === 0 ? (
@@ -108,6 +122,13 @@ const Crud = <T,>({ data, labels, dataStatus, fetchFunc }: CrudProps<T>) => {
 								</tbody>
 							</table>
 						</div>
+						<Pagination
+							actualPage={actualPage}
+							limit={limit}
+							totalPages={totalPages}
+							fetchFunc={fetchFunc}
+							style={{padding: '0'}}
+						/>
 					</StyledDiv>
 				)
 			case 'failed':
