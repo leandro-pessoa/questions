@@ -1,21 +1,22 @@
 import { useAppDispatch } from '@/app/hooks'
-import { useEffect } from 'react'
+import { useEffect, type CSSProperties } from 'react'
 import { vars } from '@/styles/vars'
 
 import { StyledUl } from './styles'
 import { ChevronRight, ChevronLeft, ChevronsRight, ChevronsLeft } from 'lucide-react'
 import Button from '../Button'
-import type { FetchUrl } from '@/types/FetchUrl'
-import type { IQuestion } from '@/types/IQuestion'
 
-interface IPaginationProps {
+import type { FetchUrl } from '@/types/FetchUrl'
+
+interface IPaginationProps<T> {
 	totalPages: number
 	limit: number
 	actualPage: number
-	fetchFunc: FetchUrl<IQuestion>
+	fetchFunc: FetchUrl<T>
+	style?: CSSProperties
 }
 
-const Pagination = ({ totalPages, limit, fetchFunc, actualPage }: IPaginationProps) => {
+const Pagination = <T, >({ totalPages, limit, fetchFunc, actualPage, style }: IPaginationProps<T>) => {
 	const dispatch = useAppDispatch()
 
 	// move o scroll para o início da página ao trocar de página
@@ -81,7 +82,7 @@ const Pagination = ({ totalPages, limit, fetchFunc, actualPage }: IPaginationPro
 	}
 
 	return (
-		<StyledUl>
+		<StyledUl style={style}>
 			{
 				// button para voltar para a primeira página, caso o número selecionável não esteja visível
 				actualPage >= 4 &&
