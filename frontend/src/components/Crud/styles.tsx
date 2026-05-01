@@ -55,7 +55,7 @@ export const StyledDiv = styled.div`
 		margin: 0;
 
 		.responsive_table {
-			max-height: 80vh;
+			max-height: 65vh;
 		}
 	}
 `
