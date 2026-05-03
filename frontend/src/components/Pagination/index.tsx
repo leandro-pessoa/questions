@@ -1,6 +1,7 @@
-import { useAppDispatch } from '@/app/hooks'
+import { useAppDispatch, useAppSelector } from '@/app/hooks'
 import { useEffect, type CSSProperties } from 'react'
 import { vars } from '@/styles/vars'
+import { selectToken } from '@/app/reducers/user'
 
 import { StyledUl } from './styles'
 import { ChevronRight, ChevronLeft, ChevronsRight, ChevronsLeft } from 'lucide-react'
@@ -19,6 +20,9 @@ interface IPaginationProps<T> {
 const Pagination = <T, >({ totalPages, limit, fetchFunc, actualPage, style }: IPaginationProps<T>) => {
 	const dispatch = useAppDispatch()
 
+	// token para paginações com Authorization
+	const token = useAppSelector(selectToken)
+
 	// move o scroll para o início da página ao trocar de página
 	useEffect(() => {
 		window.scrollTo(0, 0)
@@ -28,7 +32,7 @@ const Pagination = <T, >({ totalPages, limit, fetchFunc, actualPage, style }: IP
 	const changePage = (page: number) => {
 		// caso a página selecionada for a atual, não faz nada
 		if (page === actualPage) return
-		dispatch(fetchFunc({ page, limit }))
+		dispatch(fetchFunc({ page, limit, token }))
 	}
 
 	// função para avançar ou retroceder a alguma página, a partir da atual
