@@ -52,7 +52,6 @@ export const StyledDiv = styled.div<IStyledDivProps>`
 				${flex('row', 'flex-start', 'center')}
 				border-bottom: 1px solid ${(props) => props.theme.colors.primaryBorderColor};
 				width: calc(100% - 16px);
-				padding-left: 12px;
 
 				&:hover {
 					cursor: pointer;
@@ -68,9 +67,19 @@ export const StyledDiv = styled.div<IStyledDivProps>`
 					border: none;
 					width: 100%;
 					text-align: start;
-					padding: 8px;
+					padding: 8px 0;
 					color: ${(props) => props.theme.colors.primaryFontColor};
 					cursor: pointer;
+				}
+			}
+		}
+	}
+
+	@media screen and (min-width: ${vars.breakpoints.tablet}) {
+		.select__expand-box {
+			.expand-box__topics-list {
+				li {
+					padding-left: 12px
 				}
 			}
 		}

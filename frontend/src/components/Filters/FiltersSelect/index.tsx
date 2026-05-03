@@ -16,6 +16,7 @@ interface IFiltersSelectProps {
 	type?: 'checkbox' | 'default'
 	defaultContent?: string[]
 	style?: CSSProperties
+	className?: string
 }
 
 const FiltersSelect = ({
@@ -23,7 +24,8 @@ const FiltersSelect = ({
 	title,
 	type = 'default',
 	defaultContent = [],
-	style
+	style,
+	className
 }: IFiltersSelectProps) => {
 	const dispatch = useAppDispatch()
 
@@ -149,7 +151,7 @@ const FiltersSelect = ({
 	}
 
 	return (
-		<StyledDiv $expandBoxDisplay={activated} ref={ref} style={style}>
+		<StyledDiv $expandBoxDisplay={activated} ref={ref} style={style} className={className}>
 			<button className='select__button' onClick={() => setActivated(!activated)}>
 				{
 					// muda a legenda caso um tópico seja selecionado no modo default
