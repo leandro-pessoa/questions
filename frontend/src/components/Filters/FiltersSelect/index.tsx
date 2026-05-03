@@ -73,7 +73,10 @@ const FiltersSelect = ({
 			} else { // caso seja preenchido, irá setar o state os tópicos que passem no teste de regexp
 				setActualSelectContent(
 					selectContent.filter(
-						(topic) => new RegExp(searchInputValue, 'i').test(topic)
+						(topic) =>
+							String(topic)
+								.toLowerCase()
+								.indexOf(searchInputValue.toLowerCase()) !== -1
 					)
 				)
 			}
