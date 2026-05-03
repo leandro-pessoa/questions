@@ -9,6 +9,10 @@ export const StyledDiv = styled.div`
 
 	.filters_wrapper {
 		${flex('row', 'space-between', 'center', '8px')}
+		.filters_wrapper__select {
+			width: 50%;
+		}
+
 		.filters_wrapper__search_input {
 			width: 100px;
 		}
@@ -56,6 +60,14 @@ export const StyledDiv = styled.div`
 
 		.responsive_table {
 			max-height: 65vh;
+		}
+	}
+
+	@media screen and (min-width: ${vars.breakpoints.tablet}) {
+		.filters_wrapper {
+			.filters_wrapper__select {
+				width: 30%;
+			}
 		}
 	}
 `
