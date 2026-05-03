@@ -8,7 +8,9 @@ export const axiosError = (err: unknown) => {
         // erro de conexão com o server
         if (err.code === 'ERR_NETWORK') {
             toast.error('Falha de conexão')
-        } else {
+        } else if (err.status === 429) { // erro para too many requests
+			toast.error('Limite de requisições atingido')
+		} else {
             // erros relacionados à validação dos models do banco de dados
             if (err.response?.data.message.lenght >= 1) {
 				err.response?.data.message.forEach((msg: string) => {
