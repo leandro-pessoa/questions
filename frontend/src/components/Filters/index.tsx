@@ -11,6 +11,7 @@ import type { IFilter } from '@/types/IFilter'
 import type { UnknownAction } from 'redux'
 import type { FetchUrl } from '@/types/FetchUrl'
 import type { ActionCreatorWithPayload } from '@reduxjs/toolkit'
+import type { ReactChildren } from '@/types/ReactChildren'
 
 interface IFiltersProps<T> {
 	limit: number
@@ -18,7 +19,7 @@ interface IFiltersProps<T> {
 	selectedFilters: IFilter[]
 	setLimit: (arg: number) => UnknownAction
 	fetchFunc: FetchUrl<T>
-	children: React.ReactNode | string | [React.ReactNode | string][]
+	children: ReactChildren
 	removeSelectedFunc: ActionCreatorWithPayload<{ topic: string; value: string; displayName: string; }>
 }
 

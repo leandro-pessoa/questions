@@ -3,9 +3,10 @@ import { FormProvider, useForm, type FieldValues } from 'react-hook-form'
 import { vars } from '@/styles/vars'
 
 import type { BaseSyntheticEvent } from 'react'
+import type { ReactChildren } from '@/types/ReactChildren'
 
 interface IFormProps {
-	children: React.ReactNode | string | [React.ReactNode | string][]
+	children: ReactChildren
 	onSubmit: (data: FieldValues, e: BaseSyntheticEvent<object> | undefined) => void
 	grid?: boolean
 }

@@ -1,8 +1,9 @@
 import type { CSSProperties } from 'react'
 import { StyledButton } from './styles'
+import type { ReactChildren } from '@/types/ReactChildren'
 
 interface IButtonProps {
-	children?: React.ReactNode | string | [React.ReactNode | string][]
+	children?: ReactChildren
 	icon?: React.ReactNode
 	onClick?: () => void
 	style?: CSSProperties

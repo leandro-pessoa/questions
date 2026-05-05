@@ -1,7 +1,8 @@
+import type { ReactChildren } from '@/types/ReactChildren'
 import { StyledLabel } from './styles'
 
 interface ICheckboxProps {
-	label: React.ReactNode | string | [React.ReactNode | string][]
+	label: ReactChildren
 	checkHandle: () => void
 	checked: boolean
 }

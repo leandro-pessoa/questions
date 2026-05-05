@@ -1,9 +1,12 @@
-import { StyledLink as Link } from '@/components/Link'
-import { Title } from '..'
 import { vars } from '@/styles/vars'
 
+import { StyledLink as Link } from '@/components/Link'
+import { Title } from '..'
+
+import type { ReactChildren } from '@/types/ReactChildren'
+
 interface ITitleLink {
-	children: React.ReactNode | string | [React.ReactNode | string][]
+	children: ReactChildren
 	positionFixed?: boolean
 }
 

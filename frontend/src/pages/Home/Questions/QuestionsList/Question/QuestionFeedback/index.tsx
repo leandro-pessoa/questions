@@ -1,7 +1,10 @@
 import { vars } from '@/styles/vars'
-import styled from 'styled-components'
-import { CircleCheck, CircleX } from 'lucide-react'
 import { flex } from '@/utils/flex'
+import styled from 'styled-components'
+
+import { CircleCheck, CircleX } from 'lucide-react'
+
+import type { ReactChildren } from '@/types/ReactChildren'
 
 interface IStyledDiv {
 	readonly $correct: boolean
@@ -9,7 +12,7 @@ interface IStyledDiv {
 
 interface IQuestionFeedback {
 	correct: boolean
-	children: React.ReactNode | string | [React.ReactNode | string][]
+	children: ReactChildren
 }
 
 export const StyledDiv = styled.div<IStyledDiv>`

@@ -6,8 +6,10 @@ import { CenterContainer } from '../CenterContainer'
 import { StyledDiv } from './styles'
 import ThemeButton from '../Button/ThemeButton'
 
+import type { ReactChildren } from '@/types/ReactChildren'
+
 interface ISideScreenProps {
-	children: React.ReactNode | string | [string | React.ReactNode][]
+	children: ReactChildren
 	side?: 'right' | 'left'
 }
 
