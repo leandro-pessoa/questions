@@ -5,13 +5,17 @@ import { flex } from '@/utils/flex'
 interface IContainerProps {
 	readonly $fixedWidth?: boolean
 	readonly $relativeWidth?: string
+	readonly $backgroundColor?: 'transparent' | 'colorful'
 }
 
 const xPadding = 16
 
 export const Container = styled.main<IContainerProps>`
 	${flex('column', '', '', '32px')}
-	background-color: transparent;
+	background-color: ${({ $backgroundColor = 'transparent', theme }) =>
+		$backgroundColor === 'transparent'
+			? 'transparent'
+			: theme.colors.primaryBackgroundColor};
 	backdrop-filter: blur(10px);
 	padding: 16px;
 	border: 1px solid ${(props) => props.theme.colors.primaryBorderColor};
@@ -19,7 +23,8 @@ export const Container = styled.main<IContainerProps>`
 	width: calc(80% - ${xPadding * 2}px);
 
 	${({ $relativeWidth = '80%' }) =>
-		$relativeWidth !== '80%' && `
+		$relativeWidth !== '80%' &&
+		`
 		@media screen and (min-width: ${vars.breakpoints.tablet}) {
 			width: ${$relativeWidth};
 		}
