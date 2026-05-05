@@ -47,7 +47,7 @@ export const pagination = async (
 				.skip((page - 1) * limit) // método para criar a paginação
 				.limit(limit) // limite de documentos por página
 				.select('-__v') // remove a versionKey das queries
-				.select('-passwordHash') // remove a versionKey das queries
+				.select('-passwordHash') // remove o hash da senha das queries
 
 			// caso o pageResult não tenha nada, irá retornar um erro 404
 			if (pageResult.length === 0) next(new NotFound('Não foram encontrados resultados'))
