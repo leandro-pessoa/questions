@@ -3,8 +3,13 @@ import { selectToken } from '@/app/reducers/user'
 import { useEffect, useState } from 'react'
 import { selectActualPage, selectAdminUsersStatus, selectFetchLimit, selectTotalAdminUsersPages } from '@/app/reducers/adminUsers'
 import { fetchAdminUsers, selectAdminUsers } from '@/app/reducers/adminUsers'
+import { setModal, setModalDisplay } from '@/app/reducers/modal'
 
 import Crud from '@/components/Crud'
+import FetchButton from '@/components/FetchButton'
+import RemoveUser from './RemoveUser'
+
+import type { IUser } from '@/types/IUser'
 
 const UsersPage = () => {
 	const dispatch = useAppDispatch()
@@ -30,6 +35,31 @@ const UsersPage = () => {
 		getQuestions()
 		}, [users, dispatch, token])
 
+	const openRemoveModal = ({ _id, email }: Partial<IUser>) => {
+		dispatch(setModalDisplay(true))
+		dispatch(
+			setModal({
+				modalChildren: (
+					<RemoveUser _id={_id} email={email} />
+				),
+				modalCloseElement: 'Não',
+				modalExecButton: (
+					<FetchButton
+						isModal
+						httpMethod='delete'
+						url={`/users/${_id}`}
+						refreshFunc={fetchAdminUsers}
+						feedbackText={`Usuário ${_id} removido com sucesso`}
+					>
+						Sim
+					</FetchButton>
+				),
+
+				modalTitle: 'Remover questão',
+			}),
+		)
+	}
+
 	return (
 		<Crud
 			labels={[
@@ -46,6 +76,8 @@ const UsersPage = () => {
 			actualPage={adminUsersActualPage}
 			limit={adminUsersLimit}
 			totalPages={adminUsersTotalPages}
+			editFunc={() => {}}
+			removeFunc={openRemoveModal}
 		/>
 	)
 }

@@ -1,8 +1,19 @@
 import { useAppDispatch, useAppSelector } from '@/app/hooks'
-import { fetchQuestions, selectActualPage, selectFetchLimit, selectQuestions, selectQuestionsStatus, selectTotalQuestionPages } from '@/app/reducers/question'
+import {
+	fetchQuestions,
+	selectActualPage,
+	selectFetchLimit,
+	selectQuestions,
+	selectQuestionsStatus,
+	selectTotalQuestionPages,
+} from '@/app/reducers/question'
 import { useMemo, useState } from 'react'
+import { setModal, setModalDisplay } from '@/app/reducers/modal'
 
 import Crud from '@/components/Crud'
+import type { IQuestion } from '@/types/IQuestion'
+import FetchButton from '@/components/FetchButton'
+import RemoveQuestion from './RemoveQuestion'
 
 const QuestionsPage = () => {
 	const dispatch = useAppDispatch()
@@ -26,6 +37,31 @@ const QuestionsPage = () => {
 		getQuestions()
 	}, [questions, dispatch])
 
+	const openRemoveModal = ({ _id, subject, year }: Partial<IQuestion>) => {
+		dispatch(setModalDisplay(true))
+		dispatch(
+			setModal({
+				modalChildren: (
+					<RemoveQuestion _id={_id} subject={subject} year={year} />
+				),
+				modalCloseElement: 'Não',
+				modalExecButton: (
+					<FetchButton
+						isModal
+						httpMethod='delete'
+						url={`/questions/${_id}`}
+						refreshFunc={fetchQuestions}
+						feedbackText={`Questão ${_id} removida com sucesso`}
+					>
+						Sim
+					</FetchButton>
+				),
+
+				modalTitle: 'Remover questão',
+			}),
+		)
+	}
+
 	return (
 		<Crud
 			labels={[
@@ -36,7 +72,7 @@ const QuestionsPage = () => {
 				'Organização',
 				'Cargo',
 				'Banca',
-				'N° Alternativas'
+				'N° Alternativas',
 			]}
 			localLoading={loading}
 			data={questions || []}
@@ -45,6 +81,8 @@ const QuestionsPage = () => {
 			actualPage={questionsActualPage}
 			limit={questionsLimit}
 			totalPages={questionsTotalPages}
+			editFunc={() => {}}
+			removeFunc={openRemoveModal}
 		/>
 	)
 }
