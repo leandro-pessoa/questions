@@ -1,7 +1,7 @@
 import { useFormContext } from 'react-hook-form'
 import Input from '..'
 import { Small } from '@/components/Small'
-import { useState, type HTMLInputTypeAttribute } from 'react'
+import { useState, type CSSProperties, type HTMLInputTypeAttribute } from 'react'
 import InspectPassword from '@/components/Button/InspectPassword'
 
 interface InputProps {
@@ -19,7 +19,9 @@ interface InputProps {
     patternsOption?: boolean
     step?: number
     max?: number
+	min?: number
     hidden?: boolean
+	style?: CSSProperties
 }
 
 // componente geral de input
@@ -39,7 +41,9 @@ const FormInput = ({
     patternsOption = true,
     step = 0,
     max = 0,
+	min = 0,
     hidden = false,
+	style
 }: InputProps) => {
 	// state para definir a visibilidade da senha
 	const [passwordVisibility, setPasswordVisibility] = useState(false)
@@ -111,6 +115,7 @@ const FormInput = ({
 					autoFocus={autoFocus}
 					id={id}
 					maxLength={maxLength}
+					min={min}
 					autoComplete='on'
 					$error={!(errors[id]?.message === undefined)}
 					step={step}
@@ -120,7 +125,7 @@ const FormInput = ({
 						type === 'password' ?
 							{width: '100%', paddingRight: '17%', boxSizing: 'border-box'}
 						:
-							{}
+							style
 					}
 					{...register(id, {
 						// validações do react-hook-form
