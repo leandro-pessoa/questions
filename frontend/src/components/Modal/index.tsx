@@ -27,13 +27,13 @@ const Modal = ({ title, children, closeElement, execButton }: ModalProps) => {
 
 	useEffect(() => {
 		// fecha o modal ao clicar fora do container central
-        const handleClickOutside = (event: MouseEvent) => {
-            const target = event.target as HTMLElement
-            if (ref.current && !ref.current.contains(target)) {
-                dispatch(setModalDisplay(false))
-            }
-        }
-        document.addEventListener('click', handleClickOutside, true)
+		const handleClickOutside = (event: MouseEvent) => {
+			const target = event.target as HTMLElement
+			if (ref.current && !ref.current.contains(target)) {
+				dispatch(setModalDisplay(false))
+			}
+		}
+		document.addEventListener('click', handleClickOutside, true)
 	}, [dispatch])
 
 	const activeDisplay = modalDisplay ? 'block' : 'none'
@@ -52,9 +52,13 @@ const Modal = ({ title, children, closeElement, execButton }: ModalProps) => {
 					{children}
 					<div className='buttons_wrapper'>
 						{execButton}
-						<Button onClick={() => dispatch(setModalDisplay(false))}>
-							{closeElement}
-						</Button>
+						{closeElement && (
+							<Button
+								onClick={() => dispatch(setModalDisplay(false))}
+							>
+								{closeElement}
+							</Button>
+						)}
 					</div>
 				</Container>
 			</CenterContainer>
