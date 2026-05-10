@@ -22,6 +22,7 @@ interface InputProps {
 	min?: number
     hidden?: boolean
 	style?: CSSProperties
+	className?: string
 }
 
 // componente geral de input
@@ -43,7 +44,8 @@ const FormInput = ({
     max = 0,
 	min = 0,
     hidden = false,
-	style
+	style,
+	className = ''
 }: InputProps) => {
 	// state para definir a visibilidade da senha
 	const [passwordVisibility, setPasswordVisibility] = useState(false)
@@ -120,6 +122,7 @@ const FormInput = ({
 					$error={!(errors[id]?.message === undefined)}
 					step={step}
 					hidden={hidden}
+					className={className}
 					style={
 						// muda o estilo caso o input seja password
 						type === 'password' ?
