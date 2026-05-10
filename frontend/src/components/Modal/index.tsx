@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { selectModalDisplay, selectModalOverflow, setModalDisplay } from '@/app/reducers/modal'
+import { clearModal, selectModalDisplay, selectModalOverflow, setModalDisplay } from '@/app/reducers/modal'
 import { useAppDispatch, useAppSelector } from '@/app/hooks'
 
 import { CenterContainer } from '../CenterContainer'
@@ -31,7 +31,7 @@ const Modal = ({ title, children, closeElement, execButton }: ModalProps) => {
 		const handleClickOutside = (event: MouseEvent) => {
 			const target = event.target as HTMLElement
 			if (ref.current && !ref.current.contains(target)) {
-				dispatch(setModalDisplay(false))
+				dispatch(clearModal())
 			}
 		}
 		document.addEventListener('click', handleClickOutside, true)

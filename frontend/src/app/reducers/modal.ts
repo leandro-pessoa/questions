@@ -34,6 +34,14 @@ const modalSlice = createSlice({
 			state.modalExecButton = action.payload.modalExecButton
 			state.modalTitle = action.payload.modalTitle
 		},
+		clearModal: (state) => {
+			state.modalDisplay = false
+			state.modalChildren = ''
+			state.modalCloseElement = ''
+			state.modalExecButton = ''
+			state.modalTitle = ''
+			state.modalOverflow = false
+		},
 		setModalOverflow: (state, action: PayloadAction<boolean>) => {
 			state.modalOverflow = action.payload
 		}
@@ -42,7 +50,7 @@ const modalSlice = createSlice({
 
 export default modalSlice.reducer
 
-export const { setModalDisplay, setModal, setModalOverflow } = modalSlice.actions
+export const { setModalDisplay, setModal, setModalOverflow, clearModal } = modalSlice.actions
 
 export const selectModalDisplay = (state: RootState) => state.modal.modalDisplay
 export const selectModalChildren = (state: RootState) => state.modal.modalChildren
