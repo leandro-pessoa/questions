@@ -54,7 +54,7 @@ export const GlobalStyles = createGlobalStyle`
 		border-spacing: 0;
 	}
 
-	body, input, button {
+	body, input, button, textarea {
 		font-size: .9rem;
 	}
 
@@ -64,7 +64,7 @@ export const GlobalStyles = createGlobalStyle`
 	}
 
 	@media screen and (min-width: ${vars.breakpoints.smartphone}) {
-		body, input, button {
+		body, input, button, textarea {
 			font-size: 1rem;
 		}
 
@@ -75,7 +75,7 @@ export const GlobalStyles = createGlobalStyle`
 	}
 
 	@media screen and (min-width: ${vars.breakpoints.tablet}) {
-		body, input, button {
+		body, input, button, textarea {
 			font-size: 1.1rem;
 		}
 
@@ -86,7 +86,7 @@ export const GlobalStyles = createGlobalStyle`
 	}
 
 	@media screen and (min-width: ${vars.breakpoints.notebook}) {
-		body, input, button {
+		body, input, button, textarea {
 			font-size: 1.2rem;
 		}
 

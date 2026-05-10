@@ -13,7 +13,6 @@ export const StyledTextarea = styled.textarea<ITextareaProps>`
 	color: ${(props) => props.theme.colors.primaryFontColor};
 	border: 1px solid ${(props) => props.$error ? vars.colors.red : props.theme.colors.primaryBorderColor};
 	font-family: ${vars.fonts.primaryFont};
-	font-size: 1.2rem;
 	resize: none;
 	width: calc(100% - ${xPadding * 2}px);
 	padding: 6px ${xPadding}px;
