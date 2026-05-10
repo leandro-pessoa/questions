@@ -7,6 +7,7 @@ interface IModal {
 	modalCloseElement: ReactChildren
 	modalExecButton: ReactChildren
 	modalTitle: string
+	modalOverflow?: boolean
 }
 
 const initialState: IModal & { modalDisplay: boolean } = {
@@ -14,7 +15,8 @@ const initialState: IModal & { modalDisplay: boolean } = {
 	modalChildren: '',
 	modalCloseElement: '',
 	modalExecButton: '',
-	modalTitle: ''
+	modalTitle: '',
+	modalOverflow: false
 }
 
 const modalSlice = createSlice({
@@ -23,6 +25,8 @@ const modalSlice = createSlice({
 	reducers: {
 		setModalDisplay: (state, action: PayloadAction<boolean>) => {
 			state.modalDisplay = action.payload
+
+			if (!action.payload) state.modalOverflow = false
 		},
 		setModal: (state, action: PayloadAction<IModal>) => {
 			state.modalChildren = action.payload.modalChildren
@@ -30,15 +34,19 @@ const modalSlice = createSlice({
 			state.modalExecButton = action.payload.modalExecButton
 			state.modalTitle = action.payload.modalTitle
 		},
+		setModalOverflow: (state, action: PayloadAction<boolean>) => {
+			state.modalOverflow = action.payload
+		}
 	}
 })
 
 export default modalSlice.reducer
 
-export const { setModalDisplay, setModal } = modalSlice.actions
+export const { setModalDisplay, setModal, setModalOverflow } = modalSlice.actions
 
 export const selectModalDisplay = (state: RootState) => state.modal.modalDisplay
 export const selectModalChildren = (state: RootState) => state.modal.modalChildren
 export const selectModalCloseElement = (state: RootState) => state.modal.modalCloseElement
 export const selectModalExecButton = (state: RootState) => state.modal.modalExecButton
 export const selectModalTitle = (state: RootState) => state.modal.modalTitle
+export const selectModalOverflow = (state: RootState) => state.modal.modalOverflow

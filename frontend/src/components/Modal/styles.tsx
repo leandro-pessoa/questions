@@ -9,6 +9,7 @@ export const StyledDiv = styled.div`
 	left: 0;
 	backdrop-filter: blur(4px);
 	z-index: 13;
+	overflow-y: auto;
 
 	.buttons_wrapper {
 		${flex('row', 'auto', 'center', '16px')}

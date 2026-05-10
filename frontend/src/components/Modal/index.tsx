@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { selectModalDisplay, setModalDisplay } from '@/app/reducers/modal'
+import { selectModalDisplay, selectModalOverflow, setModalDisplay } from '@/app/reducers/modal'
 import { useAppDispatch, useAppSelector } from '@/app/hooks'
 
 import { CenterContainer } from '../CenterContainer'
@@ -22,6 +22,7 @@ const Modal = ({ title, children, closeElement, execButton }: ModalProps) => {
 	const dispatch = useAppDispatch()
 
 	const modalDisplay = useAppSelector(selectModalDisplay)
+	const modalOverflow = useAppSelector(selectModalOverflow)
 
 	const ref = useRef<HTMLDivElement>(null)
 
@@ -40,7 +41,7 @@ const Modal = ({ title, children, closeElement, execButton }: ModalProps) => {
 
 	return (
 		<StyledDiv style={{ display: activeDisplay }}>
-			<CenterContainer $height='center-fixed'>
+			<CenterContainer $height={modalOverflow ? 'auto' : 'center-fixed'}>
 				<Container
 					$backgroundColor='colorful'
 					$relativeWidth='50%'
