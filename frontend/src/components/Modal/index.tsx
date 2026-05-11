@@ -1,5 +1,10 @@
 import { useEffect, useRef } from 'react'
-import { clearModal, selectModalDisplay, selectModalOverflow, setModalDisplay } from '@/app/reducers/modal'
+import {
+	clearModal,
+	selectModalDisplay,
+	selectModalOverflow,
+	setModalDisplay,
+} from '@/app/reducers/modal'
 import { useAppDispatch, useAppSelector } from '@/app/hooks'
 
 import { CenterContainer } from '../CenterContainer'
@@ -35,13 +40,19 @@ const Modal = ({ title, children, closeElement, execButton }: ModalProps) => {
 			}
 		}
 		document.addEventListener('click', handleClickOutside, true)
-	}, [dispatch])
+
+		// move a scrollbar para o início
+		ref.current?.scrollIntoView({ behavior: 'smooth' })
+	}, [dispatch, modalDisplay])
 
 	const activeDisplay = modalDisplay ? 'block' : 'none'
 
 	return (
 		<StyledDiv style={{ display: activeDisplay }}>
-			<CenterContainer $height={modalOverflow ? 'auto' : 'center-fixed'}>
+			<CenterContainer
+				$height={modalOverflow ? 'auto' : 'center-fixed'}
+				style={{ margin: modalOverflow ? '16px 0' : '0' }}
+			>
 				<Container
 					$backgroundColor='colorful'
 					$relativeWidth='50%'
