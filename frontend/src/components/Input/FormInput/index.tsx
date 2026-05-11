@@ -23,6 +23,7 @@ interface InputProps {
     hidden?: boolean
 	style?: CSSProperties
 	className?: string
+	pattern?: RegExp
 }
 
 // componente geral de input
@@ -45,7 +46,8 @@ const FormInput = ({
 	min = 0,
     hidden = false,
 	style,
-	className = ''
+	className = '',
+	pattern
 }: InputProps) => {
 	// state para definir a visibilidade da senha
 	const [passwordVisibility, setPasswordVisibility] = useState(false)
@@ -64,7 +66,7 @@ const FormInput = ({
     // verifica padrões de regex de acordo com a prop passada
     const patterns = (email: InputProps['email']) => {
         // caso não seja necessário, a função será finalizada aqui
-        if (!patternsOption) return
+        if (!patternsOption || !pattern) return
 
         // valida o e-mail
         if (email)
@@ -80,6 +82,13 @@ const FormInput = ({
                 value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{1,}$/,
                 message: 'Senha inválida',
             }
+
+		else if (pattern) {
+			return {
+				value: pattern,
+				message: 'Alternativas válidas: A, B, C, D ou E'
+			}
+		}
 
         // valida se há espaços vazios antes e após o valor preenchido
         else
