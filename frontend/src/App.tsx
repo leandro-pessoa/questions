@@ -6,7 +6,6 @@ import { selectTheme } from './app/reducers/theme'
 import { lightTheme, darkTheme } from './styles/themeVars'
 import GlobalLoading from './components/Loading'
 import { ToastContainer } from 'react-toastify'
-import GlobalModal from './components/Modal/GlobalModal'
 
 const App = () => {
 	const theme = useAppSelector(selectTheme)
@@ -21,7 +20,6 @@ const App = () => {
 				autoClose={2000}
 			/>
 			<GlobalLoading />
-			<GlobalModal />
 			<AppRoutes />
 		</ThemeProvider>
 	)

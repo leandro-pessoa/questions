@@ -1,9 +1,9 @@
 import { useEffect, useRef } from 'react'
 import {
 	clearModal,
-	selectModalDisplay,
+	selectModalType,
 	selectModalOverflow,
-	setModalDisplay,
+	setModalType,
 } from '@/app/reducers/modal'
 import { useAppDispatch, useAppSelector } from '@/app/hooks'
 
@@ -19,14 +19,14 @@ import type { ReactChildren } from '@/types/ReactChildren'
 interface ModalProps {
 	title: string
 	children: ReactChildren
-	closeElement: ReactChildren
-	execButton: ReactChildren
+	closeElement?: ReactChildren
+	execButton?: ReactChildren
 }
 
 const Modal = ({ title, children, closeElement, execButton }: ModalProps) => {
 	const dispatch = useAppDispatch()
 
-	const modalDisplay = useAppSelector(selectModalDisplay)
+	const modalType = useAppSelector(selectModalType)
 	const modalOverflow = useAppSelector(selectModalOverflow)
 
 	const ref = useRef<HTMLDivElement>(null)
@@ -43,12 +43,10 @@ const Modal = ({ title, children, closeElement, execButton }: ModalProps) => {
 
 		// move a scrollbar para o início
 		ref.current?.scrollIntoView({ behavior: 'smooth' })
-	}, [dispatch, modalDisplay])
-
-	const activeDisplay = modalDisplay ? 'block' : 'none'
+	}, [dispatch, modalType])
 
 	return (
-		<StyledDiv style={{ display: activeDisplay }}>
+		<StyledDiv>
 			<CenterContainer
 				$height={modalOverflow ? 'auto' : 'center-fixed'}
 				style={{ margin: modalOverflow ? '16px 0' : '0' }}
@@ -56,7 +54,7 @@ const Modal = ({ title, children, closeElement, execButton }: ModalProps) => {
 				<Container
 					$backgroundColor='colorful'
 					$relativeWidth='50%'
-					style={{ gap: '8px', display: activeDisplay }}
+					style={{ gap: '8px' }}
 					ref={ref}
 				>
 					<Title>{title}</Title>
@@ -66,7 +64,7 @@ const Modal = ({ title, children, closeElement, execButton }: ModalProps) => {
 						{execButton}
 						{closeElement && (
 							<Button
-								onClick={() => dispatch(setModalDisplay(false))}
+								onClick={() => dispatch(setModalType(''))}
 							>
 								{closeElement}
 							</Button>
