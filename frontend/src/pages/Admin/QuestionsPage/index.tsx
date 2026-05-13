@@ -8,12 +8,18 @@ import {
 	selectTotalQuestionPages,
 } from '@/app/reducers/question'
 import { useMemo, useState } from 'react'
-import { setModal, setModalDisplay } from '@/app/reducers/modal'
+import {
+	selectModalData,
+	setModalData,
+	setModalType,
+	setModalOverflow,
+} from '@/app/reducers/modal'
 
 import Crud from '@/components/Crud'
-import type { IQuestion } from '@/types/IQuestion'
-import FetchButton from '@/components/FetchButton'
 import RemoveQuestion from './RemoveQuestion'
+import EditQuestion from './EditQuestion'
+
+import type { IQuestion } from '@/types/IQuestion'
 
 const QuestionsPage = () => {
 	const dispatch = useAppDispatch()
@@ -22,6 +28,7 @@ const QuestionsPage = () => {
 	const questionsLimit = useAppSelector(selectFetchLimit)
 	const questionsActualPage = useAppSelector(selectActualPage)
 	const questionsTotalPages = useAppSelector(selectTotalQuestionPages)
+	const modalData = useAppSelector(selectModalData) as IQuestion
 	// state do loading local
 	const [loading, setLoading] = useState<boolean>(false)
 
@@ -38,52 +45,42 @@ const QuestionsPage = () => {
 	}, [questions, dispatch])
 
 	const openRemoveModal = ({ _id, subject, year }: Partial<IQuestion>) => {
-		dispatch(setModalDisplay(true))
-		dispatch(
-			setModal({
-				modalChildren: (
-					<RemoveQuestion _id={_id} subject={subject} year={year} />
-				),
-				modalCloseElement: 'Não',
-				modalExecButton: (
-					<FetchButton
-						isModal
-						httpMethod='delete'
-						url={`/questions/${_id}`}
-						refreshFunc={fetchQuestions}
-						feedbackText={`Questão ${_id} removida com sucesso`}
-					>
-						Sim
-					</FetchButton>
-				),
+		dispatch(setModalType('removeQuestion'))
+		dispatch(setModalData({_id, subject, year}))
+	}
 
-				modalTitle: 'Remover questão',
-			}),
-		)
+	const openEditModal = (question: IQuestion) => {
+		dispatch(setModalType('editQuestion'))
+		dispatch(setModalOverflow(true))
+		dispatch(setModalData({...question}))
 	}
 
 	return (
-		<Crud
-			labels={[
-				'ID',
-				'Disciplina',
-				'Enunciado',
-				'Ano',
-				'Organização',
-				'Cargo',
-				'Banca',
-				'N° Alternativas',
-			]}
-			localLoading={loading}
-			data={questions || []}
-			dataStatus={questionsStatus}
-			fetchFunc={fetchQuestions}
-			actualPage={questionsActualPage}
-			limit={questionsLimit}
-			totalPages={questionsTotalPages}
-			editFunc={() => {}}
-			removeFunc={openRemoveModal}
-		/>
+		<>
+			<RemoveQuestion {...modalData} />
+			<EditQuestion {...modalData}/>
+			<Crud
+				labels={[
+					'ID',
+					'Disciplina',
+					'Enunciado',
+					'Ano',
+					'Organização',
+					'Cargo',
+					'Banca',
+					'N° Alternativas'
+				]}
+				localLoading={loading}
+				data={questions || []}
+				dataStatus={questionsStatus}
+				fetchFunc={fetchQuestions}
+				actualPage={questionsActualPage}
+				limit={questionsLimit}
+				totalPages={questionsTotalPages}
+				editFunc={openEditModal}
+				removeFunc={openRemoveModal}
+			/>
+		</>
 	)
 }
 
