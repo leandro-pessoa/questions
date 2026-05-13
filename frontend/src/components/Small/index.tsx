@@ -12,7 +12,7 @@ export const Small = styled.small<ISmallProps>`
     // caso seja true, ficará vermelho
     color: ${
 		({ $error = false, ...props }) => $error ? vars.colors.red : props.theme.colors.primaryFontColor };
-	margin-bottom: ${({ $error = false }) => $error ? '6px' : '0'};
+	margin: ${({ $error = false }) => $error ? '6px 0' : '0'};
     font-size: .8rem;
     display: block;
     max-width: 400px;
