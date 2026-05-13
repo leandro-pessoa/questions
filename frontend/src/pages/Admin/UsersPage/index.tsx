@@ -3,10 +3,9 @@ import { selectToken } from '@/app/reducers/user'
 import { useEffect, useState } from 'react'
 import { selectActualPage, selectAdminUsersStatus, selectFetchLimit, selectTotalAdminUsersPages } from '@/app/reducers/adminUsers'
 import { fetchAdminUsers, selectAdminUsers } from '@/app/reducers/adminUsers'
-import { setModal, setModalDisplay } from '@/app/reducers/modal'
+import { selectModalData, setModalData, setModalType } from '@/app/reducers/modal'
 
 import Crud from '@/components/Crud'
-import FetchButton from '@/components/FetchButton'
 import RemoveUser from './RemoveUser'
 
 import type { IUser } from '@/types/IUser'
@@ -20,6 +19,7 @@ const UsersPage = () => {
 	const adminUsersLimit = useAppSelector(selectFetchLimit)
 	const adminUsersActualPage = useAppSelector(selectActualPage)
 	const adminUsersTotalPages = useAppSelector(selectTotalAdminUsersPages)
+	const modalData = useAppSelector(selectModalData) as IUser
 	// state do loading local
 	const [loading, setLoading] = useState<boolean>(false)
 
@@ -36,49 +36,32 @@ const UsersPage = () => {
 		}, [users, dispatch, token])
 
 	const openRemoveModal = ({ _id, email }: Partial<IUser>) => {
-		dispatch(setModalDisplay(true))
-		dispatch(
-			setModal({
-				modalChildren: (
-					<RemoveUser _id={_id} email={email} />
-				),
-				modalCloseElement: 'Não',
-				modalExecButton: (
-					<FetchButton
-						isModal
-						httpMethod='delete'
-						url={`/users/${_id}`}
-						refreshFunc={fetchAdminUsers}
-						feedbackText={`Usuário ${_id} removido com sucesso`}
-					>
-						Sim
-					</FetchButton>
-				),
-
-				modalTitle: 'Remover questão',
-			}),
-		)
+		dispatch(setModalType('removeUser'))
+		dispatch(setModalData({ _id, email }))
 	}
 
 	return (
-		<Crud
-			labels={[
-				'ID',
-				'Papel',
-				'Nome completo',
-				'E-mail',
-				'N° Questões',
-			]}
-			localLoading={loading}
-			data={users || []}
-			dataStatus={usersStatus}
-			fetchFunc={fetchAdminUsers}
-			actualPage={adminUsersActualPage}
-			limit={adminUsersLimit}
-			totalPages={adminUsersTotalPages}
-			editFunc={() => {}}
-			removeFunc={openRemoveModal}
-		/>
+		<>
+			<RemoveUser {...modalData}/>
+			<Crud
+				labels={[
+					'ID',
+					'Papel',
+					'Nome completo',
+					'E-mail',
+					'N° Questões',
+				]}
+				localLoading={loading}
+				data={users || []}
+				dataStatus={usersStatus}
+				fetchFunc={fetchAdminUsers}
+				actualPage={adminUsersActualPage}
+				limit={adminUsersLimit}
+				totalPages={adminUsersTotalPages}
+				editFunc={() => {}}
+				removeFunc={openRemoveModal}
+			/>
+		</>
 	)
 }
 
