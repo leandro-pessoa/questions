@@ -56,6 +56,7 @@ const Modal = ({ title, children, closeElement, execButton }: ModalProps) => {
 					$relativeWidth='50%'
 					style={{ gap: '8px' }}
 					ref={ref}
+					$shadow
 				>
 					<Title>{title}</Title>
 					<Hr />

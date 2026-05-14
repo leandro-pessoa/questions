@@ -6,6 +6,7 @@ interface IContainerProps {
 	readonly $fixedWidth?: boolean
 	readonly $relativeWidth?: string
 	readonly $backgroundColor?: 'transparent' | 'colorful'
+	readonly $shadow?: boolean
 }
 
 const xPadding = 16
@@ -28,6 +29,12 @@ export const Container = styled.main<IContainerProps>`
 		@media screen and (min-width: ${vars.breakpoints.tablet}) {
 			width: ${$relativeWidth};
 		}
+	`}
+
+	${({ $shadow = false }) =>
+		$shadow &&
+		`
+		box-shadow: 0px 0px 10px ${vars.colors.shadow};
 	`}
 
 	${({ $fixedWidth = false }) =>
