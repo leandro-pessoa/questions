@@ -1,29 +1,38 @@
 import { useAppSelector } from '@/app/hooks'
 import { fetchAdminUsers } from '@/app/reducers/adminUsers'
 import { selectModalType } from '@/app/reducers/modal'
+import { useFetch } from '@/app/hooks/useFetch'
 
-import FetchButton from '@/components/FetchButton'
 import Modal from '@/components/Modal'
+import Button from '@/components/Button'
 
 import type { IUser } from '@/types/IUser'
 
 const RemoveUser = ({ _id, email }: Partial<IUser>) => {
 	const modalType = useAppSelector(selectModalType)
 
+	const { fetchHandle } = useFetch()
+
 	return modalType === 'removeUser' ? (
 		<Modal
 			title='Remover usuário'
 			closeElement='Não'
 			execButton={
-				<FetchButton
-					isModal
-					httpMethod='delete'
-					url={`/users/${_id}`}
-					refreshFunc={fetchAdminUsers}
-					feedbackText={`Usuário ${_id} removido com sucesso`}
+				// realiza a requisição de remoção de um user
+				<Button
+					onClick={() =>
+						fetchHandle<IUser>({
+							url: `/users/${_id}`,
+							httpMethod: 'delete',
+							refreshFunc: fetchAdminUsers, // faz o fetch dos users atualizados
+							globalLoading: true,
+							feedbackText: `Usuário ${_id} removido com sucesso`,
+							isModal: true,
+						})
+					}
 				>
 					Sim
-				</FetchButton>
+				</Button>
 			}
 		>
 			Tem certeza que deseja excluir o usuário de email {email} e id {_id}{' '}

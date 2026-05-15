@@ -1,14 +1,14 @@
-import { selectToken, selectUser } from '@/app/reducers/user'
+import { selectUser } from '@/app/reducers/user'
 import { useState } from 'react'
-import { http } from '@/http'
-import { axiosError } from '@/utils/axiosError'
 import { useAppSelector } from '@/app/hooks'
+import { useFetch } from '@/app/hooks/useFetch'
 
 import { StyledLi } from './styles'
-import Button from '@/components/Button'
 import Option from './Option'
 import QuestionFeedback from './QuestionFeedback'
 import { Loading } from '@/components/Loading'
+
+import Button from '@/components/Button'
 
 import type { IAlternative } from '@/types/IAlternative'
 import type { IQuestion } from '@/types/IQuestion'
@@ -29,39 +29,14 @@ const Question = ({
 	index,
 }: IQuestion & IQuestionProps) => {
 	const user = useAppSelector(selectUser)
-	const token = useAppSelector(selectToken)
 	const [selectedOption, setSelectedOption] = useState<IAlternative | null>(
 		null,
 	)
 	const [isAnswered, setIsAnswered] = useState<boolean>(false)
 	const [isLoading, setIsLoading] = useState<boolean>(false)
 
-	// atualiza o user logado com a questão e opção selecinada
-	const answerQuestion = async () => {
-		// caso não haja user, não faça nada
-		if (!user) return
-
-		try {
-			// loading
-			setIsLoading(true)
-			// faz a requisição put com o id da questão respondida, opção selecionada
-			// e o token do user logado
-			await http
-				.put(
-					'/users/answerQuestion',
-					{
-						questionId: _id,
-						selectedOption: selectedOption,
-					},
-					{ headers: { Authorization: token && `Bearer ${token}` } },
-				)
-				.then(() => setIsAnswered(true)) // atualiza o state, atualizando a interface
-		} catch (err) {
-			axiosError(err)
-		}
-		// loading
-		setIsLoading(false)
-	}
+	// realiza o update do user com a questão atual respondida
+	const { fetchHandle } = useFetch()
 
 	return (
 		<StyledLi>
@@ -80,7 +55,7 @@ const Question = ({
 			<p className='question__statement'>{statement}</p>
 			<ol className='question__alternatives'>
 				{/* alternativas da questão */}
-				{alternatives.map((alternative) =>
+				{alternatives.map((alternative) => (
 					<Option
 						alternative={alternative}
 						selected={selectedOption === alternative}
@@ -88,7 +63,7 @@ const Question = ({
 						key={alternative._id}
 						isAnswered={isAnswered}
 					/>
-				)}
+				))}
 			</ol>
 			{/*
 				verifica três fatores para o button aparecer:
@@ -97,16 +72,32 @@ const Question = ({
 				- se já foi respondida
 			*/}
 			{selectedOption !== null && user && !isAnswered && (
+				// atualiza o user logado com a questão e opção selecinada
 				<Button
-					style={{ marginTop: '16px' }}
-					onClick={answerQuestion}
-					disabled={isLoading}
+					onClick={() =>
+						fetchHandle({
+							url: '/users/answerQuestion',
+							data: {
+								questionId: _id,
+								selectedOption: selectedOption,
+							},
+							httpMethod: 'put',
+							then: () => setIsAnswered(true), // atualiza o state local da questão, dando o feedback de respondida
+							localLoadingFunc: setIsLoading, // atualiza o state local de loading
+						})
+					}
 				>
-					{	// exibe o loading ao responder uma questão
-						isLoading &&
-							<Loading $overlay={false} $size='15px' $borderSize='2px'>
+					{
+						// exibe o loading ao responder uma questão
+						isLoading && (
+							<Loading
+								$overlay={false}
+								$size='15px'
+								$borderSize='2px'
+							>
 								<div></div>
 							</Loading>
+						)
 					}
 					Responder
 				</Button>
