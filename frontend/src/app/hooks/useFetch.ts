@@ -17,7 +17,7 @@ interface UseFetchProps<T> {
 	refreshFunc?: FetchUrl<T>
 	feedbackText?: string
 	navigateTo?: string
-	then?: (res?: AxiosResponse) => void
+	then?: (res: AxiosResponse) => void
 	data?: T
 	globalLoading?: boolean
 	localLoadingFunc?: (value: React.SetStateAction<boolean>) => void
@@ -98,5 +98,5 @@ export const useFetch = () => {
 		if (localLoadingFunc) localLoadingFunc(false)
 	}
 
-	return {fetchHandle }
+	return { fetchHandle }
 }
