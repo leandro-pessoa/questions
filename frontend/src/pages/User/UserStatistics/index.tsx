@@ -1,10 +1,8 @@
-import { useAppDispatch, useAppSelector } from '@/app/hooks'
-import { selectToken } from '@/app/reducers/user'
-import { http } from '@/http'
+import { useAppSelector } from '@/app/hooks'
 import { vars } from '@/styles/vars'
 import { useEffect, useState } from 'react'
-import { axiosError } from '@/utils/axiosError'
 import { selectTheme } from '@/app/reducers/theme'
+import { useFetch } from '@/app/hooks/useFetch'
 
 import { Line, Pie } from 'react-chartjs-2'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointElement, LineElement, Title } from 'chart.js'
@@ -22,11 +20,8 @@ type IUserAnsweredQuestions = {
 }
 
 const UserStatistics = () => {
-	const dispatch = useAppDispatch()
 	const theme = useAppSelector(selectTheme)
-
-	// token de sessão do user
-	const token = useAppSelector(selectToken)
+	const { fetchHandle } = useFetch()
 
 	// questões respondidas do user (definidas pela resposta da requisição)
 	const [userAnsweredQuestions, setUserAnsweredQuestions] =
@@ -53,32 +48,23 @@ const UserStatistics = () => {
 	)
 
 	// alteração das cores dos labels dos gráficos de acordo com o tema
-	// eslint-disable-next-line react-hooks/immutability
 	ChartJS.defaults.color = theme === 'dark' ? vars.colors.gray : vars.colors.darkGray
 
 	useEffect(() => {
 		// obtém as questões respondidas do user da API
 		const getUserQuestions = async () => {
-			try {
-				// loading
-				setLoading(true)
-				// requisição, acrescentando o token de sessão do user
-				const res = await http.get(
-					'/users/getAnsweredQuestions',
-					{ headers: { Authorization: token && `Bearer ${token}`}}
-				)
-				// definição do state com base na resposta
-				setUserAnsweredQuestions(res.data)
-			} catch(err) { // catch do error
-				axiosError(err)
-			}
-			// loading
-			setLoading(false)
+			fetchHandle({
+				httpMethod: 'get',
+				url: '/users/getAnsweredQuestions',
+				then: (res) => setUserAnsweredQuestions(res.data),
+				localLoadingFunc: setLoading
+			})
 		}
 
 		// execução da função de requisição
 		getUserQuestions()
-	}, [token, dispatch])
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [])
 
 	// configuração do gráfico que será exibido
 	// legendas, dados e cores
