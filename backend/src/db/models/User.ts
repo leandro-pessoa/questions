@@ -2,6 +2,7 @@ import mongoose, { Schema } from 'mongoose'
 import bcrypt from 'bcryptjs'
 import type { IUser } from '@/types/IUser'
 import { answeredQuestionSchema } from './AnsweredQuestion'
+import { verifyWhiteSpaces } from '@/utils/verifyWhiteSpaces'
 
 const userSchema = new Schema<IUser>({
 	role: {
@@ -17,6 +18,7 @@ const userSchema = new Schema<IUser>({
 		required: [true, 'Nome completo obrigatório'],
 		minLength: [3, 'O nome completo precisa ter pelo menos 3 caracteres'],
 		maxLength: [60, 'O nome completo não pode ultrapassar 60 caracteres'],
+		validate: verifyWhiteSpaces('Nome completo'),
 	},
 	email: {
 		type: String,
