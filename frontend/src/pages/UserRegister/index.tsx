@@ -1,9 +1,4 @@
-import { useNavigate } from 'react-router-dom'
-import { useAppDispatch, useAppSelector } from '@/app/hooks'
-import { selectIsLoading, setIsLoading } from '@/app/reducers/loading'
-import { http } from '@/http'
-import { axiosError } from '@/utils/axiosError'
-import { toast } from 'react-toastify'
+import { useFetch } from '@/app/hooks/useFetch'
 
 import Button from '@/components/Button'
 import Form from '@/components/Form'
@@ -16,22 +11,18 @@ import SideScreen from '@/components/SideScreen'
 import type { FieldValues } from 'react-hook-form'
 
 const UserRegister = () => {
-	const navigate = useNavigate()
-	const dispatch = useAppDispatch()
 
-	const isLoading = useAppSelector(selectIsLoading)
+	const { fetchHandle } = useFetch()
 
 	const submitHandle = async (data: FieldValues) => {
-		if (isLoading) return
-		try {
-			dispatch(setIsLoading(true))
-			await http.post('/users', { ...data })
-			navigate('/login')
-			toast.success('Cadastro realizado com sucesso!')
-		} catch (err) {
-			axiosError(err)
-		}
-		dispatch(setIsLoading(false))
+		fetchHandle({
+			httpMethod: 'post',
+			url: '/users',
+			feedbackText: 'Cadastro realizado com sucesso!',
+			navigateTo: '/login',
+			data: { ...data },
+			globalLoading: true
+		})
 	}
 
 	return (
