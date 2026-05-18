@@ -66,7 +66,7 @@ const FormInput = ({
     // verifica padrões de regex de acordo com a prop passada
     const patterns = (email: InputProps['email']) => {
         // caso não seja necessário, a função será finalizada aqui
-        if (!patternsOption || !pattern) return
+        if (!patternsOption && !pattern) return
 
         // valida o e-mail
         if (email)
