@@ -17,7 +17,9 @@ export const axiosError = (err: unknown) => {
 					toast.error(msg)
 				})
             } else { // outros erros do axios
-                toast.error(err.response?.data.message)
+				if (Array.isArray(err.response?.data.message))
+					toast.error(err.response?.data.message[0])
+				else toast.error(err.response?.data.message)
             }
         }
     } else { // caso não seja erro do axios
