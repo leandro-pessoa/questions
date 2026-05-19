@@ -65,6 +65,21 @@ describe('User POST', () => {
 			})
 	})
 
+	it('should return an error when there are invalid white spaces', async () => {
+		await request(app)
+			.post('/users')
+			.send({
+				completeName: '     teste    ',
+				email: 'leandro2@gmail.com',
+    			password: 'Lea@123'
+			})
+			.set('Content-Type', 'application/json')
+			.expect(400, {
+				status: 400,
+				message: ['completeName: Espaços vazios inválidos no campo Nome completo']
+			})
+	})
+
 	it('should return an error when attributes length is too short', async () => {
 		await request(app)
 			.post('/users')
@@ -242,7 +257,7 @@ describe('User GET', () => {
 				await request(app)
 					.put('/users/answerQuestion')
 					.send({
-						questionId: '68fcc7310f020b7ccf14cdd7',
+						questionId: '69565541e723eeea8e38d345',
 						selectedOption: {right: true, text: 'Eu', letter: 'B'}
 					})
 					.set('Authorization', `Bearer ${res.body.token}`)
@@ -255,7 +270,7 @@ describe('User GET', () => {
 					.get('/users/getAnsweredQuestions')
 					.set('Authorization', `Bearer ${res.body.token}`)
 					.then((res: {body: {answeredQuestions: IAnsweredQuestion[], correct: number, incorrect: number, weeklyAnsweredQuestions: number[]}}) => {
-						expect(res.body.answeredQuestions[0].questionId).toEqual('68fcc7310f020b7ccf14cdd7')
+						expect(res.body.answeredQuestions[0].questionId).toEqual('69565541e723eeea8e38d345')
 						expect(res.body.answeredQuestions[0].selectedOption).toEqual(
 							{right: true, text: 'Eu', letter: 'B'}
 						)
@@ -322,6 +337,23 @@ describe('User UPDATE', () => {
 			})
 	})
 
+	it('should return an error when there are invalid white spaces', async () => {
+		await login(email, password)
+			.then(async res => {
+				await request(app)
+					.put('/users')
+					.send({
+						completeName: '     teste    '
+					})
+					.set('Authorization', `Bearer ${res.body.token}`)
+					.set('Content-Type', 'application/json')
+					.expect(400, {
+						status: 400,
+						message: ['completeName: Espaços vazios inválidos no campo Nome completo']
+					})
+			})
+	})
+
 	it('should return an error if the user try to add role admin on update body', async () => {
 		await login(email, password)
 			.then(async res => {
@@ -362,7 +394,7 @@ describe('User UPDATE', () => {
 				await request(app)
 					.put('/users/answerQuestion')
 					.send({
-						questionId: '68fcc7310f020b7ccf14cdd7'
+						questionId: '69565541e723eeea8e38d345'
 					})
 					.set('Authorization', `Bearer ${res.body.token}`)
 					.set('Content-Type', 'application/json')
@@ -413,13 +445,13 @@ describe('User UPDATE', () => {
 				await request(app)
 					.put('/users/answerQuestion')
 					.send({
-						questionId: '68fcc7310f020b7ccf14cdd7',
+						questionId: '69565541e723eeea8e38d345',
     					selectedOption: {right: true, text: 'Eu', letter: 'B'}
 					})
 					.set('Authorization', `Bearer ${res.body.token}`)
 					.set('Content-Type', 'application/json')
 					.then((res: {body: {answeredQuestions: IAnsweredQuestion[]}}) => {
-						expect(res.body.answeredQuestions[0].questionId).toEqual('68fcc7310f020b7ccf14cdd7')
+						expect(res.body.answeredQuestions[0].questionId).toEqual('69565541e723eeea8e38d345')
 						expect(res.body.answeredQuestions[0].selectedOption).toEqual(
 							{right: true, text: 'Eu', letter: 'B'}
 						)
