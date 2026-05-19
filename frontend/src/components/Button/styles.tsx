@@ -10,7 +10,7 @@ interface IStyledButtonProps {
 export const StyledButton = styled.button<IStyledButtonProps>`
 	${flex('row', 'center', 'center', '6px')}
 	background-color: ${(props) => props.$backgroundColor || vars.colors.blue};
-	color: ${(props) => props.$backgroundColor ? props.theme.colors.primaryFontColor : vars.colors.white};
+	color: ${(props) => props.$backgroundColor === 'transparent' ? props.theme.colors.primaryFontColor : vars.colors.white};
 	color: ${(props) => props.$iconButton && props.theme.colors.primaryFontColor};
 	border-radius: ${vars.border.radius};
 	padding: 8px 12px;
