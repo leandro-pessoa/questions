@@ -3,7 +3,6 @@ import {
 	clearModal,
 	selectModalType,
 	selectModalOverflow,
-	setModalType,
 } from '@/app/reducers/modal'
 import { useAppDispatch, useAppSelector } from '@/app/hooks'
 
@@ -61,16 +60,19 @@ const Modal = ({ title, children, closeElement, execButton }: ModalProps) => {
 					<Title>{title}</Title>
 					<Hr />
 					{children}
-					<div className='buttons_wrapper'>
-						{execButton}
-						{closeElement && (
-							<Button
-								onClick={() => dispatch(setModalType(''))}
-							>
-								{closeElement}
-							</Button>
-						)}
-					</div>
+					{
+						(execButton || closeElement) &&
+							<div className='buttons_wrapper'>
+								{execButton}
+								{closeElement && (
+									<Button
+										onClick={() => dispatch(clearModal())}
+									>
+										{closeElement}
+									</Button>
+								)}
+							</div>
+					}
 				</Container>
 			</CenterContainer>
 		</StyledDiv>
