@@ -170,6 +170,37 @@ describe('Question POST', () => {
 			})
 	})
 
+	it('should return an error if there are white spaces at question attributes', async () => {
+		await request(app)
+			.post('/questions')
+			.send({
+				_id: questionId,
+				subject: testString + ' ',
+				statement: testString + ' ',
+				year: 2020,
+				instituition: testString + ' ',
+				position: testString + ' ',
+				examiningBoard: testString + ' ',
+				alternatives: [
+					{right: false, text: 'asas', letter: 'C'},
+					{right: true, text: 'dsa  ', letter: 'E'}
+				]
+			})
+			.set('Authorization', `Bearer ${adminToken}`)
+			.set('Content-Type', 'application/json')
+			.expect(400, {
+				status: 400,
+				message: [
+					'subject: Espaços vazios inválidos no campo Disciplina',
+					'statement: Espaços vazios inválidos no campo Enunciado',
+					'instituition: Espaços vazios inválidos no campo Organização',
+					'position: Espaços vazios inválidos no campo Cargo',
+					'examiningBoard: Espaços vazios inválidos no campo Banca examinadora',
+					'alternatives: Espaços vazios inválidos no campo Alternativa'
+				]
+			})
+	})
+
 	it('should return the question on correct post body', async () => {
 		await request(app)
 			.post('/questions')
