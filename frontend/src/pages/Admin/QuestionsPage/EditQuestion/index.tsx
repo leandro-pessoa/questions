@@ -1,20 +1,18 @@
 import { useAppDispatch, useAppSelector } from '@/app/hooks'
-import { selectModalType, setModalType } from '@/app/reducers/modal'
-import { fetchQuestions } from '@/app/reducers/question'
-import { selectToken } from '@/app/reducers/user'
-import { toast } from 'react-toastify'
-import { http } from '@/http'
-import { axiosError } from '@/utils/axiosError'
-import { setIsLoading } from '@/app/reducers/loading'
+import { clearModal, selectModalType } from '@/app/reducers/modal'
+import { useFetch } from '@/app/hooks/useFetch'
+import { vars } from '@/styles/vars'
+import { useState } from 'react'
 
 import Button from '@/components/Button'
 import Form from '@/components/Form'
 import FormInput from '@/components/Input/FormInput'
 import InputContainer from '@/components/Input/InputContainer'
 import Textarea from '@/components/Textarea'
-import { StyledUl } from './styles'
+import { StyledDiv, StyledUl } from './styles'
 import { X } from 'lucide-react'
 import Modal from '@/components/Modal'
+import Checkbox from '@/components/Checkbox'
 
 import type { IQuestion } from '@/types/IQuestion'
 import type { FieldValues } from 'react-hook-form'
@@ -22,29 +20,25 @@ import type { FieldValues } from 'react-hook-form'
 const EditQuestion = (question: IQuestion) => {
 	const dispatch = useAppDispatch()
 
-	const token = useAppSelector(selectToken)
 	const modalType = useAppSelector(selectModalType)
+	const [checked, setChecked] = useState<string>('')
+
+	const { fetchHandle } = useFetch()
 
 	const submitHandle = async (data: FieldValues) => {
+		// irá realizar a requisição de alteração de questão
+		// necessita do token de admin
+		// fetchHandle({
+		// 	isModal: true,
+		// 	httpMethod: 'put',
+		// 	url: `/questions/${question._id}`,
+		// 	refreshFunc: fetchQuestions,
+		// 	feedbackText: `Questão ${question._id} atualizada com sucesso`,
+		// 	data: { ...data } as IQuestion,
+		// 	globalLoading: true
+		// })
+
 		console.log(data)
-		try {
-			dispatch(setIsLoading(true))
-			// irá realizar a requisição de alteração de questão
-			// necessita do token de admin
-			await http.put(
-				`/questions/${question._id}`,
-				{ ...data },
-				{ headers: { Authorization: token && `Bearer ${token}`}})
-			.then(() => {
-				// refresh das questions, feedback e fecha o modal
-				dispatch(fetchQuestions())
-				toast.success(`Questão ${question._id} atualizada com sucesso`)
-				dispatch(setModalType(''))
-			})
-		} catch (err) {
-			axiosError(err)
-		}
-		dispatch(setIsLoading(false))
 	}
 
 	// ano completo atual para limitar o input do ano
@@ -126,14 +120,19 @@ const EditQuestion = (question: IQuestion) => {
 						{question.alternatives.map((alternative) => {
 							return (
 								<li key={alternative._id}>
-									<InputContainer style={{ flexDirection: 'row' }}>
+									<InputContainer
+										style={{ flexDirection: 'row' }}
+									>
 										<div className='alternative__letter-container'>
 											<FormInput
 												required
 												id={alternative.letter}
 												name='Alternativa'
 												value={alternative.letter}
-												style={{ textAlign: 'center' }}
+												style={{
+													textAlign: 'center',
+													padding: '6px',
+												}}
 												pattern={/^[A|B|C|D|E]{1}$/g}
 											/>
 										</div>
@@ -148,25 +147,44 @@ const EditQuestion = (question: IQuestion) => {
 											/>
 										</div>
 									</InputContainer>
-									<Button
-										iconButton
-										title='Remover'
-										style={{
-											padding: '0',
-											alignSelf: 'center',
-										}}
-									>
-										<X />
-									</Button>
+									<div className='alternavite__options'>
+										<Checkbox
+											label='Correta'
+											checked={
+												alternative._id === checked
+											}
+											checkHandle={() =>
+												setChecked(alternative._id)
+											}
+										/>
+										<Button
+											iconButton
+											title='Remover'
+											style={{
+												padding: '0',
+												alignSelf: 'center',
+											}}
+										>
+											<X />
+										</Button>
+									</div>
 								</li>
 							)
 						})}
 					</StyledUl>
 				</div>
-				<Button type='submit'>Atualizar</Button>
-				<Button onClick={() => dispatch(setModalType(''))}>
-					Cancelar
-				</Button>
+				<StyledDiv>
+					<Button
+						type='submit'
+						backgroundColor={vars.colors.yellow}
+						style={{ color: vars.colors.black }}
+					>
+						Atualizar
+					</Button>
+					<Button onClick={() => dispatch(clearModal())}>
+						Cancelar
+					</Button>
+				</StyledDiv>
 			</Form>
 		</Modal>
 	) : (
