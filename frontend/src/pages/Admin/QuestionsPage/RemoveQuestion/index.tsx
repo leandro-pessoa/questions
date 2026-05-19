@@ -2,6 +2,7 @@ import { useAppSelector } from '@/app/hooks'
 import { selectModalType } from '@/app/reducers/modal'
 import { fetchQuestions } from '@/app/reducers/question'
 import { useFetch } from '@/app/hooks/useFetch'
+import { vars } from '@/styles/vars'
 
 import Modal from '@/components/Modal'
 import Button from '@/components/Button'
@@ -30,6 +31,7 @@ const RemoveQuestion = ({ _id, subject, year }: Partial<IQuestion>) => {
 							isModal: true,
 						})
 					}
+					backgroundColor={vars.colors.red}
 				>
 					Sim
 				</Button>

@@ -2,6 +2,7 @@ import { useAppSelector } from '@/app/hooks'
 import { fetchAdminUsers } from '@/app/reducers/adminUsers'
 import { selectModalType } from '@/app/reducers/modal'
 import { useFetch } from '@/app/hooks/useFetch'
+import { vars } from '@/styles/vars'
 
 import Modal from '@/components/Modal'
 import Button from '@/components/Button'
@@ -30,6 +31,7 @@ const RemoveUser = ({ _id, email }: Partial<IUser>) => {
 							isModal: true,
 						})
 					}
+					backgroundColor={vars.colors.red}
 				>
 					Sim
 				</Button>
