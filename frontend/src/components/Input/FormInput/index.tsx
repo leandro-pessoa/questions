@@ -126,7 +126,6 @@ const FormInput = ({
 					autoFocus={autoFocus}
 					id={id}
 					maxLength={maxLength}
-					min={min}
 					autoComplete='on'
 					$error={!(errors[id]?.message === undefined)}
 					step={step}
@@ -153,9 +152,13 @@ const FormInput = ({
 							type === 'date'
 								? {
 										value: minDate,
-										message: 'Essa data é anterior à mínima',
+										message: 'Essa data é anterior à mínima (1900)',
 									}
-								: undefined,
+								: type === 'number'
+									? {
+										value: min,
+										message: `Valor mínimo: ${min}`
+									} : undefined,
 						// verifica se o tipo do input é date ou number
 						// caso seja date, fará a validação, de acorodo com a data máxima
 						// caso seja number, irá verificar o valor máximo definido na prop
