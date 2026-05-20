@@ -6,7 +6,7 @@ export const StyledLabel = styled.label`
 	display: block;
 	position: relative;
 	padding: 8px 0;
-	padding-left: 35px;
+	padding-left: 30px;
 	cursor: pointer;
 	-webkit-user-select: none;
 	-moz-user-select: none;
