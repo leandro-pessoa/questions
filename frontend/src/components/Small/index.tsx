@@ -16,6 +16,7 @@ export const Small = styled.small<ISmallProps>`
     font-size: .8rem;
     display: block;
     max-width: 400px;
+	word-break: break-all;
 
     @media screen and (min-width: ${vars.breakpoints.smartphone}) {
         font-size: .9rem;
