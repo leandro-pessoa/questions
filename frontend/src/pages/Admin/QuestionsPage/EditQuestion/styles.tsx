@@ -31,7 +31,7 @@ export const StyledUl = styled.ul`
 			padding: 8px 16px;
 
 			.alternative__letter-container {
-				width: 10%;
+				width: 20%;
 			}
 
 			.alternative__text-container {
