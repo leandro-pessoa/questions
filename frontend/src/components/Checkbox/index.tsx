@@ -1,9 +1,11 @@
-import type { ReactChildren } from '@/types/ReactChildren'
 import { StyledLabel } from './styles'
+
+import type { ReactChildren } from '@/types/ReactChildren'
+import type { ChangeEvent } from 'react'
 
 interface ICheckboxProps {
 	label: ReactChildren
-	checkHandle: () => void
+	checkHandle: (e?: ChangeEvent<HTMLInputElement>) => void
 	checked: boolean
 }
 
