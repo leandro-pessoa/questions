@@ -2,47 +2,137 @@ import { useAppDispatch, useAppSelector } from '@/app/hooks'
 import { clearModal, selectModalType } from '@/app/reducers/modal'
 import { useFetch } from '@/app/hooks/useFetch'
 import { vars } from '@/styles/vars'
-import { useState } from 'react'
+import { useEffect, useState, type ChangeEvent } from 'react'
+import { ObjectId } from 'bson'
+import { toast } from 'react-toastify'
+import { fetchQuestions } from '@/app/reducers/question'
 
 import Button from '@/components/Button'
 import Form from '@/components/Form'
 import FormInput from '@/components/Input/FormInput'
 import InputContainer from '@/components/Input/InputContainer'
 import Textarea from '@/components/Textarea'
-import { StyledDiv, StyledUl } from './styles'
-import { X } from 'lucide-react'
+import { AlternativesDiv, ButtonsDiv } from './styles'
+import { Plus, X } from 'lucide-react'
 import Modal from '@/components/Modal'
 import Checkbox from '@/components/Checkbox'
+import Input from '@/components/Input'
 
 import type { IQuestion } from '@/types/IQuestion'
 import type { FieldValues } from 'react-hook-form'
+import type { IAlternative } from '@/types/IAlternative'
 
 const EditQuestion = (question: IQuestion) => {
 	const dispatch = useAppDispatch()
 
 	const modalType = useAppSelector(selectModalType)
 	const [checked, setChecked] = useState<string>('')
+	const [alternatives, setAlternatives] = useState<IQuestion['alternatives']>(
+		question.alternatives || [],
+	)
 
 	const { fetchHandle } = useFetch()
 
+	// atribui as alternativas da questão a ser editada no state alternatives
+	useEffect(() => {
+		const updateAlternatives = () => {
+			setAlternatives(question.alternatives)
+		}
+		updateAlternatives()
+	}, [question.alternatives])
+
+	// altera um atributo de um objeto que está dentro do array de alternativas
+	// é utilizado nos inputs das alternativas
+	// parâmetros:
+	// evento, id da alternativa e atributo a ser modificado, isCheckbox para alterar a alternativa correta
+	const setAlternative = (
+		e: ChangeEvent<HTMLInputElement>,
+		alternativeId: IAlternative['_id'],
+		attribute: string,
+		isCheckbox: boolean = false
+	) => {
+		setAlternatives(alternatives.map((alt) => {
+			if (alt._id === alternativeId) { // encontra o objeto a ser modificado
+				return {
+					...alt,
+					[attribute]: isCheckbox ? true : e.target.value
+				} // altera o valor do atributo
+			}
+			return {...alt, right: isCheckbox ? false : alt.right} //retorna o objeto inalterado caso não seja o alvo da modificação
+		}))
+	}
+
 	const submitHandle = async (data: FieldValues) => {
+		// verifica se a quantidade mínima de alternativas foi enviada
+		if(alternatives.length < 2) {
+			toast.error('Adicione ao menos duas alternativas')
+			return
+		}
+
+		// verifica se alguma opção for marcada como correta
+		// caso não, retorna um feedback e finaliza a função
+		if (!checked) {
+			toast.error('Marque uma alternativa correta')
+			return
+		}
+
+		// chaves do objeto enviado pelo formulário
+		const questionKeys = Object.keys(data)
+
+		// // irá remover os atributos dos formulários das alternativas
+		// // pois as alternativas estão salvas no state alternatives
+		questionKeys.forEach((key) => {
+			if(key.match(/^[a-fA-F0-9]{24,25}$/)) {
+				delete data[key]
+			}
+		})
+
+		// questão limpa com os demais dados e alternativas
+		const updatedQuestion = { ...data, alternatives: [...alternatives] }
+
 		// irá realizar a requisição de alteração de questão
 		// necessita do token de admin
-		// fetchHandle({
-		// 	isModal: true,
-		// 	httpMethod: 'put',
-		// 	url: `/questions/${question._id}`,
-		// 	refreshFunc: fetchQuestions,
-		// 	feedbackText: `Questão ${question._id} atualizada com sucesso`,
-		// 	data: { ...data } as IQuestion,
-		// 	globalLoading: true
-		// })
+		fetchHandle({
+			isModal: true,
+			httpMethod: 'put',
+			url: `/questions/${question._id}`,
+			refreshFunc: fetchQuestions,
+			feedbackText: `Questão ${question._id} atualizada com sucesso`,
+			data: updatedQuestion as IQuestion,
+			globalLoading: true
+		})
 
-		console.log(data)
+		// console.log(updatedQuestion)
 	}
 
 	// ano completo atual para limitar o input do ano
 	const fullYear = new Date().getFullYear()
+
+	const removeAlternative = (id: IAlternative['_id']) => {
+		const filteredAlternatives = alternatives.filter(
+			(alternative) => alternative._id !== id,
+		)
+		setAlternatives(filteredAlternatives)
+	}
+
+	const addAlternative = () => {
+		const id = new ObjectId().toString()
+
+		setAlternatives([
+			...alternatives,
+			{ right: false, text: 'Nova alternativa', letter: 'A', _id: id }
+		])
+	}
+
+	// handle para a função da checkbox
+	// altera o valor correto nas alternativas e muda o state de visualização das checkboxes
+	const checkHandle = (
+		e: ChangeEvent<HTMLInputElement>,
+		alternativeId: IAlternative['_id']
+	) => {
+		setAlternative(e, alternativeId, 'right', true)
+		setChecked(alternativeId)
+	}
 
 	return modalType === 'editQuestion' ? (
 		<Modal title='Editar questão'>
@@ -76,8 +166,8 @@ const EditQuestion = (question: IQuestion) => {
 						id='year'
 						name='Ano'
 						type='number'
-						max={fullYear}
 						min={1900}
+						max={fullYear}
 						value={question.year}
 					/>
 				</InputContainer>
@@ -114,66 +204,85 @@ const EditQuestion = (question: IQuestion) => {
 						value={question.examiningBoard}
 					/>
 				</InputContainer>
-				<div style={{ gridColumn: '1 / 3' }}>
-					<label htmlFor='alternatives'>Alternativas</label>
-					<StyledUl id='alternatives'>
-						{question.alternatives.map((alternative) => {
-							return (
-								<li key={alternative._id}>
-									<InputContainer
-										style={{ flexDirection: 'row' }}
-									>
-										<div className='alternative__letter-container'>
-											<FormInput
-												required
-												id={alternative.letter}
-												name='Alternativa'
-												value={alternative.letter}
+				<AlternativesDiv>
+					{alternatives && alternatives.length > 0 ? (
+						<>
+							<label htmlFor='alternatives'>Alternativas</label>
+							<ul id='alternatives'>
+								{alternatives.map((alternative) => {
+									return (
+										<li key={alternative._id}>
+											<InputContainer
 												style={{
-													textAlign: 'center',
-													padding: '6px',
+													flexDirection: 'row',
 												}}
-												pattern={/^[A|B|C|D|E]{1}$/g}
-											/>
-										</div>
-										<div className='alternative__text-container'>
-											<FormInput
-												required
-												id={alternative.text}
-												name='Assertiva'
-												value={alternative.text}
-												minLength={1}
-												maxLength={100}
-											/>
-										</div>
-									</InputContainer>
-									<div className='alternavite__options'>
-										<Checkbox
-											label='Correta'
-											checked={
-												alternative._id === checked
-											}
-											checkHandle={() =>
-												setChecked(alternative._id)
-											}
-										/>
-										<Button
-											iconButton
-											title='Remover'
-											style={{
-												padding: '0',
-												alignSelf: 'center',
-											}}
-										>
-											<X />
-										</Button>
-									</div>
-								</li>
-							)
-						})}
-					</StyledUl>
-				</div>
-				<StyledDiv>
+											>
+												<div className='alternative__letter-container'>
+													<Input
+														value={alternative.letter}
+														style={{
+															textAlign: 'center',
+															padding: '6px',
+														}}
+														onChange={(e) => setAlternative(e, alternative._id, 'letter')}
+													/>
+												</div>
+												<div className='alternative__text-container'>
+													<Input
+														value={alternative.text}
+														minLength={1}
+														maxLength={100}
+														onChange={(e) => setAlternative(e, alternative._id, 'text')}
+													/>
+												</div>
+											</InputContainer>
+											<div className='alternavite__options'>
+												<Checkbox
+													label='Correta'
+													checked={
+														alternative._id ===
+														checked
+													}
+													checkHandle={
+														(e) =>
+															checkHandle(
+																e as ChangeEvent<HTMLInputElement>,
+																alternative._id
+															)
+													}
+												/>
+												<Button
+													onClick={() =>
+														removeAlternative(
+															alternative._id,
+														)
+													}
+													iconButton
+													title='Remover'
+													style={{
+														padding: '0',
+														alignSelf: 'center',
+													}}
+												>
+													<X />
+												</Button>
+											</div>
+										</li>
+									)
+								})}
+							</ul>
+						</>
+					) : (
+						<p className='empty-alternatives'>
+							Cadastre ao menos duas alternativas
+						</p>
+					)}
+					<Button className='add-alternative' onClick={() => addAlternative()}>
+						<Plus />
+						Alternativa
+					</Button>
+				</AlternativesDiv>
+				<ButtonsDiv>
 					<Button
 						type='submit'
 						backgroundColor={vars.colors.yellow}
@@ -184,7 +293,7 @@ const EditQuestion = (question: IQuestion) => {
 					<Button onClick={() => dispatch(clearModal())}>
 						Cancelar
 					</Button>
-				</StyledDiv>
+				</ButtonsDiv>
 			</Form>
 		</Modal>
 	) : (
