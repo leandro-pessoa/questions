@@ -5,6 +5,8 @@ import { verifyWhiteSpaces } from '@/utils/verifyWhiteSpaces'
 
 const fullYear = new Date().getFullYear()
 
+const alternativeRegexp = /^[^\s]+(?:$|.*[^\s]+$)/
+
 const questionSchema = new Schema<IQuestion>({
 	subject: {
 		type: String,
@@ -74,7 +76,12 @@ const questionSchema = new Schema<IQuestion>({
 				validator: (value: IAlternative[]) => {return value.every(alternative => alternative.letter.match(/[A|B|C|D|E]{1}/g))},
 				message: 'A letra de cada alternativa deve ser: A, B, C, D ou E'
 			},
-			verifyWhiteSpaces('Alternativa')
+			{
+				validator: (value: IAlternative[]) => {
+					return value.every((alternative) => alternative.letter.match(alternativeRegexp) && alternative.text.match(alternativeRegexp))
+				},
+				message: 'Não pode haver espaços vazios nas alternativas'
+			}
 		],
 	}
 })
