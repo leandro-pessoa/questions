@@ -37,6 +37,13 @@ const EditQuestion = (question: IQuestion) => {
 	useEffect(() => {
 		const updateAlternatives = () => {
 			setAlternatives(question.alternatives)
+
+			// faz uma verificação para não retornar um erro
+			// registra no checked a alternativa que está correta no banco
+			if (question.alternatives) {
+				const rightAnswer = question.alternatives.find((alternative) => alternative.right)
+				if (rightAnswer) setChecked(rightAnswer._id)
+			}
 		}
 		updateAlternatives()
 	}, [question.alternatives])
@@ -101,23 +108,31 @@ const EditQuestion = (question: IQuestion) => {
 			data: updatedQuestion as IQuestion,
 			globalLoading: true
 		})
-
-		// console.log(updatedQuestion)
 	}
 
 	// ano completo atual para limitar o input do ano
 	const fullYear = new Date().getFullYear()
 
+	// remove uma alternativa da lista
 	const removeAlternative = (id: IAlternative['_id']) => {
 		const filteredAlternatives = alternatives.filter(
-			(alternative) => alternative._id !== id,
+			(alternative) => {
+				// caso seja a alternativa correta, limpa o state checked
+				if(alternative.right && alternative._id === id) setChecked('')
+
+				// retorna a alternativa que não seja a que for ser excluída
+				return alternative._id !== id
+			},
 		)
 		setAlternatives(filteredAlternatives)
 	}
 
+	// adiciona uma nova alternativa na lista
 	const addAlternative = () => {
+		// id no mesmo formado do mongodb
 		const id = new ObjectId().toString()
-
+		
+		// adiciona nova alternativa
 		setAlternatives([
 			...alternatives,
 			{ right: false, text: 'Nova alternativa', letter: 'A', _id: id }
