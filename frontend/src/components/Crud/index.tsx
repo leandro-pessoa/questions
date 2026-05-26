@@ -1,17 +1,19 @@
-import { useAppDispatch } from '@/app/hooks'
+import { useAppDispatch, useAppSelector } from '@/app/hooks'
 import { vars } from '@/styles/vars'
+import { selectToken } from '@/app/reducers/user'
 
 import Button from '../Button'
 import { StyledDiv } from './styles'
-import { Trash2, Pencil, RotateCcw } from 'lucide-react'
+import { Trash2, Pencil, RotateCcw, Search, Plus } from 'lucide-react'
 import { Loading } from '../Loading'
 import Input from '../Input'
 import FiltersSelect from '../Filters/FiltersSelect'
 import { CenterContainer } from '../CenterContainer'
 import { Title } from '../Title'
+import Pagination from '../Pagination'
 
 import type { FetchUrl } from '@/types/FetchUrl'
-import Pagination from '../Pagination'
+import type { FormEvent } from 'react'
 
 interface CrudProps<T> {
 	data: { _id: string }[]
@@ -22,6 +24,9 @@ interface CrudProps<T> {
 	totalPages: number
 	actualPage: number
 	limit: number
+	editFunc: (value: T) => void
+	removeFunc: (value: T) => void
+	addFunc: () => void
 }
 
 const Crud = <T,>({
@@ -32,8 +37,18 @@ const Crud = <T,>({
 	totalPages,
 	actualPage,
 	limit,
+	editFunc,
+	removeFunc,
+	addFunc
 }: CrudProps<T>) => {
 	const dispatch = useAppDispatch()
+
+	const token = useAppSelector(selectToken)
+
+	const searchHandle = (e: FormEvent<HTMLFormElement>) => {
+		e.preventDefault()
+		console.log(e)
+	}
 
 	const renderData = () => {
 		switch (dataStatus) {
@@ -56,16 +71,23 @@ const Crud = <T,>({
 					</Title>
 				) : (
 					<StyledDiv>
-						<div className='filters_wrapper'>
+						<form className='filters_wrapper' onSubmit={searchHandle}>
 							<FiltersSelect
-								title='Qtde resultados'
+								title='Quantidade'
 								defaultContent={['5', '10', '15', '20', '30']}
+								className='filters_wrapper__select'
 							/>
-							<Input
-								className='filters_wrapper__search_input'
-								placeholder='Pesquisar'
-							/>
-						</div>
+							<div style={{ display: 'flex', gap: '8px' }}>
+								<Input
+									className='filters_wrapper__search_input'
+									placeholder='Pesquisar'
+									style={{ padding: '8px 16px' }}
+								/>
+								<Button>
+									<Search />
+								</Button>
+							</div>
+						</form>
 						<div className='responsive_table'>
 							<table>
 								<thead>
@@ -73,7 +95,7 @@ const Crud = <T,>({
 										<th>Ações</th>
 										{/* titulos da tabela, com base na prop labels */}
 										{labels.map((value: string) => {
-											return <th>{value}</th>
+											return <th key={value}>{value}</th>
 										})}
 									</tr>
 								</thead>
@@ -91,10 +113,16 @@ const Crud = <T,>({
 														borderBottom: 'none',
 													}}
 												>
-													<Button iconButton>
+													<Button
+														iconButton
+														onClick={()=>editFunc({ ...value } as T)}
+													>
 														<Pencil />
 													</Button>
-													<Button iconButton>
+													<Button
+														iconButton
+														onClick={()=>removeFunc({ ...value } as T)}
+													>
 														<Trash2 />
 													</Button>
 												</td>
@@ -108,9 +136,7 @@ const Crud = <T,>({
 													return (
 														<td
 															key={index}
-															title={String(
-																isArray,
-															)}
+															title={String(isArray)}
 														>
 															{isArray}
 														</td>
@@ -122,13 +148,21 @@ const Crud = <T,>({
 								</tbody>
 							</table>
 						</div>
-						<Pagination
-							actualPage={actualPage}
-							limit={limit}
-							totalPages={totalPages}
-							fetchFunc={fetchFunc}
-							style={{padding: '0'}}
-						/>
+						<div className='crud_footer'>
+							<div style={{width: '33%'}}>
+								<Button icon={<Plus/>} onClick={addFunc}>
+									Adicionar
+								</Button>
+							</div>
+							<Pagination
+								actualPage={actualPage}
+								limit={limit}
+								totalPages={totalPages}
+								fetchFunc={fetchFunc}
+								style={{padding: '0', width: '33%'}}
+							/>
+							<div style={{width: '33%'}}></div>
+						</div>
 					</StyledDiv>
 				)
 			case 'failed':
@@ -136,7 +170,7 @@ const Crud = <T,>({
 					<CenterContainer $height='header'>
 						<h2>Falha ao tentar carregar os dados</h2>
 						<br />
-						<Button onClick={() => dispatch(fetchFunc())}>
+						<Button onClick={() => dispatch(fetchFunc({ token }))}>
 							<RotateCcw />
 							Recarregar
 						</Button>

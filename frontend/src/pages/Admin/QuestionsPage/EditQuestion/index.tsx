@@ -86,8 +86,8 @@ const EditQuestion = (question: IQuestion) => {
 		// chaves do objeto enviado pelo formulário
 		const questionKeys = Object.keys(data)
 
-		// // irá remover os atributos dos formulários das alternativas
-		// // pois as alternativas estão salvas no state alternatives
+		// irá remover os atributos dos formulários das alternativas
+		// pois as alternativas estão salvas no state alternatives
 		questionKeys.forEach((key) => {
 			if(key.match(/^[a-fA-F0-9]{24,25}$/)) {
 				delete data[key]
@@ -131,7 +131,7 @@ const EditQuestion = (question: IQuestion) => {
 	const addAlternative = () => {
 		// id no mesmo formado do mongodb
 		const id = new ObjectId().toString()
-		
+
 		// adiciona nova alternativa
 		setAlternatives([
 			...alternatives,

@@ -46,6 +46,10 @@ export const StyledDiv = styled.div`
 		}
 	}
 
+	.crud_footer {
+		${flex('row', 'space-between', 'center')}
+	}
+
 	@media screen and (min-width: ${vars.breakpoints.smallSmartphone}) {
 		.filters_wrapper {
 			.filters_wrapper__search_input {
