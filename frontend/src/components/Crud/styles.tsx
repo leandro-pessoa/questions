@@ -47,7 +47,12 @@ export const StyledDiv = styled.div`
 	}
 
 	.crud_footer {
-		${flex('row', 'space-between', 'center')}
+		${flex('column', 'auto', 'auto', '8px')}
+
+		ul {
+			align-self: center;
+			padding: 0;
+		}
 	}
 
 	@media screen and (min-width: ${vars.breakpoints.smallSmartphone}) {
@@ -65,6 +70,14 @@ export const StyledDiv = styled.div`
 		.responsive_table {
 			max-height: 65vh;
 		}
+
+		.crud_footer {
+			${flex('row', 'space-between', 'center')}
+
+			ul {
+				width: 50%;
+			}
+		}
 	}
 
 	@media screen and (min-width: ${vars.breakpoints.tablet}) {
@@ -72,6 +85,17 @@ export const StyledDiv = styled.div`
 			.filters_wrapper__select {
 				width: 30%;
 			}
+		}
+
+		.crud_footer__blank-div {
+			display: none;
+		}
+	}
+
+	@media screen and (min-width: ${vars.breakpoints.notebook}) {
+		.crud_footer__blank-div {
+			display: block;
+			width: 25%;
 		}
 	}
 `

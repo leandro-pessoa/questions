@@ -149,7 +149,7 @@ const Crud = <T,>({
 							</table>
 						</div>
 						<div className='crud_footer'>
-							<div style={{width: '33%'}}>
+							<div style={{width: '25%'}}>
 								<Button icon={<Plus/>} onClick={addFunc}>
 									Adicionar
 								</Button>
@@ -159,9 +159,8 @@ const Crud = <T,>({
 								limit={limit}
 								totalPages={totalPages}
 								fetchFunc={fetchFunc}
-								style={{padding: '0', width: '33%'}}
 							/>
-							<div style={{width: '33%'}}></div>
+							<div className='crud_footer__blank-div'></div>
 						</div>
 					</StyledDiv>
 				)
