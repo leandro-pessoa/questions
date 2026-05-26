@@ -277,10 +277,14 @@ const EditQuestion = (question: IQuestion) => {
 							Cadastre ao menos duas alternativas
 						</p>
 					)}
-					<Button className='add-alternative' onClick={() => addAlternative()}>
-						<Plus />
-						Alternativa
-					</Button>
+					{
+						// só exibira o button de adicionar alternativa até a quinta alternativa
+						alternatives && alternatives.length < 5 &&
+							<Button className='add-alternative' onClick={() => addAlternative()}>
+								<Plus />
+								Alternativa
+							</Button>
+					}
 				</AlternativesDiv>
 				<ButtonsDiv>
 					<Button
