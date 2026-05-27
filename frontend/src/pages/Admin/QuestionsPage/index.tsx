@@ -7,7 +7,7 @@ import {
 	selectQuestionsStatus,
 	selectTotalQuestionPages,
 } from '@/app/reducers/question'
-import { useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
 	selectModalData,
 	setModalData,
@@ -32,7 +32,7 @@ const QuestionsPage = () => {
 	// state do loading local
 	const [loading, setLoading] = useState<boolean>(false)
 
-	useMemo(() => {
+	useEffect(() => {
 		const getQuestions = () => {
 			// obtém as questões, caso não estejam no state global
 			if (!questions || questions.length === 0) {
