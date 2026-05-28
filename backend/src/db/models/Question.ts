@@ -73,7 +73,12 @@ const questionSchema = new Schema<IQuestion>({
 				message: 'Não pode haver mais de uma alternativa correta'
 			},
 			{
-				validator: (value: IAlternative[]) => {return value.every(alternative => alternative.letter.match(/[A|B|C|D|E]{1}/g))},
+				validator: (value: IAlternative[]) => {
+					return value.every(
+						alternative =>
+							alternative.letter.match(/^[A|B|C|D|E]{1}$/g)
+					)
+				},
 				message: 'A letra de cada alternativa deve ser: A, B, C, D ou E'
 			},
 			{
