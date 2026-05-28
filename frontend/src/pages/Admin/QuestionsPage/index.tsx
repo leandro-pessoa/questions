@@ -36,15 +36,13 @@ const QuestionsPage = () => {
 
 	useEffect(() => {
 		const getQuestions = () => {
-			// obtém as questões, caso não estejam no state global
-			if (!questions || questions.length === 0) {
-				setLoading(true)
-				dispatch(fetchQuestions())
-				setLoading(false)
-			}
+			// obtém as questões
+			setLoading(true)
+			dispatch(fetchQuestions())
+			setLoading(false)
 		}
 		getQuestions()
-	}, [questions, dispatch])
+	}, [dispatch])
 
 	const openRemoveModal = ({ _id, subject, year }: Partial<IQuestion>) => {
 		dispatch(setModalType('removeQuestion'))
