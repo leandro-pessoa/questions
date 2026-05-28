@@ -1,5 +1,5 @@
-import { useAppDispatch, useAppSelector } from '@/app/hooks'
-import { clearModal, selectModalType } from '@/app/reducers/modal'
+import { useAppDispatch } from '@/app/hooks'
+import { clearModal } from '@/app/reducers/modal'
 import { useFetch } from '@/app/hooks/useFetch'
 import { vars } from '@/styles/vars'
 import { useEffect, useState, type ChangeEvent } from 'react'
@@ -22,31 +22,32 @@ import type { IQuestion } from '@/types/IQuestion'
 import type { FieldValues } from 'react-hook-form'
 import type { IAlternative } from '@/types/IAlternative'
 
-const EditQuestion = (question: IQuestion) => {
+const QuestionForm = ({question, mode}: {question?: IQuestion, mode: 'put' | 'post'}) => {
 	const dispatch = useAppDispatch()
 
-	const modalType = useAppSelector(selectModalType)
 	const [checked, setChecked] = useState<string>('')
 	const [alternatives, setAlternatives] = useState<IQuestion['alternatives']>(
-		question.alternatives || [],
+		question?.alternatives || [],
 	)
 
 	const { fetchHandle } = useFetch()
 
 	// atribui as alternativas da questão a ser editada no state alternatives
 	useEffect(() => {
-		const updateAlternatives = () => {
-			setAlternatives(question.alternatives)
+		if (question) {
+			const updateAlternatives = () => {
+				setAlternatives(question.alternatives)
 
-			// faz uma verificação para não retornar um erro
-			// registra no checked a alternativa que está correta no banco
-			if (question.alternatives) {
-				const rightAnswer = question.alternatives.find((alternative) => alternative.right)
-				if (rightAnswer) setChecked(rightAnswer._id)
+				// faz uma verificação para não retornar um erro
+				// registra no checked a alternativa que está correta no banco
+				if (question.alternatives) {
+					const rightAnswer = question.alternatives.find((alternative) => alternative.right)
+					if (rightAnswer) setChecked(rightAnswer._id)
+				}
 			}
+			updateAlternatives()
 		}
-		updateAlternatives()
-	}, [question.alternatives])
+	}, [question?.alternatives, question])
 
 	// altera um atributo de um objeto que está dentro do array de alternativas
 	// é utilizado nos inputs das alternativas
@@ -95,17 +96,21 @@ const EditQuestion = (question: IQuestion) => {
 		})
 
 		// questão limpa com os demais dados e alternativas
-		const updatedQuestion = { ...data, alternatives: [...alternatives] }
+		const newQuestion = { ...data, alternatives: [...alternatives] }
 
 		// irá realizar a requisição de alteração de questão
 		// necessita do token de admin
 		fetchHandle({
 			isModal: true,
-			httpMethod: 'put',
-			url: `/questions/${question._id}`,
+			httpMethod: mode,
+			url: `/questions${question ? `/${question._id}` : ''}`,
 			refreshFunc: fetchQuestions,
-			feedbackText: `Questão ${question._id} atualizada com sucesso`,
-			data: updatedQuestion as IQuestion,
+			feedbackText:
+				question ?
+				`Questão ${question._id} atualizada com sucesso`
+				:
+				'Questão adicionada com sucesso',
+			data: newQuestion as IQuestion,
 			globalLoading: true
 		})
 	}
@@ -149,8 +154,8 @@ const EditQuestion = (question: IQuestion) => {
 		setChecked(alternativeId)
 	}
 
-	return modalType === 'editQuestion' ? (
-		<Modal title='Editar questão'>
+	return (
+		<Modal title={mode === 'put' ? 'Editar questão' : 'Adicionar questão'}>
 			<Form onSubmit={submitHandle} grid>
 				<InputContainer>
 					<label htmlFor='subject'>Disciplina</label>
@@ -160,7 +165,7 @@ const EditQuestion = (question: IQuestion) => {
 						name='Disciplina'
 						minLength={2}
 						maxLength={20}
-						value={question.subject}
+						value={question ? question.subject : ''}
 					/>
 				</InputContainer>
 				<InputContainer style={{ gridColumn: '1 / 3' }}>
@@ -171,7 +176,7 @@ const EditQuestion = (question: IQuestion) => {
 						name='Enunciado'
 						minLength={10}
 						maxLength={500}
-						value={question.statement}
+						value={question ? question.statement : ''}
 					/>
 				</InputContainer>
 				<InputContainer>
@@ -183,7 +188,7 @@ const EditQuestion = (question: IQuestion) => {
 						type='number'
 						min={1900}
 						max={fullYear}
-						value={question.year}
+						value={question ? question.year : ''}
 					/>
 				</InputContainer>
 				<InputContainer>
@@ -194,7 +199,7 @@ const EditQuestion = (question: IQuestion) => {
 						name='Organização'
 						minLength={2}
 						maxLength={30}
-						value={question.instituition}
+						value={question ? question.instituition : ''}
 					/>
 				</InputContainer>
 				<InputContainer>
@@ -205,7 +210,7 @@ const EditQuestion = (question: IQuestion) => {
 						name='Cargo'
 						minLength={4}
 						maxLength={30}
-						value={question.position}
+						value={question ? question.position : ''}
 					/>
 				</InputContainer>
 				<InputContainer>
@@ -216,7 +221,7 @@ const EditQuestion = (question: IQuestion) => {
 						name='Banca examinadora'
 						minLength={2}
 						maxLength={30}
-						value={question.examiningBoard}
+						value={question ? question.examiningBoard : ''}
 					/>
 				</InputContainer>
 				<AlternativesDiv>
@@ -307,7 +312,7 @@ const EditQuestion = (question: IQuestion) => {
 						backgroundColor={vars.colors.yellow}
 						style={{ color: vars.colors.black }}
 					>
-						Atualizar
+						{mode === 'put' ? 'Atualizar' : 'Adicionar'}
 					</Button>
 					<Button onClick={() => dispatch(clearModal())}>
 						Cancelar
@@ -315,9 +320,7 @@ const EditQuestion = (question: IQuestion) => {
 				</ButtonsDiv>
 			</Form>
 		</Modal>
-	) : (
-		<></>
 	)
 }
 
-export default EditQuestion
+export default QuestionForm
