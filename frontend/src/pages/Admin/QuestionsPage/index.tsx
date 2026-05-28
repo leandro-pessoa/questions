@@ -13,11 +13,12 @@ import {
 	setModalData,
 	setModalType,
 	setModalOverflow,
+	selectModalType,
 } from '@/app/reducers/modal'
 
 import Crud from '@/components/Crud'
 import RemoveQuestion from './RemoveQuestion'
-import EditQuestion from './EditQuestion'
+import QuestionForm from './QuestionForm'
 
 import type { IQuestion } from '@/types/IQuestion'
 
@@ -29,6 +30,7 @@ const QuestionsPage = () => {
 	const questionsActualPage = useAppSelector(selectActualPage)
 	const questionsTotalPages = useAppSelector(selectTotalQuestionPages)
 	const modalData = useAppSelector(selectModalData) as IQuestion
+	const modalType = useAppSelector(selectModalType)
 	// state do loading local
 	const [loading, setLoading] = useState<boolean>(false)
 
@@ -55,10 +57,16 @@ const QuestionsPage = () => {
 		dispatch(setModalData({...question}))
 	}
 
+	const openAddModal = () => {
+		dispatch(setModalOverflow(true))
+		dispatch(setModalType('addQuestion'))
+	}
+
 	return (
 		<>
 			<RemoveQuestion {...modalData} />
-			<EditQuestion {...modalData}/>
+			{modalType === 'editQuestion' && <QuestionForm question={modalData} mode='put' />}
+			{modalType === 'addQuestion' && <QuestionForm mode='post' />}
 			<Crud
 				labels={[
 					'ID',
@@ -79,6 +87,7 @@ const QuestionsPage = () => {
 				totalPages={questionsTotalPages}
 				editFunc={openEditModal}
 				removeFunc={openRemoveModal}
+				addFunc={openAddModal}
 			/>
 		</>
 	)
