@@ -85,7 +85,7 @@ const questionSchema = new Schema<IQuestion>({
 				validator: (value: IAlternative[]) => {
 					return value.every((alternative) => alternative.letter.match(alternativeRegexp) && alternative.text.match(alternativeRegexp))
 				},
-				message: 'Não pode haver espaços vazios nas alternativas'
+				message: 'Espaços vazios inválidos no campo Alternativa'
 			}
 		],
 	}
