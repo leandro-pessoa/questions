@@ -159,7 +159,7 @@ describe('Question POST', () => {
 				examiningBoard: testString,
 				alternatives: [
 					{right: false, text: 'asas', letter: 'C'},
-					{right: true, text: 'dsa', letter: 'Z'}
+					{right: true, text: 'dsa', letter: 'Aaa'}
 				]
 			})
 			.set('Authorization', `Bearer ${adminToken}`)
