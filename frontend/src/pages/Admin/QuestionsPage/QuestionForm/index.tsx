@@ -34,7 +34,7 @@ const QuestionForm = ({question, mode}: {question?: IQuestion, mode: 'put' | 'po
 
 	// atribui as alternativas da questão a ser editada no state alternatives
 	useEffect(() => {
-		if (question) {
+		if (question) { // caso seja para adição, não executa este bloco
 			const updateAlternatives = () => {
 				setAlternatives(question.alternatives)
 
@@ -98,7 +98,7 @@ const QuestionForm = ({question, mode}: {question?: IQuestion, mode: 'put' | 'po
 		// questão limpa com os demais dados e alternativas
 		const newQuestion = { ...data, alternatives: [...alternatives] }
 
-		// irá realizar a requisição de alteração de questão
+		// irá realizar a requisição de alteração/adição de questão
 		// necessita do token de admin
 		fetchHandle({
 			isModal: true,
