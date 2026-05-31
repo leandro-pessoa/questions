@@ -22,6 +22,7 @@ interface UseFetchProps<T> {
 	globalLoading?: boolean
 	localLoadingFunc?: (value: React.SetStateAction<boolean>) => void
 	throwError?: boolean
+	catchFunc?: () => void
 }
 
 export const useFetch = () => {
@@ -42,7 +43,8 @@ export const useFetch = () => {
 			then,
 			data,
 			globalLoading,
-			localLoadingFunc
+			localLoadingFunc,
+			catchFunc
 		}: UseFetchProps<T>
 	) => {
 		// será executada após uma requisição
@@ -92,6 +94,7 @@ export const useFetch = () => {
 			return res
 		} catch (err) {
 			axiosError(err)
+			if (catchFunc) catchFunc()
 		}
 		// loading
 		if (globalLoading) dispatch(setIsLoading(false))
