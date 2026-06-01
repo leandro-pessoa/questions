@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 
-const loginLimiterSchema = new mongoose.Schema({
+const userLimiterSchema = new mongoose.Schema({
 	email: {
 		type: String,
 		required: true,
@@ -17,6 +17,6 @@ const loginLimiterSchema = new mongoose.Schema({
 	}
 })
 
-const LoginLimiter = mongoose.model('LoginLimiter', loginLimiterSchema)
+const UserLimiter = mongoose.model('UserLimiter', userLimiterSchema)
 
-export default LoginLimiter
+export default UserLimiter

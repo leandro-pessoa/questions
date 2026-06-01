@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken'
 import BaseError from '@/errors/BaseError'
 import BadRequest from '@/errors/BadRequest'
 import NotFound from '@/errors/NotFound'
-import LoginLimiter from '@/db/models/LoginLimiter'
+import UserLimiter from '@/db/models/UserLimiter'
 
 import type { IUser } from '@/types/IUser'
 import type { IAlternative } from '@/types/IAlternative'
@@ -43,7 +43,7 @@ export default class UserService extends CRUDServices<IUser> {
 				// realiza a criação do token, com expiração de 7 dias
 				const token = jwt.sign(data, secretKey, {expiresIn: '7d'})
 
-				const limiter = await LoginLimiter.findOne({ email })
+				const limiter = await UserLimiter.findOne({ email })
 
 				// verifica se a quantidade máxima de tentativas foi atingida
 				if (limiter && limiter.count >= 5) {
@@ -140,10 +140,10 @@ export default class UserService extends CRUDServices<IUser> {
 	// adiciona no contador cada vez que tentar realizar o login e falhar (verficado no controller)
 	// parâmetros:
 	// email do user que está tentando realizar o login
-	async loginLimiter(email: IUser['email']) {
+	async limiter(email: IUser['email']) {
 		// encontra o documento na base de dados
 		// ele expira em 5 minutos
-		const limiter = await LoginLimiter.findOne({ email })
+		const limiter = await UserLimiter.findOne({ email })
 
 		// caso já exista
 		if (limiter) { // verifica se a contagem já chegou no limite
@@ -152,12 +152,12 @@ export default class UserService extends CRUDServices<IUser> {
 			}
 
 			// caso não, adiciona um na contagem
-			await LoginLimiter.updateOne({ email }, { count: limiter.count += 1})
+			await UserLimiter.updateOne({ email }, { count: limiter.count += 1})
 			return
 		}
 
 		// caso não exista, irá criar um novo documento
-		await LoginLimiter.create({ email, count: 1 })
+		await UserLimiter.create({ email, count: 1 })
 	}
 
 	// obtém o número de questões respondidas do dia atual e dos 6 anteriores
