@@ -1,10 +1,7 @@
-import { http } from '@/http'
-import { axiosError } from '@/utils/axiosError'
 import { useNavigate } from 'react-router-dom'
-import { useAppDispatch, useAppSelector } from '@/app/hooks'
+import { useAppDispatch } from '@/app/hooks'
 import { setEmail } from '@/app/reducers/changePassword'
-import { toast } from 'react-toastify'
-import { selectIsLoading, setIsLoading } from '@/app/reducers/loading'
+import { useFetch } from '@/app/hooks/useFetch'
 
 import Button from '@/components/Button'
 import { Container } from '@/components/Container'
@@ -20,25 +17,25 @@ import type { BaseSyntheticEvent } from 'react'
 const SendPasswordCode = () => {
 	const navigate = useNavigate()
 	const dispatch = useAppDispatch()
-	const isLoading = useAppSelector(selectIsLoading)
+	const { fetchHandle } = useFetch()
 
 	const sendCodeSubmitHandle = async (data: FieldValues, e: BaseSyntheticEvent<object> | undefined) => {
-		if (isLoading) return
+		// requisição que irá enviar o código para o email do user
+		fetchHandle({
+			httpMethod: 'post',
+			url: '/sendChangePasswordCode',
+			then: () => { // insere o email no state global e navega para a confirmação do código
+				dispatch(setEmail(data.email))
+				navigate('/usuario/esqueci-minha-senha/confirmar-codigo')
+			},
+			data: { ...data },
+			feedbackText: 'Código enviado',
+			globalLoading: true,
+			catchFunc: () => navigate('/login'),
+		})
 
+		// limpa o input
 		const target = e?.target as HTMLFormElement
-
-		try {
-			dispatch(setIsLoading(true))
-			await http.post('/sendChangePasswordCode', data)
-				.then(() => {
-					toast.success('Código enviado')
-					dispatch(setEmail(data.email))
-					navigate('/usuario/esqueci-minha-senha/confirmar-codigo')
-				})
-		} catch (err) {
-			axiosError(err)
-		}
-		dispatch(setIsLoading(false))
 		target.reset()
 	}
 

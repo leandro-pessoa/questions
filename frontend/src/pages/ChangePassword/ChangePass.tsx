@@ -1,10 +1,8 @@
-import { http } from '@/http'
-import { axiosError } from '@/utils/axiosError'
 import { useAppDispatch, useAppSelector } from '@/app/hooks'
 import { selectToken, setToken } from '@/app/reducers/changePassword'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
-import { selectIsLoading, setIsLoading } from '@/app/reducers/loading'
+import { useFetch } from '@/app/hooks/useFetch'
 
 import Button from '@/components/Button'
 import { Container } from '@/components/Container'
@@ -19,37 +17,32 @@ import type { FieldValues } from 'react-hook-form'
 const ChangePass = () => {
 	const navigate = useNavigate()
 	const dispatch = useAppDispatch()
+	const { fetchHandle } = useFetch()
+
 	const token = useAppSelector(selectToken)
-	const isLoading = useAppSelector(selectIsLoading)
 
-	const sendCodeSubmitHandle = async (data: FieldValues) => {
-		if (isLoading) return
-
-		try {
-			dispatch(setIsLoading(true))
-			await http.put(
-				'/users/updateUserPassword',
-				{ ...data },
-				{ headers: { Authorization: token && `Bearer ${token}` } },
-			).then((res) => {
+	const changePassSubmitHandle = async (data: FieldValues) => {
+		// faz uma requisição que irá alterar a senha do usuário
+		fetchHandle({
+			httpMethod: 'put',
+			url: '/users/updateUserPassword',
+			then: (res) => { // limpa o token e manda o feedback
 				dispatch(setToken(''))
 				toast.success(res.data.message)
-				navigate('/login')
-			})
-
-
-		} catch (err) {
-			axiosError(err)
-			navigate('/login')
-		}
-		dispatch(setIsLoading(false))
+			},
+			data: { ...data },
+			navigateTo: '/login',
+			globalLoading: true,
+			catchFunc: () => navigate('/login'),
+			otherToken: token // utiliza o token de alteração de senha (não o de login)
+		})
 	}
 
 	return (
 		<SideScreen side='right'>
 			<Container $relativeWidth='60%'>
 				<Title>Alteração de senha</Title>
-				<Form onSubmit={sendCodeSubmitHandle}>
+				<Form onSubmit={changePassSubmitHandle}>
 					<InputContainer>
 						<label htmlFor='password'>Nova senha:</label>
 						<FormInput
