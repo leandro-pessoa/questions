@@ -23,13 +23,14 @@ interface UseFetchProps<T> {
 	localLoadingFunc?: (value: React.SetStateAction<boolean>) => void
 	throwError?: boolean
 	catchFunc?: () => void
+	otherToken?: string
 }
 
 export const useFetch = () => {
 	const dispatch = useAppDispatch()
 	const navigate = useNavigate()
 
-	const token = useAppSelector(selectToken)
+	const loginToken = useAppSelector(selectToken)
 	const isLoading = useAppSelector(selectIsLoading)
 
 	const fetchHandle = async <T,>(
@@ -44,12 +45,13 @@ export const useFetch = () => {
 			data,
 			globalLoading,
 			localLoadingFunc,
-			catchFunc
+			catchFunc,
+			otherToken
 		}: UseFetchProps<T>
 	) => {
 		// será executada após uma requisição
 		const finalThen = () => {
-			if (refreshFunc) dispatch(refreshFunc({ token })) // faz um get da api com os elementos atualizados, caso queira
+			if (refreshFunc) dispatch(refreshFunc({ token: otherToken || loginToken })) // faz um get da api com os elementos atualizados, caso queira
 			if(feedbackText) toast.success(feedbackText) // feedback para o usuário
 			if (isModal) { // fecha e limpa os dados do modal, caso queira
 				dispatch(clearModal())
@@ -76,7 +78,9 @@ export const useFetch = () => {
 					url,
 					{ ...data },
 					{
-						headers: { Authorization: token && `Bearer ${token}` },
+						headers: { Authorization:
+							otherToken || loginToken ? `Bearer ${otherToken || loginToken}` : ''
+						},
 					},
 				)
 					.then(then)
@@ -86,7 +90,9 @@ export const useFetch = () => {
 
 			// demais requisições (get, delete)
 			const res = await http[httpMethod](url, {
-				headers: { Authorization: token && `Bearer ${token}` },
+				headers: { Authorization:
+					otherToken || loginToken && `Bearer ${otherToken || loginToken}`
+				},
 			})
 				.then(then)
 				.then(finalThen)
