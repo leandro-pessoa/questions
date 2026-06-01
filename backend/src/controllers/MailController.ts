@@ -5,6 +5,7 @@ import MailServices from '@/services/MailServices'
 import UserService from '@/services/UserService'
 import { generateRandomCode } from '@/utils/generateRandomCode'
 import jwt from 'jsonwebtoken'
+import UserLimiter from '@/db/models/UserLimiter'
 
 import type { Request, Response, NextFunction } from 'express'
 
@@ -92,8 +93,7 @@ export default class MailController {
 			// caso o documento não exista ou o token enviado seja diferente
 			// retorna uma bad request
 			if (!result || code !== result.token) {
-				next(new BadRequest('Código expirado ou inválido. Tente novamente'))
-				return
+				throw new BadRequest('Código expirado ou inválido. Tente novamente')
 			}
 
 			// chave secreta para o json web token
@@ -107,6 +107,23 @@ export default class MailController {
 				return
 			}
 
+			const limiter = await UserLimiter.findOne({ email })
+
+			// verifica se a quantidade máxima de tentativas foi atingida
+			if (limiter && limiter.count >= 5) {
+				// verifica se o documento consta na base de dados (expira em 5 minutos ou na confirmação)
+				const tokenAlreadyExists = await mailService.getOne({ userId: user._id })
+
+				// caso conste, remove o documento que permite confirmar o código
+				if (tokenAlreadyExists) {
+					await mailService.deleteOne(tokenAlreadyExists._id)
+				}
+
+				// caso sim, não permite o user confirmar o código
+				// mesmo que o código esteja correto
+				throw new BadRequest('Quantidade máxima de tentativas excedidas. Aguarde 5 minutos', 401)
+			}
+
 			// cria um token para validar a alteração no UserController
 			// o token expira em 2 minutos
 			const token = jwt.sign({ userId: user._id }, secretKey, {expiresIn: 120})
@@ -116,7 +133,13 @@ export default class MailController {
 
 			// remove o documento contendo o token da base de dados
 			await mailService.deleteOne(result._id)
-		} catch(err) {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		} catch(err: any) {
+			// caso seja erro de credenciais inválidas
+			if (err.msg === 'Código expirado ou inválido. Tente novamente') {
+				// executa o service que irá verificar a quantidade de tentativas
+				await userService.limiter(email)
+			}
 			next(err)
 		}
 	}

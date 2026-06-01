@@ -1,5 +1,4 @@
 import { useNavigate } from 'react-router-dom'
-import { toast } from 'react-toastify'
 import { useAppDispatch, useAppSelector } from '@/app/hooks'
 import { selectEmail, setToken } from '@/app/reducers/changePassword'
 import { useFetch } from '@/app/hooks/useFetch'
@@ -22,23 +21,32 @@ const ConfirmPasswordCode = () => {
 
 	const email = useAppSelector(selectEmail)
 
-	const confirmCodeHandle = async (data: FieldValues, e: BaseSyntheticEvent<object> | undefined) => {
+	const confirmCodeHandle = async (
+		data: FieldValues,
+		e: BaseSyntheticEvent<object> | undefined,
+	) => {
 		// faz a requisição enviando o código de confirmação
 		fetchHandle({
 			httpMethod: 'post',
 			url: '/confirmPasswordCode',
 			then: (res) => {
-				if (res.data.isCorrectCode) { // caso seja o código correto
+				if (res.data.isCorrectCode) {
+					// caso seja o código correto
 					// armazena o código no state global e navega para a alteração
 					dispatch(setToken(res.data.token))
 					navigate('/usuario/esqueci-minha-senha/alterar-senha')
-				} else { // lança o feedback de erro e volta para a página de login
-					toast.error('Código incorreto. Tente novamente nos próximos 5 minutos')
-					navigate('/login')
 				}
 			},
 			data: { code: data.code, email }, // envia o código e o email do user
 			globalLoading: true,
+			catchFunc: (err) => {
+				// caso atinja a quantidade máxima de tentativas, volta para a página de login
+				if (
+					err.response?.data.message ===
+					'Quantidade máxima de tentativas excedidas. Aguarde 5 minutos'
+				)
+					navigate('/login')
+			},
 		})
 
 		// limpa o formulário
@@ -52,17 +60,14 @@ const ConfirmPasswordCode = () => {
 				<Title>Confirmar código</Title>
 				<Form onSubmit={confirmCodeHandle}>
 					<InputContainer>
-						<label htmlFor='code'>Insira o código fornecido no seu e-mail:</label>
-						<FormInput
-							required
-							id='code'
-							name='Código'
-							autoFocus
-						/>
+						<label htmlFor='code'>
+							Insira o código fornecido no seu e-mail:
+						</label>
+						<FormInput required id='code' name='Código' autoFocus />
 					</InputContainer>
 					<Button
 						type='submit'
-						style={{ width: 'max-content', marginTop: '16px'}}
+						style={{ width: 'max-content', marginTop: '16px' }}
 					>
 						Confirmar código
 					</Button>
