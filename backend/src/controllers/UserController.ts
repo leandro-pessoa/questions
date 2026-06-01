@@ -146,7 +146,7 @@ export default class UserController extends Controller<IUser> {
 			// caso seja erro de credenciais inválidas
 			if (err.msg === 'Credenciais inválidas') {
 				// executa o service que irá verificar a quantidade de tentativas
-				await userService.loginLimiter(email)
+				await userService.limiter(email)
 			}
 			next(err)
 		}
