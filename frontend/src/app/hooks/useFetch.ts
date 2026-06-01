@@ -22,7 +22,8 @@ interface UseFetchProps<T> {
 	globalLoading?: boolean
 	localLoadingFunc?: (value: React.SetStateAction<boolean>) => void
 	throwError?: boolean
-	catchFunc?: () => void
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	catchFunc?: (err: any) => void
 	otherToken?: string
 }
 
@@ -100,7 +101,7 @@ export const useFetch = () => {
 			return res
 		} catch (err) {
 			axiosError(err)
-			if (catchFunc) catchFunc()
+			if (catchFunc) catchFunc(err)
 		}
 		// loading
 		if (globalLoading) dispatch(setIsLoading(false))
