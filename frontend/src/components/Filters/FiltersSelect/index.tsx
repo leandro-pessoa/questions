@@ -4,7 +4,7 @@ import { http } from '@/http'
 import { useAppDispatch, useAppSelector } from '@/app/hooks'
 import { selectLimit, selectSelectedFilters, setLimit, toggleCheckboxFilter } from '@/app/reducers/filters'
 
-import { StyledDiv } from './styles'
+import { StyledDiv } from '@/components/Select/styles'
 import { ChevronDown, ChevronUp } from 'lucide-react'
 import Input from '@/components/Input'
 import { Loading } from '@/components/Loading'
