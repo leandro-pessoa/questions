@@ -1,7 +1,4 @@
-import { useAppDispatch } from '@/app/hooks'
-import { clearModal } from '@/app/reducers/modal'
 import { useFetch } from '@/app/hooks/useFetch'
-import { vars } from '@/styles/vars'
 import { useEffect, useState, type ChangeEvent } from 'react'
 import { ObjectId } from 'bson'
 import { toast } from 'react-toastify'
@@ -12,7 +9,7 @@ import Form from '@/components/Form'
 import FormInput from '@/components/Input/FormInput'
 import InputContainer from '@/components/Input/InputContainer'
 import Textarea from '@/components/Textarea'
-import { AlternativesDiv, ButtonsDiv } from './styles'
+import { AlternativesDiv } from './styles'
 import { Plus, X } from 'lucide-react'
 import Modal from '@/components/Modal'
 import Checkbox from '@/components/Checkbox'
@@ -21,10 +18,9 @@ import Input from '@/components/Input'
 import type { IQuestion } from '@/types/IQuestion'
 import type { FieldValues } from 'react-hook-form'
 import type { IAlternative } from '@/types/IAlternative'
+import ModalButtonsDiv from '@/components/ModalButtonsDiv'
 
 const QuestionForm = ({question, mode}: {question?: IQuestion, mode: 'put' | 'post'}) => {
-	const dispatch = useAppDispatch()
-
 	const [checked, setChecked] = useState<string>('')
 	const [alternatives, setAlternatives] = useState<IQuestion['alternatives']>(
 		question?.alternatives || [],
@@ -306,18 +302,7 @@ const QuestionForm = ({question, mode}: {question?: IQuestion, mode: 'put' | 'po
 							</Button>
 					}
 				</AlternativesDiv>
-				<ButtonsDiv>
-					<Button
-						type='submit'
-						backgroundColor={vars.colors.yellow}
-						style={{ color: vars.colors.black }}
-					>
-						{mode === 'put' ? 'Atualizar' : 'Adicionar'}
-					</Button>
-					<Button onClick={() => dispatch(clearModal())}>
-						Cancelar
-					</Button>
-				</ButtonsDiv>
+				<ModalButtonsDiv mode={mode} />
 			</Form>
 		</Modal>
 	)
