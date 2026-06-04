@@ -7,12 +7,12 @@ interface ISelectProps {
 	className?: string
 	options: string[]
 	id?: string
-	defaultValue?: string
+	selectedOption: string
+	setSelectedOption: (opt: string) => void
 }
 
-const Select = ({ style, className, options, id, defaultValue }: ISelectProps) => {
+const Select = ({ style, className, options, id, selectedOption, setSelectedOption }: ISelectProps) => {
 	const [activated, setActivated] = useState<boolean>(false)
-	const [selectedOption, setSelectedOption] = useState<string>(defaultValue || '')
 
 	const ref = useRef<HTMLDivElement>(null)
 
