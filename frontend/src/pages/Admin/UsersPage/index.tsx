@@ -3,7 +3,7 @@ import { selectToken } from '@/app/reducers/user'
 import { useEffect, useState } from 'react'
 import { selectActualPage, selectAdminUsersStatus, selectFetchLimit, selectTotalAdminUsersPages } from '@/app/reducers/adminUsers'
 import { fetchAdminUsers, selectAdminUsers } from '@/app/reducers/adminUsers'
-import { selectModalData, selectModalType, setModalData, setModalOverflow, setModalType } from '@/app/reducers/modal'
+import { selectModalData, selectModalType, setModalData, setModalType } from '@/app/reducers/modal'
 
 import Crud from '@/components/Crud'
 import RemoveUser from './RemoveUser'
@@ -44,13 +44,11 @@ const UsersPage = () => {
 
 	const openEditModal = (user: IUser) => {
 		dispatch(setModalType('editUser'))
-		dispatch(setModalOverflow(true))
 		dispatch(setModalData({...user}))
 	}
 
 	const openAddModal = () => {
 		dispatch(setModalType('addUser'))
-		dispatch(setModalOverflow(true))
 	}
 
 	return (

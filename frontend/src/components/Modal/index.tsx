@@ -1,8 +1,7 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
 	clearModal,
 	selectModalType,
-	selectModalOverflow,
 } from '@/app/reducers/modal'
 import { useAppDispatch, useAppSelector } from '@/app/hooks'
 
@@ -26,7 +25,7 @@ const Modal = ({ title, children, closeElement, execButton }: ModalProps) => {
 	const dispatch = useAppDispatch()
 
 	const modalType = useAppSelector(selectModalType)
-	const modalOverflow = useAppSelector(selectModalOverflow)
+	const [modalOverflow, setModalOverflow] = useState<boolean>(false)
 
 	const ref = useRef<HTMLDivElement>(null)
 
@@ -42,6 +41,25 @@ const Modal = ({ title, children, closeElement, execButton }: ModalProps) => {
 
 		// move a scrollbar para o início
 		ref.current?.scrollIntoView({ behavior: 'smooth' })
+
+		// ativa o overflow de acordo com a altura do container centralizado e da altura da tela
+		const activeModalOverflow = () => {
+			// altura da tela
+			const screenHeight = window.innerHeight
+
+			// caso a altura do container seja maior do que a da tela, ativa o overflow
+			if (Number(ref.current?.clientHeight) > screenHeight) {
+				setModalOverflow(true)
+				return
+			}
+
+			// caso não, desativa
+			setModalOverflow(false)
+		}
+
+		// executa a função ao mudar o tamanho da tela e ao abrir o modal
+		window.addEventListener('resize', () => activeModalOverflow(), true)
+		activeModalOverflow()
 	}, [dispatch, modalType])
 
 	return (

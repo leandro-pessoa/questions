@@ -12,7 +12,6 @@ import {
 	selectModalData,
 	setModalData,
 	setModalType,
-	setModalOverflow,
 	selectModalType,
 } from '@/app/reducers/modal'
 
@@ -51,12 +50,10 @@ const QuestionsPage = () => {
 
 	const openEditModal = (question: IQuestion) => {
 		dispatch(setModalType('editQuestion'))
-		dispatch(setModalOverflow(true))
 		dispatch(setModalData({...question}))
 	}
 
 	const openAddModal = () => {
-		dispatch(setModalOverflow(true))
 		dispatch(setModalType('addQuestion'))
 	}
 
