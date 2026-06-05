@@ -9,6 +9,7 @@ interface IFormProps {
 	children: ReactChildren
 	onSubmit: (data: FieldValues, e: BaseSyntheticEvent<object> | undefined) => void
 	grid?: boolean
+	className?: string
 }
 
 interface IStyledFormProps {
@@ -28,12 +29,12 @@ const StyledForm = styled.form<IStyledFormProps>`
 	`}
 `
 
-const Form = ({ children, onSubmit, grid = false }: IFormProps) => {
+const Form = ({ children, onSubmit, grid = false, className }: IFormProps) => {
 	const methods = useForm()
 
 	return (
 		<FormProvider {...methods}>
-			<StyledForm onSubmit={methods.handleSubmit(onSubmit)} $grid={grid}>
+			<StyledForm onSubmit={methods.handleSubmit(onSubmit)} $grid={grid} className={className}>
 				{children}
 			</StyledForm>
 		</FormProvider>
