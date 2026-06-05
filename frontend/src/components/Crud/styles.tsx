@@ -14,7 +14,8 @@ export const StyledDiv = styled.div`
 		}
 
 		.filters_wrapper__search_input {
-			width: 100px;
+			width: calc(100% - 32px); // - total input x padding
+			height: calc(100% - 16px); // - total input y padding
 		}
 	}
 

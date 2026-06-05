@@ -6,14 +6,16 @@ import Button from '../Button'
 import { StyledDiv } from './styles'
 import { Trash2, Pencil, RotateCcw, Search, Plus } from 'lucide-react'
 import { Loading } from '../Loading'
-import Input from '../Input'
 import FiltersSelect from '../Filters/FiltersSelect'
 import { CenterContainer } from '../CenterContainer'
 import { Title } from '../Title'
 import Pagination from '../Pagination'
+import Form from '../Form'
 
 import type { FetchUrl } from '@/types/FetchUrl'
-import type { FormEvent } from 'react'
+import type { FieldValues } from 'react-hook-form'
+import FormInput from '../Input/FormInput'
+import { toast } from 'react-toastify'
 
 interface CrudProps<T> {
 	data: { _id: string }[]
@@ -45,9 +47,12 @@ const Crud = <T,>({
 
 	const token = useAppSelector(selectToken)
 
-	const searchHandle = (e: FormEvent<HTMLFormElement>) => {
-		e.preventDefault()
-		console.log(e)
+	const searchHandle = (data: FieldValues) => {
+		if (data.searchValue === '') {
+			toast.error('Insira um valor de pesquisa')
+			return
+		}
+		console.log(data)
 	}
 
 	const renderData = () => {
@@ -71,23 +76,25 @@ const Crud = <T,>({
 					</Title>
 				) : (
 					<StyledDiv>
-						<form className='filters_wrapper' onSubmit={searchHandle}>
+						<Form className='filters_wrapper' onSubmit={searchHandle}>
 							<FiltersSelect
 								title='Quantidade'
 								defaultContent={['5', '10', '15', '20', '30']}
 								className='filters_wrapper__select'
 							/>
-							<div style={{ display: 'flex', gap: '8px' }}>
-								<Input
+							<div style={{ display: 'flex', gap: '4px' }}>
+								<FormInput
+									id='searchValue'
+									name='Pesquisa'
 									className='filters_wrapper__search_input'
 									placeholder='Pesquisar'
 									style={{ padding: '8px 16px' }}
 								/>
-								<Button>
+								<Button type='submit'>
 									<Search />
 								</Button>
 							</div>
-						</form>
+						</Form>
 						<div className='responsive_table'>
 							<table>
 								<thead>
