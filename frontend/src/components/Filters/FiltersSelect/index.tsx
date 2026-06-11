@@ -118,6 +118,7 @@ const FiltersSelect = ({
 										<button
 											onClick={() => buttonClickHandle(value)}
 											disabled={limit === Number(value)}
+											type='button'
 										>
 											{value}
 												{limit === Number(value) && ' - Atual'}
@@ -152,7 +153,11 @@ const FiltersSelect = ({
 
 	return (
 		<StyledDiv $expandBoxDisplay={activated} ref={ref} style={style} className={className}>
-			<button className='select__button' onClick={() => setActivated(!activated)}>
+			<button
+				className='select__button'
+				onClick={() => setActivated(!activated)}
+				type='button'
+			>
 				{
 					// muda a legenda caso um tópico seja selecionado no modo default
 					type === 'default' ?
