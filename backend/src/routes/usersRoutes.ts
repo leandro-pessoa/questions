@@ -11,7 +11,7 @@ const userController = new UserController()
 // GET
 router.get('/users', loginRequired, adminRequired, (req, res, next) => userController.indexUsers(req, res, next), pagination)
 router.get('/access', loginRequired, adminRequired, (req, res, next) => userController.verifyAdmin(req, res, next))
-router.get('/searchUsers', loginRequired, adminRequired, (req, res, next) => userController.searchIndex(req, res, next))
+router.get('/searchUsers', loginRequired, adminRequired, (req, res, next) => userController.searchIndex(req, res, next), pagination)
 router.get('/users/getAnsweredQuestions', loginRequired, (req, res, next) => userController.getUserAnsweredQuestions(req, res, next))
 router.get('/users/:id', loginRequired, adminRequired, (req, res, next) => userController.show(req, res, next))
 

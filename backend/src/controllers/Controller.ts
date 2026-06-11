@@ -60,16 +60,11 @@ export default class Controller<T> {
 		searchObj[column] = isNumber ? searchValue : searchRegex
 
 		try {
-			// faz a pesquisa utilizando o service getAll
-			const result = await this.serviceEntity.getAll(searchObj)
+			// passa o model e os filtros para o middleware pagination
+			req.paginationModel = this.serviceEntity.model
+			req.paginationFilters = searchObj
 
-			// caso o valor não seja encontrado
-			if (result.length === 0) {
-				next(new NotFound())
-				return
-			}
-
-			return res.status(200).json(result)
+			next()
 		} catch (err) {
 			next(err)
 		}
