@@ -5,27 +5,29 @@ import { useAppDispatch, useAppSelector } from '@/app/hooks'
 import { selectLimit, selectSelectedFilters, setLimit, toggleCheckboxFilter } from '@/app/reducers/filters'
 
 import { StyledDiv } from '@/components/Select/styles'
-import { ChevronDown, ChevronUp } from 'lucide-react'
+import { ChevronDown, ChevronUp, Check } from 'lucide-react'
 import Input from '@/components/Input'
 import { Loading } from '@/components/Loading'
 import Checkbox from '@/components/Checkbox'
 
 interface IFiltersSelectProps {
 	topicFetchUrl?: string
-	title: string
+	title?: string
 	type?: 'checkbox' | 'default'
 	defaultContent?: string[]
 	style?: CSSProperties
 	className?: string
+	noLabels?: boolean
 }
 
 const FiltersSelect = ({
 	topicFetchUrl,
-	title,
+	title = '',
 	type = 'default',
 	defaultContent = [],
 	style,
-	className
+	className,
+	noLabels = false
 }: IFiltersSelectProps) => {
 	const dispatch = useAppDispatch()
 
@@ -117,11 +119,16 @@ const FiltersSelect = ({
 									type === 'default' ?
 										<button
 											onClick={() => buttonClickHandle(value)}
-											disabled={limit === Number(value)}
+											disabled={selectedTopics === value}
 											type='button'
 										>
+											{
+												selectedTopics === value &&
+													<div className='topics-list__checked-box'>
+														<Check style={{ width: '20px', height: '20px'}}/>
+													</div>
+											}
 											{value}
-												{limit === Number(value) && ' - Atual'}
 										</button>
 									:
 										<Checkbox
@@ -132,7 +139,8 @@ const FiltersSelect = ({
 														{
 															topic: topicFetchUrl || '',
 															value,
-															displayName: title}
+															displayName: title
+														}
 													)
 												)
 											}
@@ -152,7 +160,12 @@ const FiltersSelect = ({
 	}
 
 	return (
-		<StyledDiv $expandBoxDisplay={activated} ref={ref} style={style} className={className}>
+		<StyledDiv
+			$expandBoxDisplay={activated}
+			ref={ref}
+			style={style}
+			className={className}
+		>
 			<button
 				className='select__button'
 				onClick={() => setActivated(!activated)}
@@ -161,7 +174,7 @@ const FiltersSelect = ({
 				{
 					// muda a legenda caso um tópico seja selecionado no modo default
 					type === 'default' ?
-						selectedTopics || title
+						(noLabels ? '' : selectedTopics) || title
 					:
 						title
 				}
