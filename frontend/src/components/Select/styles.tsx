@@ -62,7 +62,12 @@ export const StyledDiv = styled.div<IStyledDivProps>`
 					border-bottom: none;
 				}
 
+				.topics-list__checked-box {
+					${flex('column', 'center')}
+				}
+
 				button {
+					${flex('row', 'auto', 'center', '4px')}
 					background-color: transparent;
 					border: none;
 					width: 100%;
