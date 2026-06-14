@@ -80,13 +80,19 @@ const Crud = <T,>({
 							<FiltersSelect
 								title='Quantidade'
 								defaultContent={['5', '10', '15', '20', '30']}
-								className='filters_wrapper__select'
+								className='filters_wrapper__select-quantity'
 							/>
-							<div style={{ display: 'flex', gap: '4px' }}>
+							<div className='filters_wrapper__search'>
+								<FiltersSelect
+									title='Coluna'
+									defaultContent={labels}
+									noLabels={true}
+									className='filters_wrapper__select-column'
+								/>
 								<FormInput
 									id='searchValue'
 									name='Pesquisa'
-									className='filters_wrapper__search_input'
+									className='filters_wrapper__search-input'
 									placeholder='Pesquisar'
 									style={{ padding: '8px 16px' }}
 								/>
