@@ -8,12 +8,21 @@ export const StyledDiv = styled.div`
 	margin: 32px 0;
 
 	.filters_wrapper {
-		${flex('row', 'space-between', 'center', '8px')}
-		.filters_wrapper__select {
-			width: 50%;
+		${flex('column', 'space-between', 'flex-start', '8px')}
+		.filters_wrapper__select-quantity {
+			width: 100%;
 		}
 
-		.filters_wrapper__search_input {
+		.filters_wrapper__search {
+			${flex('row', 'auto', 'auto', '4px')}
+			width: 100%;
+		}
+
+		.filters_wrapper__select-column {
+			width: 100%;
+		}
+
+		.filters_wrapper__search-input {
 			width: calc(100% - 32px); // - total input x padding
 			height: calc(100% - 16px); // - total input y padding
 		}
@@ -68,6 +77,18 @@ export const StyledDiv = styled.div`
 		width: 80%;
 		margin: 0;
 
+		.filters_wrapper {
+			${flex('row', 'space-between', 'center', '8px')}
+
+			.filters_wrapper__select-column {
+				width: auto;
+			}
+
+			.filters_wrapper__select-quantity {
+				width: 50%;
+			}
+		}
+
 		.responsive_table {
 			max-height: 65vh;
 		}
@@ -83,9 +104,18 @@ export const StyledDiv = styled.div`
 
 	@media screen and (min-width: ${vars.breakpoints.tablet}) {
 		.filters_wrapper {
-			.filters_wrapper__select {
+			.filters_wrapper__select-quantity {
 				width: 30%;
 			}
+
+			.filters_wrapper__search {
+				width: auto;
+
+				.filters_wrapper__select-column {
+					width: 300px;
+				}
+			}
+
 		}
 
 		.crud_footer__blank-div {
