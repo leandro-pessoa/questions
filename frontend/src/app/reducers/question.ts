@@ -61,9 +61,9 @@ const questionSlice = createSlice({
 // obtém os dados da api dos questions (index)
 export const fetchQuestions = createAsyncThunk(
     'question/fetchQuestions',
-	async (pagination?: {page?: number, limit?: number, filters?: string}) => {
+	async (params?: {page?: number, limit?: number, filters?: string}) => {
 		// utiliza função facilitadora
-		return asyncThunkFetchUrl<IQuestion>('/questions', '', pagination)
+		return asyncThunkFetchUrl<IQuestion>('/questions', '', params)
 	}
 )
 

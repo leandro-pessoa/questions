@@ -68,9 +68,9 @@ const adminUsersSlice = createSlice({
 // obtém os dados da api dos users (index)
 export const fetchAdminUsers = createAsyncThunk(
 	'adminUsers/fetchAdminUsers',
-	async (pagination?: {page?: number, limit?: number, filters?: string, token?: string}) => {
+	async (params?: {page?: number, limit?: number, filters?: string, token?: string}) => {
 		// utiliza função facilitadora
-		return asyncThunkFetchUrl<IUser>('/users', pagination?.token, pagination)
+		return asyncThunkFetchUrl<IUser>('/users', params?.token, params)
 	}
 )
 
