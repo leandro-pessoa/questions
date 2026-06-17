@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type CSSProperties } from 'react'
+import { useEffect, useRef, useState, type CSSProperties, type Dispatch, type SetStateAction } from 'react'
 import { axiosError } from '@/utils/axiosError'
 import { http } from '@/http'
 import { useAppDispatch, useAppSelector } from '@/app/hooks'
@@ -18,6 +18,7 @@ interface IFiltersSelectProps {
 	style?: CSSProperties
 	className?: string
 	noLabels?: boolean
+	setExternalSelectedValue?: Dispatch<SetStateAction<string>>
 }
 
 const FiltersSelect = ({
@@ -27,7 +28,8 @@ const FiltersSelect = ({
 	defaultContent = [],
 	style,
 	className,
-	noLabels = false
+	noLabels = false,
+	setExternalSelectedValue
 }: IFiltersSelectProps) => {
 	const dispatch = useAppDispatch()
 
@@ -96,6 +98,7 @@ const FiltersSelect = ({
 			return
 		}
 
+		if (setExternalSelectedValue) setExternalSelectedValue(value)
 		setSelectedTopics(value)
 		dispatch(setLimit(Number(value)))
 		setActivated(false)
