@@ -247,6 +247,26 @@ describe('User GET', () => {
 			})
 	})
 
+	it('should return an error if searchValue or column was not sent at searchIndex', async () => {
+		await request(app)
+			.get('/searchUsers?searchValue=teste&column=')
+			.set('Authorization', `Bearer ${adminToken}`)
+			.expect(400, {
+				status: 400,
+				message: 'Requisição inválida'
+			})
+	})
+
+	it('should return an error if column was equal to password at searchIndex', async () => {
+		await request(app)
+			.get('/searchUsers?searchValue=teste&column=password')
+			.set('Authorization', `Bearer ${adminToken}`)
+			.expect(400, {
+				status: 400,
+				message: 'Requisição inválida'
+			})
+	})
+
 	it('should return user answered questions at getUserAnsweredQuestions', async () => {
 		// matching example
 		// 2026-04-03T20:33:39.712Z
@@ -305,6 +325,16 @@ describe('User GET', () => {
 			.then(res => {
 				expect(res.body.completeName).toEqual(completeName)
 				expect(res.body.email).toEqual(email)
+			})
+	})
+
+	it('return searched values', async () => {
+		await request(app)
+			.get('/searchUsers?searchValue=teste@gmail.com&column=email')
+			.set('Authorization', `Bearer ${adminToken}`)
+			.then(res => {
+				expect(res.body.pageResult).toHaveLength(1)
+				expect(res.body.pageResult[0].completeName).toEqual('Teste')
 			})
 	})
 })
