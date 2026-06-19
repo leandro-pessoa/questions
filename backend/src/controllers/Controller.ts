@@ -23,6 +23,9 @@ export default class Controller<T> {
 	// faz uma pesquisa em um model
 	// na query, é possível informar o valor a ser pesquisado e a coluna alvo
 	async searchIndex(req: Request, res: Response, next: NextFunction) {
+		// attributos que são arrays para pesquisas com base na length
+		const arrayColumns = ['answeredQuestions', 'alternatives']
+
 		const { searchValue, column } = req.query
 
 		// caso não seja informado o valor ou a coluna
@@ -51,13 +54,19 @@ export default class Controller<T> {
 		const isNumber = searchValue.match(/^[0-9]{1,}$/)
 
 		// objeto de pesquisa que será enviado para o find do model
-		const searchObj: Record<string, RegExp | string> = {}
+		const searchObj: Record<string, RegExp | string | { $size: string }> = {}
 
 		// regex para o valor de pesquisa
 		const searchRegex = new RegExp(searchValue, 'gi')
 
 		// cria um atributo no objeto searchObj e atribui um valor a ele de acordo com o isNumber
 		searchObj[column] = isNumber ? searchValue : searchRegex
+
+		// verifica se a pesquisa é em um atributo que possui um array como valor
+		if (arrayColumns.includes(column) && isNumber) {
+			// atribui a pesquisa um size operator do mongoose
+			searchObj[column] = { $size: searchValue }
+		}
 
 		try {
 			// passa o model e os filtros para o middleware pagination
