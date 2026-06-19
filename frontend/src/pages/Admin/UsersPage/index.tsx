@@ -74,6 +74,7 @@ const UsersPage = () => {
 				editFunc={openEditModal}
 				removeFunc={openRemoveModal}
 				addFunc={openAddModal}
+				searchUrl='searchUsers'
 			/>
 		</>
 	)

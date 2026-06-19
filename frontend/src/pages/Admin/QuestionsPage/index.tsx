@@ -83,6 +83,7 @@ const QuestionsPage = () => {
 				editFunc={openEditModal}
 				removeFunc={openRemoveModal}
 				addFunc={openAddModal}
+				searchUrl='searchQuestions'
 			/>
 		</>
 	)

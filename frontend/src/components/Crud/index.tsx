@@ -1,6 +1,8 @@
 import { useAppDispatch, useAppSelector } from '@/app/hooks'
 import { vars } from '@/styles/vars'
 import { selectToken } from '@/app/reducers/user'
+import { toast } from 'react-toastify'
+import { useState } from 'react'
 
 import Button from '../Button'
 import { StyledDiv } from './styles'
@@ -11,11 +13,10 @@ import { CenterContainer } from '../CenterContainer'
 import { Title } from '../Title'
 import Pagination from '../Pagination'
 import Form from '../Form'
+import FormInput from '../Input/FormInput'
 
 import type { FetchUrl } from '@/types/FetchUrl'
 import type { FieldValues } from 'react-hook-form'
-import FormInput from '../Input/FormInput'
-import { toast } from 'react-toastify'
 
 interface CrudProps<T> {
 	data: { _id: string }[]
@@ -29,6 +30,7 @@ interface CrudProps<T> {
 	editFunc: (value: T) => void
 	removeFunc: (value: T) => void
 	addFunc: () => void
+	searchUrl: string
 }
 
 const Crud = <T,>({
@@ -41,18 +43,35 @@ const Crud = <T,>({
 	limit,
 	editFunc,
 	removeFunc,
-	addFunc
+	addFunc,
+	searchUrl
 }: CrudProps<T>) => {
 	const dispatch = useAppDispatch()
 
 	const token = useAppSelector(selectToken)
+	const [searchColumn, setSearchColumn] = useState<string>('')
+	const [searchLimit, setSearchLimit] = useState<string>('10')
 
 	const searchHandle = (data: FieldValues) => {
 		if (data.searchValue === '') {
 			toast.error('Insira um valor de pesquisa')
 			return
 		}
-		console.log(data)
+
+		if (!searchColumn) {
+			toast.error('Insira a coluna de pesquisa')
+			return
+		}
+
+		dispatch(fetchFunc({
+			search: {
+				searchUrl,
+				searchValue: data.searchValue,
+				column: searchColumn
+			},
+			limit: Number(searchLimit),
+			token
+		}))
 	}
 
 	const renderData = () => {
@@ -81,13 +100,15 @@ const Crud = <T,>({
 								title='Quantidade'
 								defaultContent={['5', '10', '15', '20', '30']}
 								className='filters_wrapper__select-quantity'
+								setExternalSelectedValue={setSearchLimit}
 							/>
 							<div className='filters_wrapper__search'>
 								<FiltersSelect
 									title='Coluna'
-									defaultContent={labels}
+									defaultContent={Object.keys(data[0])}
 									noLabels={true}
 									className='filters_wrapper__select-column'
+									setExternalSelectedValue={setSearchColumn}
 								/>
 								<FormInput
 									id='searchValue'

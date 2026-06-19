@@ -50,7 +50,10 @@ const adminUsersSlice = createSlice({
 
 				// preenche o states referentes à requisição caso a resposta não seja um falsy value
 				if (action.payload) {
-					state.adminUsers = [...action.payload.pageResult]
+					// verifica se a resposta é em paginação ou em um objeto
+					const payload = action.payload.pageResult ? [...action.payload.pageResult] : [action.payload]
+
+					state.adminUsers = payload as IUser[]
 					state.totalAdminUserPages = action.payload.totalPages
 					state.totalAdminUsers = action.payload.totalValues
 					state.actualPage = action.payload.actualPage
@@ -68,9 +71,26 @@ const adminUsersSlice = createSlice({
 // obtém os dados da api dos users (index)
 export const fetchAdminUsers = createAsyncThunk(
 	'adminUsers/fetchAdminUsers',
-	async (params?: {page?: number, limit?: number, filters?: string, token?: string}) => {
+	async (params?:
+		{
+			page?: number
+			limit?: number
+			filters?: string
+			token?: string
+			search?: {
+				searchUrl: string
+				searchValue: string | number
+				column: string
+			}
+		}
+	) => {
 		// utiliza função facilitadora
-		return asyncThunkFetchUrl<IUser>('/users', params?.token, params)
+		return asyncThunkFetchUrl<IUser>(
+			'/users',
+			params?.token,
+			params?.search,
+			params
+		)
 	}
 )
 

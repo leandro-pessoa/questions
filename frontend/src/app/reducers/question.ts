@@ -43,7 +43,10 @@ const questionSlice = createSlice({
 
                 // preenche o states referentes à requisição caso a resposta não seja um falsy value
                 if (action.payload) {
-                    state.questions = [...action.payload.pageResult]
+					// verifica se a resposta é em paginação ou em um objeto
+					const payload = action.payload.pageResult ? [...action.payload.pageResult] : [action.payload]
+
+                    state.questions = payload as IQuestion[]
 					state.totalQuestionPages = action.payload.totalPages
 					state.totalQuestions = action.payload.totalValues
 					state.actualPage = action.payload.actualPage
@@ -61,9 +64,26 @@ const questionSlice = createSlice({
 // obtém os dados da api dos questions (index)
 export const fetchQuestions = createAsyncThunk(
     'question/fetchQuestions',
-	async (params?: {page?: number, limit?: number, filters?: string}) => {
+	async (params?:
+		{
+			page?: number
+			limit?: number
+			filters?: string
+			token?: string
+			search?: {
+				searchUrl: string
+				searchValue: string | number
+				column: string
+			}
+		}
+	) => {
 		// utiliza função facilitadora
-		return asyncThunkFetchUrl<IQuestion>('/questions', '', params)
+		return asyncThunkFetchUrl<IQuestion>(
+			'/questions',
+			params?.token,
+			params?.search,
+			params
+		)
 	}
 )
 
