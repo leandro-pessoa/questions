@@ -14,7 +14,7 @@ export const StyledDiv = styled.div`
 		}
 
 		.filters_wrapper__search {
-			${flex('row', 'auto', 'auto', '4px')}
+			${flex('row', 'auto', 'center', '4px')}
 			width: 100%;
 		}
 
