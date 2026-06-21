@@ -1,4 +1,5 @@
 import type { AsyncThunk, AsyncThunkConfig } from '@reduxjs/toolkit'
+import type { ISearchFetch } from './ISearchFetch'
 
 export type FetchUrl<T> = AsyncThunk<
 	{
@@ -13,11 +14,7 @@ export type FetchUrl<T> = AsyncThunk<
 			limit?: number | undefined
 			filters?: string | undefined
 			token?: string
-			search?: {
-				searchUrl: string
-				searchValue: string | number
-				column: string
-			}
+			search?: ISearchFetch
 	  }
 	| undefined,
 	AsyncThunkConfig
