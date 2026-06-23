@@ -43,7 +43,7 @@ export const asyncThunkFetchUrl = async <T>(
 			return `${url}?page=${pagination?.page ? pagination?.page : 1}&limit=${pagination?.limit ? pagination?.limit : 10}`
 		}
 
-		if (search) {
+		if (search?.searchValue && search.column) {
 			const searchUrl = `${search ? `&searchValue=${search.searchValue}&column=${search.column}` : ''}`
 
 			// a url get pode receber parâmetros de pesquisa e paginação
