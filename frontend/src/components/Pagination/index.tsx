@@ -8,6 +8,7 @@ import { ChevronRight, ChevronLeft, ChevronsRight, ChevronsLeft } from 'lucide-r
 import Button from '../Button'
 
 import type { FetchUrl } from '@/types/FetchUrl'
+import type { ISearchFetch } from '@/types/ISearchFetch'
 
 interface IPaginationProps<T> {
 	totalPages: number
@@ -15,9 +16,19 @@ interface IPaginationProps<T> {
 	actualPage: number
 	fetchFunc: FetchUrl<T>
 	style?: CSSProperties
+	search?: ISearchFetch
+	filters?: string
 }
 
-const Pagination = <T, >({ totalPages, limit, fetchFunc, actualPage, style }: IPaginationProps<T>) => {
+const Pagination = <T, >({
+	totalPages,
+	limit,
+	fetchFunc,
+	actualPage,
+	style,
+	search,
+	filters
+}: IPaginationProps<T>) => {
 	const dispatch = useAppDispatch()
 
 	// token para paginações com Authorization
@@ -32,7 +43,7 @@ const Pagination = <T, >({ totalPages, limit, fetchFunc, actualPage, style }: IP
 	const changePage = (page: number) => {
 		// caso a página selecionada for a atual, não faz nada
 		if (page === actualPage) return
-		dispatch(fetchFunc({ page, limit, token }))
+		dispatch(fetchFunc({ page, limit, token, search, filters }))
 	}
 
 	// função para avançar ou retroceder a alguma página, a partir da atual
