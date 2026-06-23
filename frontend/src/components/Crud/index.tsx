@@ -13,10 +13,9 @@ import { CenterContainer } from '../CenterContainer'
 import { Title } from '../Title'
 import Pagination from '../Pagination'
 import Form from '../Form'
-import FormInput from '../Input/FormInput'
 
 import type { FetchUrl } from '@/types/FetchUrl'
-import type { FieldValues } from 'react-hook-form'
+import Input from '../Input'
 
 interface CrudProps<T> {
 	data: { _id: string }[]
@@ -40,7 +39,6 @@ const Crud = <T,>({
 	fetchFunc,
 	totalPages,
 	actualPage,
-	limit,
 	editFunc,
 	removeFunc,
 	addFunc,
@@ -50,10 +48,17 @@ const Crud = <T,>({
 
 	const token = useAppSelector(selectToken)
 	const [searchColumn, setSearchColumn] = useState<string>('')
-	const [searchLimit, setSearchLimit] = useState<string>('10')
+	const [searchLimit, setSearchLimit] = useState<number>(10)
+	const [searchValue, setSearchValue] = useState<string>('')
 
-	const searchHandle = (data: FieldValues) => {
-		if (data.searchValue === '') {
+	const search = {
+		searchUrl,
+		searchValue,
+		column: searchColumn
+	}
+
+	const searchHandle = () => {
+		if (searchValue === '') {
 			toast.error('Insira um valor de pesquisa')
 			return
 		}
@@ -64,11 +69,7 @@ const Crud = <T,>({
 		}
 
 		dispatch(fetchFunc({
-			search: {
-				searchUrl,
-				searchValue: data.searchValue,
-				column: searchColumn
-			},
+			search,
 			limit: Number(searchLimit),
 			token
 		}))
@@ -110,12 +111,12 @@ const Crud = <T,>({
 									className='filters_wrapper__select-column'
 									setExternalSelectedValue={setSearchColumn}
 								/>
-								<FormInput
-									id='searchValue'
-									name='Pesquisa'
+								<Input
 									className='filters_wrapper__search-input'
 									placeholder='Pesquisar'
-									style={{ padding: '8px 16px' }}
+									style={{ padding: '10px 16px' }}
+									onChange={(e) => setSearchValue(e.target.value)}
+									value={searchValue}
 								/>
 								<Button type='submit'>
 									<Search />
@@ -190,9 +191,10 @@ const Crud = <T,>({
 							</div>
 							<Pagination
 								actualPage={actualPage}
-								limit={limit}
+								limit={searchLimit}
 								totalPages={totalPages}
 								fetchFunc={fetchFunc}
+								search={search}
 							/>
 							<div className='crud_footer__blank-div'></div>
 						</div>
