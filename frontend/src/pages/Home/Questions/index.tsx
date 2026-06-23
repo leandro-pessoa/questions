@@ -8,8 +8,9 @@ import {
 	selectQuestionsStatus,
 	selectTotalQuestionPages
 } from '@/app/reducers/question'
-import { selectLimit, selectSelectedFilters, setLimit, toggleCheckboxFilter } from '@/app/reducers/filters'
+import { clearSelectedFilters, selectFiltersString, selectLimit, selectSelectedFilters, setFiltersString, setLimit, toggleCheckboxFilter } from '@/app/reducers/filters'
 import { useFilter } from '@/app/hooks/useFilter'
+import { useLocation } from 'react-router-dom'
 
 import { Loading } from '@/components/Loading'
 import { CenterContainer } from '@/components/CenterContainer'
@@ -29,14 +30,21 @@ const Questions = () => {
 	const limit = useAppSelector(selectLimit)
 	const selectedFilters = useAppSelector(selectSelectedFilters)
 	const fetchLimit = useAppSelector(selectFetchLimit)
+	const filtersString = useAppSelector(selectFiltersString)
 
 	const { isAnyFilterSelected } = useFilter()
+	const { pathname } = useLocation()
 
 	useEffect(() => {
-		if (!questions) {
+		const questionsPages = ['/', '/admin/questoes']
+		// limpa todos os filtros e faz um novo fetch nas questions quando a nova página atual estiver contida em questionsPages
+		if (questionsPages.includes(pathname)) {
 			dispatch(fetchQuestions())
+			dispatch(setFiltersString(''))
+			dispatch(setLimit(10))
+			dispatch(clearSelectedFilters())
 		}
-	}, [dispatch, questions])
+	}, [dispatch, pathname])
 
 	const renderQuestions = () => {
 		switch (questionsFetchStatus) {
@@ -75,6 +83,7 @@ const Questions = () => {
 							totalPages={totalQuestionPages}
 							limit={limit}
 							actualPage={actualPage}
+							filters={filtersString}
 						/>
 					</>
 				)
