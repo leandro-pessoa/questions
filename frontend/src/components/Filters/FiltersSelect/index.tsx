@@ -10,7 +10,7 @@ import Input from '@/components/Input'
 import { Loading } from '@/components/Loading'
 import Checkbox from '@/components/Checkbox'
 
-interface IFiltersSelectProps {
+interface IFiltersSelectProps<T> {
 	topicFetchUrl?: string
 	title?: string
 	type?: 'checkbox' | 'default'
@@ -18,10 +18,10 @@ interface IFiltersSelectProps {
 	style?: CSSProperties
 	className?: string
 	noLabels?: boolean
-	setExternalSelectedValue?: Dispatch<SetStateAction<string>>
+	setExternalSelectedValue?: Dispatch<SetStateAction<T>>
 }
 
-const FiltersSelect = ({
+const FiltersSelect = <T,>({
 	topicFetchUrl,
 	title = '',
 	type = 'default',
@@ -30,7 +30,7 @@ const FiltersSelect = ({
 	className,
 	noLabels = false,
 	setExternalSelectedValue
-}: IFiltersSelectProps) => {
+}: IFiltersSelectProps<T>) => {
 	const dispatch = useAppDispatch()
 
 	const selectedFilters = useAppSelector(selectSelectedFilters)
@@ -98,7 +98,7 @@ const FiltersSelect = ({
 			return
 		}
 
-		if (setExternalSelectedValue) setExternalSelectedValue(value)
+		if (setExternalSelectedValue) setExternalSelectedValue(value as T)
 		setSelectedTopics(value)
 		dispatch(setLimit(Number(value)))
 		setActivated(false)
