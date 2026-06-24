@@ -1,9 +1,8 @@
 import { useAppDispatch, useAppSelector } from '@/app/hooks'
-import { clearCrudFilters, setCrudSearchColumn, setCrudSearchLimit, setCrudSearchValue } from '@/app/reducers/crudSearch'
+import { setCrudSearchColumn, setCrudSearchLimit, setCrudSearchValue } from '@/app/reducers/crudSearch'
 import { selectToken } from '@/app/reducers/user'
 import { toast } from 'react-toastify'
-import { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useState } from 'react'
 
 import { StyledForm } from './styles'
 import Button from '@/components/Button'
@@ -23,8 +22,6 @@ const CrudFilters = <T,>({ fetchFunc, data, searchUrl }: ICrudFilters<T>) => {
 	const dispatch = useAppDispatch()
 	const token = useAppSelector(selectToken)
 
-	const { pathname } = useLocation()
-
 	const [searchColumn, setSearchColumn] = useState<string>('')
 	const [searchLimit, setSearchLimit] = useState<number>(10)
 	const [searchValue, setSearchValue] = useState<string>('')
@@ -34,14 +31,6 @@ const CrudFilters = <T,>({ fetchFunc, data, searchUrl }: ICrudFilters<T>) => {
 		searchValue,
 		column: searchColumn
 	}
-
-	useEffect(() => {
-		const adminPages = ['/admin/questoes', '/admin/usuarios']
-
-		if (adminPages.includes(pathname)) {
-			dispatch(clearCrudFilters())
-		}
-	}, [dispatch, pathname])
 
 	const searchHandle = () => {
 		if (searchValue === '') {

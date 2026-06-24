@@ -7,8 +7,9 @@ import { useEffect } from 'react'
 import styled from 'styled-components'
 import { vars } from '@/styles/vars'
 import { flex } from '@/utils/flex'
+import { clearCrudFilters } from '@/app/reducers/crudSearch'
 
-import { Outlet, useNavigate } from 'react-router-dom'
+import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import AdminNav from './AdminNav'
 import { CenterContainer } from '@/components/CenterContainer'
 
@@ -31,6 +32,8 @@ const StyledDiv = styled.div`
 const Admin = () => {
 	const dispatch = useAppDispatch()
 	const navigate = useNavigate()
+
+	const { pathname } = useLocation()
 
 	const token = useAppSelector(selectToken)
 	const loading = useAppSelector(selectIsLoading)
@@ -62,7 +65,16 @@ const Admin = () => {
 		}
 
 		verifyAccess()
-	}, [dispatch, navigate, token])
+
+		// páginas de admin
+		const adminPages = ['/admin/questoes', '/admin/usuarios']
+
+		// verfica se houve alguma troca de rota nas páginas de admin
+		// se sim limpa os filtros de pesquisa do crud do admin
+		if (adminPages.includes(pathname)) {
+			dispatch(clearCrudFilters())
+		}
+	}, [dispatch, navigate, token, pathname])
 
 	return (
 		<StyledDiv>
