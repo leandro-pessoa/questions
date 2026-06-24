@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type CSSProperties, type Dispatch, type Se
 import { axiosError } from '@/utils/axiosError'
 import { http } from '@/http'
 import { useAppDispatch, useAppSelector } from '@/app/hooks'
-import { selectLimit, selectSelectedFilters, setLimit, toggleCheckboxFilter } from '@/app/reducers/filters'
+import { selectSelectedFilters, toggleCheckboxFilter } from '@/app/reducers/filters'
 
 import { StyledDiv } from '@/components/Select/styles'
 import { ChevronDown, ChevronUp, Check } from 'lucide-react'
@@ -19,6 +19,8 @@ interface IFiltersSelectProps<T> {
 	className?: string
 	noLabels?: boolean
 	setExternalSelectedValue?: Dispatch<SetStateAction<T>>
+	externalSelectedValue?: number | string
+	defaultSelectedValue?: number | string
 }
 
 const FiltersSelect = <T,>({
@@ -29,18 +31,18 @@ const FiltersSelect = <T,>({
 	style,
 	className,
 	noLabels = false,
-	setExternalSelectedValue
+	setExternalSelectedValue,
+	externalSelectedValue,
+	defaultSelectedValue
 }: IFiltersSelectProps<T>) => {
 	const dispatch = useAppDispatch()
 
 	const selectedFilters = useAppSelector(selectSelectedFilters)
-	const limit = useAppSelector(selectLimit)
 
 	const [activated, setActivated] = useState<boolean>(false)
 	const [selectContent, setSelectContent] = useState<string[]>(defaultContent)
 	const [actualSelectContent, setActualSelectContent] = useState<string[]>(defaultContent)
 	const [searchInputValue, setSearchInputValue] = useState<string>('')
-	const [selectedTopics, setSelectedTopics] = useState<string | string[]>('')
 
 	const ref = useRef<HTMLDivElement>(null)
 
@@ -94,13 +96,7 @@ const FiltersSelect = <T,>({
 	// handle para o select default
 	// fecha o content quando algo é selecionado
 	const buttonClickHandle = (value: string) => {
-		if (Number(value) === limit) {
-			return
-		}
-
 		if (setExternalSelectedValue) setExternalSelectedValue(value as T)
-		setSelectedTopics(value)
-		dispatch(setLimit(Number(value)))
 		setActivated(false)
 	}
 
@@ -122,11 +118,11 @@ const FiltersSelect = <T,>({
 									type === 'default' ?
 										<button
 											onClick={() => buttonClickHandle(value)}
-											disabled={selectedTopics === value}
+											disabled={externalSelectedValue === value}
 											type='button'
 										>
 											{
-												selectedTopics === value &&
+												externalSelectedValue === value &&
 													<div className='topics-list__checked-box'>
 														<Check style={{ width: '20px', height: '20px'}}/>
 													</div>
@@ -177,8 +173,18 @@ const FiltersSelect = <T,>({
 				{
 					// muda a legenda caso um tópico seja selecionado no modo default
 					type === 'default' ?
-						(noLabels ? '' : selectedTopics) || title
+						(
+							// caso sim, verifica se o modo noLabels está ativado
+							// ou se o valor selecionado é o mesmo do padrão do select
+							noLabels || externalSelectedValue === defaultSelectedValue ?
+									// se sim, exibe o títutlo estaticamente
+ 									title
+								:
+									// se não, exibe o valor selecionado dinamicamente
+									externalSelectedValue
+							)
 					:
+						// caso seja type checkbox, exibe o título estaticamente
 						title
 				}
 				{

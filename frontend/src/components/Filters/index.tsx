@@ -35,6 +35,7 @@ const Filters = <T,>({
 }: IFiltersProps<T>) => {
 	const dispatch = useAppDispatch()
 	const [display, setDisplay] = useState<boolean>(false)
+	const [localLimit, setLocalLimit] = useState<number>(limit)
 
 	const filterHandle = () => {
 		let filtersString = ''
@@ -44,9 +45,9 @@ const Filters = <T,>({
 				filtersString += `${filter.topic}=[${filter.values.map(value => `"${value}"`)}]&`
 			}
 		})
-		dispatch(setLimit(limit))
+		dispatch(setLimit(localLimit))
 		dispatch(setFiltersString(filtersString.slice(0, -1)))
-		dispatch(fetchFunc({filters: filtersString.slice(0, -1), limit}))
+		dispatch(fetchFunc({filters: filtersString.slice(0, -1), limit: localLimit}))
 	}
 
 	return (
@@ -89,7 +90,10 @@ const Filters = <T,>({
 							<FiltersSelect
 								title='Qtde resultados'
 								defaultContent={['5', '10', '15', '20', '30']}
+								defaultSelectedValue={10}
 								style={{width: '210px'}}
+								setExternalSelectedValue={setLocalLimit}
+								externalSelectedValue={localLimit}
 							/>
 						</div>
 					</div>

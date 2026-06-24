@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from '@/app/hooks'
-import { setCrudSearchColumn, setCrudSearchLimit, setCrudSearchValue } from '@/app/reducers/crudSearch'
+import { selectCrudSearchColumn, selectCrudSearchLimit, setCrudSearchColumn, setCrudSearchLimit, setCrudSearchValue } from '@/app/reducers/crudSearch'
 import { selectToken } from '@/app/reducers/user'
 import { toast } from 'react-toastify'
 import { useState } from 'react'
@@ -22,8 +22,11 @@ const CrudFilters = <T,>({ fetchFunc, data, searchUrl }: ICrudFilters<T>) => {
 	const dispatch = useAppDispatch()
 	const token = useAppSelector(selectToken)
 
-	const [searchColumn, setSearchColumn] = useState<string>('')
-	const [searchLimit, setSearchLimit] = useState<number>(10)
+	const globalSearchLimit = useAppSelector(selectCrudSearchLimit)
+	const globalSearchColumn = useAppSelector(selectCrudSearchColumn)
+
+	const [searchColumn, setSearchColumn] = useState<string>(globalSearchColumn || '')
+	const [searchLimit, setSearchLimit] = useState<number>(globalSearchLimit || 10)
 	const [searchValue, setSearchValue] = useState<string>('')
 
 	const search = {
@@ -61,7 +64,9 @@ const CrudFilters = <T,>({ fetchFunc, data, searchUrl }: ICrudFilters<T>) => {
 				title='Quantidade'
 				defaultContent={['5', '10', '15', '20', '30']}
 				className='select-quantity'
+				noLabels={true}
 				setExternalSelectedValue={setSearchLimit}
+				externalSelectedValue={searchLimit || globalSearchLimit}
 			/>
 			<div className='search'>
 				<FiltersSelect
@@ -70,6 +75,7 @@ const CrudFilters = <T,>({ fetchFunc, data, searchUrl }: ICrudFilters<T>) => {
 					noLabels={true}
 					className='select-column'
 					setExternalSelectedValue={setSearchColumn}
+					externalSelectedValue={searchColumn || globalSearchColumn}
 				/>
 				<Input
 					className='search-input'
