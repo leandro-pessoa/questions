@@ -1,21 +1,18 @@
 import { useAppDispatch, useAppSelector } from '@/app/hooks'
 import { vars } from '@/styles/vars'
 import { selectToken } from '@/app/reducers/user'
-import { toast } from 'react-toastify'
-import { useState } from 'react'
 
 import Button from '../Button'
 import { StyledDiv } from './styles'
-import { Trash2, Pencil, RotateCcw, Search, Plus } from 'lucide-react'
+import { Trash2, Pencil, RotateCcw, Plus } from 'lucide-react'
 import { Loading } from '../Loading'
-import FiltersSelect from '../Filters/FiltersSelect'
 import { CenterContainer } from '../CenterContainer'
 import { Title } from '../Title'
 import Pagination from '../Pagination'
-import Form from '../Form'
 
 import type { FetchUrl } from '@/types/FetchUrl'
-import Input from '../Input'
+import CrudFilters from './CrudFilters'
+import { selectCrudSearchColumn, selectCrudSearchLimit, selectCrudSearchValue } from '@/app/reducers/crudSearch'
 
 interface CrudProps<T> {
 	data: { _id: string }[]
@@ -31,7 +28,6 @@ interface CrudProps<T> {
 	addFunc: () => void
 	searchUrl: string
 }
-
 const Crud = <T,>({
 	data,
 	labels,
@@ -47,32 +43,14 @@ const Crud = <T,>({
 	const dispatch = useAppDispatch()
 
 	const token = useAppSelector(selectToken)
-	const [searchColumn, setSearchColumn] = useState<string>('')
-	const [searchLimit, setSearchLimit] = useState<number>(10)
-	const [searchValue, setSearchValue] = useState<string>('')
+	const searchValue = useAppSelector(selectCrudSearchValue)
+	const searchColumn = useAppSelector(selectCrudSearchColumn)
+	const searchLimit = useAppSelector(selectCrudSearchLimit)
 
 	const search = {
 		searchUrl,
 		searchValue,
 		column: searchColumn
-	}
-
-	const searchHandle = () => {
-		if (searchValue === '') {
-			toast.error('Insira um valor de pesquisa')
-			return
-		}
-
-		if (!searchColumn) {
-			toast.error('Insira a coluna de pesquisa')
-			return
-		}
-
-		dispatch(fetchFunc({
-			search,
-			limit: Number(searchLimit),
-			token
-		}))
 	}
 
 	const renderData = () => {
@@ -96,33 +74,11 @@ const Crud = <T,>({
 					</Title>
 				) : (
 					<StyledDiv>
-						<Form className='filters_wrapper' onSubmit={searchHandle}>
-							<FiltersSelect
-								title='Quantidade'
-								defaultContent={['5', '10', '15', '20', '30']}
-								className='filters_wrapper__select-quantity'
-								setExternalSelectedValue={setSearchLimit}
-							/>
-							<div className='filters_wrapper__search'>
-								<FiltersSelect
-									title='Coluna'
-									defaultContent={Object.keys(data[0])}
-									noLabels={true}
-									className='filters_wrapper__select-column'
-									setExternalSelectedValue={setSearchColumn}
-								/>
-								<Input
-									className='filters_wrapper__search-input'
-									placeholder='Pesquisar'
-									style={{ padding: '10px 16px' }}
-									onChange={(e) => setSearchValue(e.target.value)}
-									value={searchValue}
-								/>
-								<Button type='submit'>
-									<Search />
-								</Button>
-							</div>
-						</Form>
+						<CrudFilters
+							fetchFunc={fetchFunc}
+							data={data}
+							searchUrl={searchUrl}
+						/>
 						<div className='responsive_table'>
 							<table>
 								<thead>
@@ -213,7 +169,6 @@ const Crud = <T,>({
 				)
 		}
 	}
-
 	return renderData()
 }
 

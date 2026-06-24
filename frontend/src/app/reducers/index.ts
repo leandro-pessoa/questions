@@ -7,6 +7,7 @@ import filtersReducer from './filters'
 import changePasswordReducer from './changePassword'
 import adminUsersReducer from './adminUsers'
 import modalReducer from './modal'
+import crudSearch from './crudSearch'
 
 export const rootReducer = combineReducers({
 	theme: themeReducer,
@@ -16,5 +17,6 @@ export const rootReducer = combineReducers({
 	filters: filtersReducer,
 	changePassword: changePasswordReducer,
 	adminUsers: adminUsersReducer,
-	modal: modalReducer
+	modal: modalReducer,
+	crudSearch: crudSearch
 })
