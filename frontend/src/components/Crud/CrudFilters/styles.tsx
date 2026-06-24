@@ -5,6 +5,8 @@ import styled from 'styled-components'
 
 export const StyledForm = styled(Form)`
 	${flex('column', 'space-between', 'flex-start', '8px')}
+	width: 100%;
+
 	.select-quantity {
 		width: 100%;
 	}
@@ -12,16 +14,17 @@ export const StyledForm = styled(Form)`
 	.search {
 		${flex('row', 'auto', 'center', '4px')}
 		width: 100%;
+
+		.select-column {
+			width: 40%;
+		}
+
+		.search-input {
+			width: calc(60% - 32px); // - total input x padding
+			height: calc(100% - 16px); // - total input y padding
+		}
 	}
 
-	.select-column {
-		width: 100%;
-	}
-
-	.search-input {
-		width: calc(100% - 32px); // - total input x padding
-		height: calc(100% - 16px); // - total input y padding
-	}
 
 	@media screen and (min-width: ${vars.breakpoints.smallSmartphone}) {
 		.search_input {
