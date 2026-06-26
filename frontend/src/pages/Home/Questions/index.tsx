@@ -8,7 +8,7 @@ import {
 	selectQuestionsStatus,
 	selectTotalQuestionPages
 } from '@/app/reducers/question'
-import { clearSelectedFilters, selectFiltersString, selectLimit, selectSelectedFilters, setFiltersString, setLimit, toggleCheckboxFilter } from '@/app/reducers/filters'
+import { selectFiltersString, selectLimit, selectSelectedFilters, setLimit, toggleCheckboxFilter, clearFilters } from '@/app/reducers/filters'
 import { useFilter } from '@/app/hooks/useFilter'
 import { useLocation } from 'react-router-dom'
 
@@ -40,9 +40,7 @@ const Questions = () => {
 		// limpa todos os filtros e faz um novo fetch nas questions quando a nova página atual estiver contida em questionsPages
 		if (questionsPages.includes(pathname)) {
 			dispatch(fetchQuestions())
-			dispatch(setFiltersString(''))
-			dispatch(setLimit(10))
-			dispatch(clearSelectedFilters())
+			dispatch(clearFilters())
 		}
 	}, [dispatch, pathname])
 
