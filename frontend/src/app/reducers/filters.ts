@@ -72,16 +72,18 @@ const filtersSlice = createSlice({
 			}
 		},
 
-		clearSelectedFilters: (state) => {
-			state.selectedFilters = []
-		},
-
 		setLimit: (state, action: PayloadAction<number>) => {
 			state.limit = action.payload
 		},
 
 		setFiltersString: (state, action: PayloadAction<string>) => {
 			state.filtersString = action.payload
+		},
+
+		clearFilters: (state) => {
+			state.selectedFilters = []
+			state.limit = 10
+			state.filtersString = ''
 		}
 	}
 })
@@ -90,9 +92,9 @@ export default filtersSlice.reducer
 
 export const {
 	toggleCheckboxFilter,
-	clearSelectedFilters,
 	setLimit,
-	setFiltersString
+	setFiltersString,
+	clearFilters
 } = filtersSlice.actions
 
 export const selectSelectedFilters = (state: RootState) => state.filters.selectedFilters
