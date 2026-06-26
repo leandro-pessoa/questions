@@ -1,6 +1,7 @@
 import { useAppDispatch, useAppSelector } from '@/app/hooks'
 import { vars } from '@/styles/vars'
 import { selectToken } from '@/app/reducers/user'
+import { selectCrudSearchColumn, selectCrudSearchLimit, selectCrudSearchValue } from '@/app/reducers/crudSearch'
 
 import Button from '../Button'
 import { StyledDiv } from './styles'
@@ -9,10 +10,10 @@ import { Loading } from '../Loading'
 import { CenterContainer } from '../CenterContainer'
 import { Title } from '../Title'
 import Pagination from '../Pagination'
+import CancelSearch from '../Button/CancelSearch'
+import CrudFilters from './CrudFilters'
 
 import type { FetchUrl } from '@/types/FetchUrl'
-import CrudFilters from './CrudFilters'
-import { selectCrudSearchColumn, selectCrudSearchLimit, selectCrudSearchValue } from '@/app/reducers/crudSearch'
 
 interface CrudProps<T> {
 	data: { _id: string }[]
@@ -140,7 +141,7 @@ const Crud = <T,>({
 							</table>
 						</div>
 						<div className='crud_footer'>
-							<div style={{width: '25%'}}>
+							<div className='footer__container'>
 								<Button icon={<Plus/>} onClick={addFunc}>
 									Adicionar
 								</Button>
@@ -152,7 +153,19 @@ const Crud = <T,>({
 								fetchFunc={fetchFunc}
 								search={search}
 							/>
-							<div className='crud_footer__blank-div'></div>
+							{
+								searchValue ?
+									<div
+										className='footer__container wide_refresh'
+										style={{ justifyContent: 'flex-end'}}
+									>
+										<CancelSearch
+											fetchFunc={fetchFunc}
+										/>
+									</div>
+								:
+									<div className="crud_footer__blank-div"></div>
+							}
 						</div>
 					</StyledDiv>
 				)

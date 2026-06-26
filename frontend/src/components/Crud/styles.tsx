@@ -42,6 +42,10 @@ export const StyledDiv = styled.div`
 			align-self: center;
 			padding: 0;
 		}
+
+		.wide_refresh {
+			display: none;
+		}
 	}
 
 	@media screen and (min-width: ${vars.breakpoints.smartphone}) {
@@ -58,13 +62,24 @@ export const StyledDiv = styled.div`
 			ul {
 				width: 50%;
 			}
+
+			.wide_refresh {
+				display: flex;
+			}
 		}
 	}
 
 	@media screen and (min-width: ${vars.breakpoints.tablet}) {
-		.crud_footer__blank-div {
-			display: none;
+		.footer__container {
+			${flex('row')}
+			width: 25%;
 		}
+
+		/* .crud_footer {
+			.crud_footer__blank-div {
+				display: block;
+			}
+		} */
 	}
 
 	@media screen and (min-width: ${vars.breakpoints.notebook}) {
