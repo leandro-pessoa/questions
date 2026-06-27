@@ -337,6 +337,16 @@ describe('User GET', () => {
 				expect(res.body.pageResult[0].completeName).toEqual('Teste')
 			})
 	})
+
+	it('return values searching by attribute lengths', async () => {
+		await request(app)
+			.get('/searchUsers?searchValue=1&column=answeredQuestions')
+			.set('Authorization', `Bearer ${adminToken}`)
+			.then(res => {
+				expect(res.body.pageResult.length).toBeGreaterThanOrEqual(1)
+				expect(res.body.pageResult[0].completeName).toEqual('Teste')
+			})
+	})
 })
 
 describe('User UPDATE', () => {
