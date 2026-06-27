@@ -34,7 +34,7 @@ export const StyledSection = styled.section<IStyledSectionProps>`
 	@media screen and (min-width: ${vars.breakpoints.smallSmartphone}) {
 		.filters__content {
 			.content__selects {
-				grid-template-columns: auto auto;
+				grid-template-columns: 50% auto;
 			}
 		}
 	}
@@ -44,7 +44,7 @@ export const StyledSection = styled.section<IStyledSectionProps>`
 
 		.filters__content {
 			.content__selects {
-				grid-template-columns: auto auto auto;
+				grid-template-columns: 33% 33% auto;
 			}
 		}
 	}
