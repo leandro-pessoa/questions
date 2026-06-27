@@ -1,18 +1,19 @@
 import { useState } from 'react'
-import { useAppDispatch } from '@/app/hooks'
+import { useAppDispatch, useAppSelector } from '@/app/hooks'
+import { selectFiltersString, setFiltersString } from '@/app/reducers/filters'
 
 import { StyledSection } from './styles'
 import Button from '../Button'
-import { FunnelPlus, ChevronUp, ChevronDown } from 'lucide-react'
+import { FunnelPlus, ChevronUp, ChevronDown, Search } from 'lucide-react'
 import FiltersSelect from './FiltersSelect'
 import SelectedFilters from './SelectedFilters'
+import CancelSearch from '../Button/CancelSearch'
 
 import type { IFilter } from '@/types/IFilter'
 import type { UnknownAction } from 'redux'
 import type { FetchUrl } from '@/types/FetchUrl'
 import type { ActionCreatorWithPayload } from '@reduxjs/toolkit'
 import type { ReactChildren } from '@/types/ReactChildren'
-import { setFiltersString } from '@/app/reducers/filters'
 
 interface IFiltersProps<T> {
 	limit: number
@@ -21,7 +22,11 @@ interface IFiltersProps<T> {
 	setLimit: (arg: number) => UnknownAction
 	fetchFunc: FetchUrl<T>
 	children: ReactChildren
-	removeSelectedFunc: ActionCreatorWithPayload<{ topic: string; value: string; displayName: string; }>
+	removeSelectedFunc: ActionCreatorWithPayload<{
+		topic: string
+		value: string
+		displayName: string
+	}>
 }
 
 const Filters = <T,>({
@@ -31,23 +36,30 @@ const Filters = <T,>({
 	setLimit,
 	fetchFunc,
 	children,
-	removeSelectedFunc
+	removeSelectedFunc,
 }: IFiltersProps<T>) => {
 	const dispatch = useAppDispatch()
 	const [display, setDisplay] = useState<boolean>(false)
 	const [localLimit, setLocalLimit] = useState<number>(limit)
 
+	const globalFiltersString = useAppSelector(selectFiltersString)
+
 	const filterHandle = () => {
 		let filtersString = ''
 
-		selectedFilters.forEach(filter => {
+		selectedFilters.forEach((filter) => {
 			if (filter.values.length >= 1) {
-				filtersString += `${filter.topic}=[${filter.values.map(value => `"${value}"`)}]&`
+				filtersString += `${filter.topic}=[${filter.values.map((value) => `"${value}"`)}]&`
 			}
 		})
 		dispatch(setLimit(localLimit))
 		dispatch(setFiltersString(filtersString.slice(0, -1)))
-		dispatch(fetchFunc({filters: filtersString.slice(0, -1), limit: localLimit}))
+		dispatch(
+			fetchFunc({
+				filters: filtersString.slice(0, -1),
+				limit: localLimit,
+			}),
+		)
 	}
 
 	return (
@@ -55,49 +67,55 @@ const Filters = <T,>({
 			<Button
 				title='Filtros'
 				backgroundColor='transparent'
-				style={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}
+				style={{
+					width: '100%',
+					display: 'flex',
+					justifyContent: 'space-between',
+				}}
 				onClick={() => setDisplay(!display)}
 			>
-				<div style={{ display: 'flex', alignItems: 'center', gap: '4px'}}>
+				<div
+					style={{
+						display: 'flex',
+						alignItems: 'center',
+						gap: '4px',
+					}}
+				>
 					<FunnelPlus />
 					Filtros
 				</div>
-				{
-					display ?
-						<ChevronUp />
-					:
-						<ChevronDown />
-				}
+				{display ? <ChevronUp /> : <ChevronDown />}
 			</Button>
-			{
-				display &&
-					<div className='filters__content'>
-						<div className='content__selects'>
-							{children}
-						</div>
-						<SelectedFilters
-							selectedFilters={selectedFilters}
-							isAnyFilterSelected={isAnyFilterSelected}
-							removeSelectedFunc={removeSelectedFunc}
+			{display && (
+				<div className='filters__content'>
+					{
+						(globalFiltersString || limit !== 10) &&
+							<div style={{ marginBottom: '12px' }}>
+								<CancelSearch fetchFunc={fetchFunc} />
+							</div>
+
+					}
+					<div className='content__selects'>{children}</div>
+					<SelectedFilters
+						selectedFilters={selectedFilters}
+						isAnyFilterSelected={isAnyFilterSelected}
+						removeSelectedFunc={removeSelectedFunc}
+					/>
+					<div className='content__bottom'>
+						<Button onClick={filterHandle} icon={<Search />}>
+							Filtrar
+						</Button>
+						<FiltersSelect
+							title='Qtde resultados'
+							defaultContent={['5', '10', '15', '20', '30']}
+							defaultSelectedValue={10}
+							style={{ width: '210px' }}
+							setExternalSelectedValue={setLocalLimit}
+							externalSelectedValue={localLimit}
 						/>
-						<div className='content__bottom'>
-							<Button
-								onClick={filterHandle}
-								style={{ padding: '6px 32px'}}
-							>
-								Filtrar
-							</Button>
-							<FiltersSelect
-								title='Qtde resultados'
-								defaultContent={['5', '10', '15', '20', '30']}
-								defaultSelectedValue={10}
-								style={{width: '210px'}}
-								setExternalSelectedValue={setLocalLimit}
-								externalSelectedValue={localLimit}
-							/>
-						</div>
 					</div>
-			}
+				</div>
+			)}
 		</StyledSection>
 	)
 }
