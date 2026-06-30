@@ -7,7 +7,7 @@ export const StyledDiv = styled.div`
 	width: 95%;
 	margin: 32px 0;
 
-	.responsive_table {
+	.responsive-table {
 		max-height: 70vh;
 		width: 100%;
 		overflow: auto;
@@ -35,7 +35,7 @@ export const StyledDiv = styled.div`
 		}
 	}
 
-	.crud_footer {
+	.crud-footer {
 		${flex('column', 'auto', 'auto', '8px')}
 
 		ul {
@@ -43,7 +43,7 @@ export const StyledDiv = styled.div`
 			padding: 0;
 		}
 
-		.wide_refresh {
+		.wide-refresh {
 			display: none;
 		}
 	}
@@ -52,18 +52,18 @@ export const StyledDiv = styled.div`
 		width: 80%;
 		margin: 0;
 
-		.responsive_table {
+		.responsive-table {
 			max-height: 65vh;
 		}
 
-		.crud_footer {
+		.crud-footer {
 			${flex('row', 'space-between', 'center')}
 
 			ul {
 				width: 50%;
 			}
 
-			.wide_refresh {
+			.wide-refresh {
 				display: flex;
 			}
 		}
@@ -77,7 +77,7 @@ export const StyledDiv = styled.div`
 	}
 
 	@media screen and (min-width: ${vars.breakpoints.notebook}) {
-		.crud_footer__blank-div {
+		.crud-footer__blank-div {
 			display: block;
 			width: 25%;
 		}

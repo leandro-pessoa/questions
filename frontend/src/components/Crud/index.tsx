@@ -85,7 +85,7 @@ const Crud = <T,>({
 							data={data}
 							searchUrl={searchUrl}
 						/>
-						<div className='responsive_table'>
+						<div className='responsive-table'>
 							<table>
 								<thead>
 									<tr>
@@ -145,7 +145,7 @@ const Crud = <T,>({
 								</tbody>
 							</table>
 						</div>
-						<div className='crud_footer'>
+						<div className='crud-footer'>
 							<div className='footer__container'>
 								<Button icon={<Plus/>} onClick={addFunc}>
 									Adicionar
@@ -161,7 +161,7 @@ const Crud = <T,>({
 							{
 								searchValue ?
 									<div
-										className='footer__container wide_refresh'
+										className='footer__container wide-refresh'
 										style={{ justifyContent: 'flex-end'}}
 									>
 										<CancelSearch
@@ -169,7 +169,7 @@ const Crud = <T,>({
 										/>
 									</div>
 								:
-									<div className="crud_footer__blank-div"></div>
+									<div className="crud-footer__blank-div"></div>
 							}
 						</div>
 					</StyledDiv>
