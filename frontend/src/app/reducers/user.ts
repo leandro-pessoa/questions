@@ -27,6 +27,8 @@ const userSlice = createSlice({
 		setAdmin: (state, action: PayloadAction<boolean>) => {
 			state.admin = action.payload
 		},
+
+		// limpa todos os valores do state
 		logout: (state) => {
 			state.user = null
 			state.token = ''

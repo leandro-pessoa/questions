@@ -21,6 +21,8 @@ const modalSlice = createSlice({
 		setModalData: (state, action: PayloadAction<IModal['modalData']>) => {
 			state.modalData = action.payload
 		},
+
+		// limpa todos os valores desse state
 		clearModal: (state) => {
 			state.modalData = {}
 			state.modalType = ''

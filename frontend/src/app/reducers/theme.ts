@@ -11,6 +11,8 @@ const themeSlice = createSlice({
 	name: 'theme',
 	initialState,
 	reducers: {
+		// altera o tema da aplicação
+		// e faz o set no storage, salvando o tema no navegador
 		toggleTheme: (state) => {
 			state.theme = state.theme === 'dark' ? 'light' : 'dark'
 			localStorage.setItem('questions-theme', JSON.stringify(state.theme))

@@ -47,13 +47,21 @@ const Filters = <T,>({
 	const filterHandle = () => {
 		let filtersString = ''
 
+		// para cada filtro selecionado, irá adicionar na string filtersString o tópico e os valores
+		// ex: 'subject=["Matemática", "Português"]&year=["2025"]'
 		selectedFilters.forEach((filter) => {
 			if (filter.values.length >= 1) {
 				filtersString += `${filter.topic}=[${filter.values.map((value) => `"${value}"`)}]&`
 			}
 		})
+
+		// seta o limit local, que é utilizado somente nesse componente
 		dispatch(setLimit(localLimit))
+
+		// seta a filtersString (- o & no final)
 		dispatch(setFiltersString(filtersString.slice(0, -1)))
+
+		// realiza o fetch com os filtros e o limit
 		dispatch(
 			fetchFunc({
 				filters: filtersString.slice(0, -1),

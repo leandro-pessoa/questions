@@ -80,6 +80,7 @@ const filtersSlice = createSlice({
 			state.filtersString = action.payload
 		},
 
+		// limpa todos os valores desse state
 		clearFilters: (state) => {
 			state.selectedFilters = []
 			state.limit = 10

@@ -29,6 +29,7 @@ const crudSearchSlice = createSlice({
 			state.crudSearchLimit = action.payload
 		},
 
+		// limpa todos os valores desse state
 		clearCrudFilters: (state) => {
 			state.crudSearchColumn = ''
 			state.crudSearchLimit = 10
