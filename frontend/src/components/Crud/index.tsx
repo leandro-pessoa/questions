@@ -44,10 +44,13 @@ const Crud = <T,>({
 	const dispatch = useAppDispatch()
 
 	const token = useAppSelector(selectToken)
+
+	// states de pesquisa globais
 	const searchValue = useAppSelector(selectCrudSearchValue)
 	const searchColumn = useAppSelector(selectCrudSearchColumn)
 	const searchLimit = useAppSelector(selectCrudSearchLimit)
 
+	// objeto utilizado para realizar o fetch
 	const search = {
 		searchUrl,
 		searchValue,
@@ -56,6 +59,7 @@ const Crud = <T,>({
 
 	const renderData = () => {
 		switch (dataStatus) {
+			// caso esteja pending a requisição
 			case 'pending':
 				return (
 					<CenterContainer $height='header'>
@@ -64,6 +68,7 @@ const Crud = <T,>({
 						</Loading>
 					</CenterContainer>
 				)
+			// caso a requisição seja bem-sucedida
 			case 'succeeded':
 				return data.length === 0 ? (
 					<Title
@@ -169,6 +174,7 @@ const Crud = <T,>({
 						</div>
 					</StyledDiv>
 				)
+			// caso a requisição falhe
 			case 'failed':
 				return (
 					<CenterContainer $height='header'>

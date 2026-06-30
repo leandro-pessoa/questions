@@ -23,14 +23,17 @@ const CrudFilters = <T,>({ fetchFunc, data, searchUrl }: ICrudFilters<T>) => {
 	const dispatch = useAppDispatch()
 	const token = useAppSelector(selectToken)
 
+	// states globais de pesquisa
 	const globalSearchLimit = useAppSelector(selectCrudSearchLimit)
 	const globalSearchColumn = useAppSelector(selectCrudSearchColumn)
 	const globalSearchValue = useAppSelector(selectCrudSearchValue)
 
+	// states locais de pesquisa
 	const [searchColumn, setSearchColumn] = useState<string>(globalSearchColumn || '')
 	const [searchLimit, setSearchLimit] = useState<number>(globalSearchLimit || 10)
 	const [searchValue, setSearchValue] = useState<string>('')
 
+	// objeto utilizado para realizar o fetch
 	const search = {
 		searchUrl,
 		searchValue,
@@ -38,19 +41,24 @@ const CrudFilters = <T,>({ fetchFunc, data, searchUrl }: ICrudFilters<T>) => {
 	}
 
 	const searchHandle = () => {
+		// verifica se um valor de pesquisa foi informado
 		if (searchValue === '') {
 			toast.error('Insira um valor de pesquisa')
 			return
 		}
 
+		// verifica se uma coluna de pesquisa foi informada
 		if (!searchColumn) {
 			toast.error('Insira a coluna de pesquisa')
 			return
 		}
 
+		// define os states globais de pesquisa
 		dispatch(setCrudSearchColumn(searchColumn))
 		dispatch(setCrudSearchLimit(searchLimit))
 		dispatch(setCrudSearchValue(searchValue))
+
+		// realiza o fetch da pesquisa, obtendo os novos valores
 		dispatch(
 			fetchFunc({
 				search,
@@ -72,6 +80,8 @@ const CrudFilters = <T,>({ fetchFunc, data, searchUrl }: ICrudFilters<T>) => {
 					externalSelectedValue={searchLimit || globalSearchLimit}
 				/>
 				{
+					// caso haja algum valor de pesquisa global
+					// o button de cancelar a pesquisa irá aparecer
 					globalSearchValue &&
 						<CancelSearch
 							fetchFunc={fetchFunc}
@@ -82,10 +92,12 @@ const CrudFilters = <T,>({ fetchFunc, data, searchUrl }: ICrudFilters<T>) => {
 			<div className='search'>
 				<FiltersSelect
 					title='Coluna'
+					// obtém as chaves do objeto que for definido no Crud (Ex: question, user)
 					defaultContent={Object.keys(data[0])}
 					noLabels={true}
 					className='search__select-column'
 					setExternalSelectedValue={setSearchColumn}
+					// informa a coluna de pesquisa local ou a global
 					externalSelectedValue={searchColumn || globalSearchColumn}
 				/>
 				<Input

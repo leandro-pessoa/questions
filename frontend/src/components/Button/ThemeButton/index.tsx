@@ -17,10 +17,11 @@ const ThemeButton = ({ fixed = false, style }: IThemeButtonProps) => {
 		<Button
 			onClick={() => dispatch(toggleTheme())}
 			style={{
+				// altera a forma de posicionamento do button conforme a prop fixed
 				position: fixed ? 'fixed' : 'static',
 				top: fixed ? '16px' : 'auto',
 				right: fixed ? '16px' : 'auto',
-				...style
+				...style // demais estilos
 			}}
 			iconButton
 			title='Mudar tema'

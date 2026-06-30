@@ -74,12 +74,6 @@ export const StyledDiv = styled.div`
 			${flex('row')}
 			width: 25%;
 		}
-
-		/* .crud_footer {
-			.crud_footer__blank-div {
-				display: block;
-			}
-		} */
 	}
 
 	@media screen and (min-width: ${vars.breakpoints.notebook}) {
