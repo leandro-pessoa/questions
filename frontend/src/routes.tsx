@@ -11,6 +11,7 @@ import Admin from './pages/Admin'
 import Menu from './pages/Admin/Menu'
 import UsersPage from './pages/Admin/UsersPage'
 import QuestionsPage from './pages/Admin/QuestionsPage'
+import NotFound from './pages/NotFound'
 
 const AppRoutes = () => {
 	return (
@@ -34,6 +35,7 @@ const AppRoutes = () => {
 						<Route path='usuarios' element={ <UsersPage /> } />
 						<Route path='questoes' element={ <QuestionsPage /> } />
 					</Route>
+					<Route path='*' element={ <NotFound /> }/>
 				</Route>
 			</Routes>
 		</BrowserRouter>
