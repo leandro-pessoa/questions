@@ -75,20 +75,10 @@ const Filters = <T,>({
 			<Button
 				title='Filtros'
 				backgroundColor='transparent'
-				style={{
-					width: '100%',
-					display: 'flex',
-					justifyContent: 'space-between',
-				}}
+				className='filters__toggle-button'
 				onClick={() => setDisplay(!display)}
 			>
-				<div
-					style={{
-						display: 'flex',
-						alignItems: 'center',
-						gap: '4px',
-					}}
-				>
+				<div className='toggle-button__wrapper'>
 					<FunnelPlus />
 					Filtros
 				</div>

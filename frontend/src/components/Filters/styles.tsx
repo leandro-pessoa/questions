@@ -14,6 +14,15 @@ export const StyledSection = styled.section<IStyledSectionProps>`
 	border-left: none;
 	padding: 0 5%;
 
+	.filters__toggle-button {
+		width: 100%;
+		${flex('row', 'space-between')}
+
+		.toggle-button__wrapper {
+			${flex('row', 'auto', 'center', '4px')}
+		}
+	}
+
 	.filters__content {
 		padding: ${(props) => props.$display ? '16px' : '0'} 0;
 		height: ${(props) => props.$display ? 'auto' : '0'};
