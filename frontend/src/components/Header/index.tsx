@@ -9,7 +9,7 @@ const Header = () => {
 			<TitleLink>
 				Questions?
 			</TitleLink>
-			<div style={{ display: 'flex', gap: '12px' }}>
+			<div className='header__menu'>
 				<Nav />
 				<ThemeButton />
 			</div>

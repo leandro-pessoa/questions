@@ -8,4 +8,8 @@ export const StyledHeader = styled.header`
 	background-color: transparent;
 	backdrop-filter: blur(10px);
 	border-bottom: 1px solid ${(props) => props.theme.colors.primaryBorderColor};
+
+	.header__menu {
+		${flex('row', 'auto', 'auto', '12px')}
+	}
 `
