@@ -1,7 +1,8 @@
 import { useFormContext } from 'react-hook-form'
+import { useState, type CSSProperties, type HTMLInputTypeAttribute } from 'react'
+
 import Input from '..'
 import { Small } from '@/components/Small'
-import { useState, type CSSProperties, type HTMLInputTypeAttribute } from 'react'
 import InspectPassword from '@/components/Button/InspectPassword'
 
 interface InputProps {
@@ -46,8 +47,7 @@ const FormInput = ({
 	min = 0,
     hidden = false,
 	style,
-	className = '',
-	pattern
+	className = ''
 }: InputProps) => {
 	// state para definir a visibilidade da senha
 	const [passwordVisibility, setPasswordVisibility] = useState(false)
@@ -66,7 +66,7 @@ const FormInput = ({
     // verifica padrões de regex de acordo com a prop passada
     const patterns = (email: InputProps['email']) => {
         // caso não seja necessário, a função será finalizada aqui
-        if (!patternsOption && !pattern) return
+        if (!patternsOption) return
 
         // valida o e-mail
         if (email)
@@ -82,13 +82,6 @@ const FormInput = ({
                 value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{1,}$/,
                 message: 'Senha inválida',
             }
-
-		else if (pattern) {
-			return {
-				value: pattern,
-				message: 'Alternativas válidas: A, B, C, D ou E'
-			}
-		}
 
         // valida se há espaços vazios antes e após o valor preenchido
         else
