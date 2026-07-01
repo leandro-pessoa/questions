@@ -13,6 +13,11 @@ export const StyledDiv = styled.div`
 	.content-container {
 		${flex('column', 'center', 'auto', '6px')}
 		width: 100%;
+
+		.content-container__back-button {
+			align-self: flex-start;
+			margin-left: 16px;
+		}
 	}
 
 	@media screen and (min-width: ${vars.breakpoints.smallSmartphone}) {

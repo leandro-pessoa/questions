@@ -27,7 +27,7 @@ const SideScreen = ({ children, side = 'left' }: ISideScreenProps) => {
 				<Button
 					onClick={() => navigate(-1)}
 					iconButton
-					style={{ alignSelf: 'flex-start', marginLeft: '16px'  }}
+					className='content-container__back-button'
 					title='Voltar'
 				>
 					<ArrowLeft />
