@@ -17,9 +17,12 @@ const SelectedFilters = ({ selectedFilters, isAnyFilterSelected, removeSelectedF
 	const dispatch = useAppDispatch()
 
 	return (
+		// só exibe esse componente caso haja algum filtro selecionado
 		<StyledDiv style={{ display: isAnyFilterSelected ? 'block' : 'none'}}>
 			<ul>
+				{/* mostra todos os filtros selecionados */}
 				{selectedFilters.map((filter) => {
+					// caso haja algum valor no filtro, o exibe
 					if (filter.values.length >= 1) {
 						return (
 							<li key={filter.displayName}>
@@ -27,6 +30,7 @@ const SelectedFilters = ({ selectedFilters, isAnyFilterSelected, removeSelectedF
 									{filter.displayName}
 								</span>
 								:{' '}
+								{/* exibe cada valor do filtro */}
 								{filter.values.map((value) => (
 									<span className='filters__value' key={value}>
 										{value}
@@ -34,6 +38,7 @@ const SelectedFilters = ({ selectedFilters, isAnyFilterSelected, removeSelectedF
 											iconButton
 											onClick={() =>
 												dispatch(
+													// action para remover um valor
 													removeSelectedFunc({
 														topic: filter.topic,
 														value,

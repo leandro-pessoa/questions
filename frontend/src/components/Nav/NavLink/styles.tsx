@@ -14,6 +14,7 @@ export const StyledNavLink = styled(NavLink)<StyledNavLinkProps>`
 	text-decoration: none;
 
 	&.active {
+		// altera a cor da border bottom, de acordo com a prop $activeColor
 		border-bottom: 3px solid ${(props) =>
 			props.$activeColor ? props.$activeColor : props.theme.colors.primaryFontColor
 		};

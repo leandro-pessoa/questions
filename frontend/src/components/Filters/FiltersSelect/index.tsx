@@ -114,7 +114,7 @@ const FiltersSelect = <T,>({
 						actualSelectContent.map((value) =>
 							<li key={value}>
 								{
-									// troca o tipo de tópico selecionável, de acordo com a prop type
+									// troca o tipo de tópico selecionável, de acordo com a prop type (checkbox ou default)
 									type === 'default' ?
 										<button
 											onClick={() => buttonClickHandle(value)}
@@ -134,6 +134,7 @@ const FiltersSelect = <T,>({
 											label={value}
 											checkHandle={
 												()=>dispatch(
+													// executa a action ao marcar ou desmarcar a caixa
 													toggleCheckboxFilter(
 														{
 															topic: topicFetchUrl || '',
@@ -143,6 +144,7 @@ const FiltersSelect = <T,>({
 													)
 												)
 											}
+											// checa a caixa caso o valor selecionado seja igual ao do valor dela
 											checked={
 												selectedFilters.find(
 													filter => filter.topic === topicFetchUrl

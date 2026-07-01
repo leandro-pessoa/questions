@@ -65,6 +65,7 @@ const Modal = ({ title, children, closeElement, execButton }: ModalProps) => {
 	return (
 		<StyledDiv>
 			<CenterContainer
+				// permitem que o modal ultrapasse o limite da tela, permitindo o scroll
 				$height={modalOverflow ? 'auto' : 'center-fixed'}
 				style={{ margin: modalOverflow ? '16px 0' : '0' }}
 			>

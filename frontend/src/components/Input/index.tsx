@@ -10,10 +10,19 @@ const xPadding = 14
 
 const Input = styled.input<IInputProps>`
 	background-color: ${(props) => props.theme.colors.primaryBackgroundColor};
+
+	// caso haja um erro, a borda do input ficará vermelha
 	border: 1px solid ${(props) => props.$error ? vars.colors.red : props.theme.colors.primaryBorderColor};
+
 	color: ${(props) => props.theme.colors.primaryFontColor};
+
+	// border radius global
 	border-radius: ${vars.border.radius};
+
+	// padding horizontal
 	padding: 6px ${xPadding}px;
+
+	// atribui uma width de 100%, de acordo com a prop hundredPercent
 	width: ${
 		({ $width = 'hundredPercent'}) =>
 			$width === 'auto' ? 'auto' : `calc(100% - ${xPadding * 2}px)`

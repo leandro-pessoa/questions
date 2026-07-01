@@ -8,7 +8,6 @@ interface ISmallProps {
 // componente geral de small
 // props: error
 export const Small = styled.small<ISmallProps>`
-    // props
     // caso seja true, ficará vermelho
     color: ${
 		({ $error = false, ...props }) => $error ? vars.colors.red : props.theme.colors.primaryFontColor };

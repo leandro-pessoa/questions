@@ -20,6 +20,7 @@ const StyledForm = styled.form<IStyledFormProps>`
 	display: flex;
 	flex-direction: column;
 
+	// caso a prop $grid seja true, irá adicionar um grid layout para o formulário
 	${({ $grid = false }) => $grid && `
 		@media screen and (min-width: ${vars.breakpoints.tablet}) {
 			display: grid;
@@ -34,7 +35,11 @@ const Form = ({ children, onSubmit, grid = false, className }: IFormProps) => {
 
 	return (
 		<FormProvider {...methods}>
-			<StyledForm onSubmit={methods.handleSubmit(onSubmit)} $grid={grid} className={className}>
+			<StyledForm
+				onSubmit={methods.handleSubmit(onSubmit)}
+				$grid={grid}
+				className={className}
+			>
 				{children}
 			</StyledForm>
 		</FormProvider>

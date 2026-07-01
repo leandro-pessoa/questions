@@ -15,6 +15,7 @@ const NavLink = ({ children, to, activeColor }: NavLinkProps) => {
 	return (
 		<StyledNavLink
 			to={to}
+			// adiciona a classe active ao acessar esse link
 			className={({ isActive }) =>
 				`${isActive ? 'active' : ''}`
 			}

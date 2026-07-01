@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
+
 import { StyledDiv } from './styles'
 import { ChevronDown, ChevronUp } from 'lucide-react'
 
@@ -53,6 +54,7 @@ const Select = ({ style, className, options, id, selectedOption, setSelectedOpti
 			</button>
 			<div className='select__expand-box'>
 				<ul className='expand-box__topics-list'>
+					{/* itera sobre o array options, exibindo todas as opções para selecionar */}
 					{options.map((opt) => (
 						<li key={opt}>
 							<button onClick={() => selectHandle(opt)} type='button'>

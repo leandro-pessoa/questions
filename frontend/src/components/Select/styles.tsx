@@ -16,6 +16,8 @@ export const StyledDiv = styled.div<IStyledDivProps>`
 		background-color: ${(props) => props.theme.colors.tertiaryBackgroundColor};
 		color: ${(props) => props.theme.colors.primaryFontColor};
 		padding: 8px 16px;
+
+		// altera a border radius, de acordo com o display da caixa do select
 		border-radius: ${
 			(props) =>
 				props.$expandBoxDisplay ? `${borderRadius} ${borderRadius} 0 0` : borderRadius
@@ -30,7 +32,10 @@ export const StyledDiv = styled.div<IStyledDivProps>`
 
 	.select__expand-box {
 		position: absolute;
+
+		// exibe a caixa do select, de acordo com a prop $expandBoxDisplay
 		display: ${(props) => props.$expandBoxDisplay ? 'flex' : 'none'};
+		
 		flex-direction: column;
 		gap: 6px;
 		background-color: ${(props) => props.theme.colors.primaryBackgroundColor};

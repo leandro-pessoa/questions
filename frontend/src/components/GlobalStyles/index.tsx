@@ -30,6 +30,7 @@ export const GlobalStyles = createGlobalStyle`
 	body {
 		line-height: 1;
 		font-family: ${vars.fonts.primaryFont};
+		// gradiente para o plano de fundo principal
 		background: radial-gradient(
 				${(props) => props.theme.colors.tertiaryBackgroundColor},
 				${(props) => props.theme.colors.primaryBackgroundColor},

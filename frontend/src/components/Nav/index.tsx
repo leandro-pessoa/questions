@@ -3,11 +3,11 @@ import styled from 'styled-components'
 import { useAppSelector, useAppDispatch } from '@/app/hooks'
 import { selectUser, logout, selectAdmin } from '@/app/reducers/user'
 import { useNavigate } from 'react-router-dom'
+import { clearAdminUsers } from '@/app/reducers/adminUsers'
 
 import NavLink from './NavLink'
 import Button from '../Button'
 import { CircleUser, LogIn, UserPlus, LogOut, Settings } from 'lucide-react'
-import { clearAdminUsers } from '@/app/reducers/adminUsers'
 
 const StyledNav = styled.nav`
 	${flex('row', 'center', 'center', '16px')}
@@ -20,6 +20,7 @@ const Nav = () => {
 	const user = useAppSelector(selectUser)
 	const admin = useAppSelector(selectAdmin)
 
+	// limpa todos os states de user e navega para a página de login
 	const logoutHandle = () => {
 		navigate('/login')
 		dispatch(logout())

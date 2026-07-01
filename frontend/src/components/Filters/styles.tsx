@@ -24,6 +24,7 @@ export const StyledSection = styled.section<IStyledSectionProps>`
 	}
 
 	.filters__content {
+		// estilos de acordo com a prop $display
 		padding: ${(props) => props.$display ? '16px' : '0'} 0;
 		height: ${(props) => props.$display ? 'auto' : '0'};
 		overflow: ${(props) => props.$display ? 'visible' : 'hidden'};
