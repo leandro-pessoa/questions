@@ -60,7 +60,9 @@ const QuestionsPage = () => {
 	return (
 		<>
 			<RemoveQuestion {...modalData} />
+			{/* somente abre o modal de editar questões caso o tipo seja igual ao informado */}
 			{modalType === 'editQuestion' && <QuestionForm question={modalData} mode='put' />}
+			{/* somente abre o modal de adicionar questões caso o tipo seja igual ao informado */}
 			{modalType === 'addQuestion' && <QuestionForm mode='post' />}
 			<Crud
 				labels={[

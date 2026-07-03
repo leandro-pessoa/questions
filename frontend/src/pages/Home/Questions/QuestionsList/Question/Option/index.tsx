@@ -22,6 +22,7 @@ const Option = ({
 	const [cutDisplay, setCutDisplay] = useState<boolean>(false)
 	const [cutted, setCutted] = useState<boolean>(false)
 
+	// seleciona uma opção, caso a questão não tenha sido respondida
 	const selectHandle = () => {
 		if (!isAnswered) {
 			if (cutted) {
@@ -31,6 +32,7 @@ const Option = ({
 		}
 	}
 
+	// elimina uma opção, caso a questão não tenha sido respondida
 	const cutHandle = () => {
 		if (!isAnswered) {
 			if (selected) {

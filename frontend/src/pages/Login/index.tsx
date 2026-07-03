@@ -28,25 +28,38 @@ const Login = () => {
 	const isLoading = useAppSelector(selectIsLoading)
 
 	const submitHandle = async (data: FieldValues) => {
+		// caso esteja carregando, não permite executar a função
 		if (isLoading) return
+
 		try {
+			// loading
 			dispatch(setIsLoading(true))
+
+			// realiza a requisição de login com os dados do formulário enviados
 			const loginReq = await http.post('/users/login', { ...data })
 
+			// obtém o token do user, caso o login seja bem sucedido
 			const token = loginReq.data.token
 
+			// faz uma requisição para verificar se o user é admin ou não
+			// obs: o backend não depende desse state para prosseguir com requisições de admin, ele é utilizado apenas para funcionalidades do frontend
 			await http.get('/access',
 				{ headers: { Authorization: token && `Bearer ${token}`}}
 			)
+			// altera o state global de admin conforme o tipo da resposta
 			.then(() => dispatch(setAdmin(true)))
 			.catch(() => dispatch(setAdmin(false)))
 
+			// salva o user e o token dele nos states globais
 			dispatch(setUser(loginReq.data.user))
 			dispatch(setToken(token))
+
+			// navega para a página inicial
 			navigate('/')
 		} catch (err) {
 			axiosError(err)
 		}
+		// loading
 		dispatch(setIsLoading(false))
 	}
 

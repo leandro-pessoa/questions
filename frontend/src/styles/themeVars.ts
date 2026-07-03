@@ -1,5 +1,7 @@
 import { vars } from './vars'
 
+// variáveis utilizadas para definir as cores de cada tema
+
 export const lightTheme = {
 	colors: {
 		primaryBackgroundColor: vars.colors.lightGray,

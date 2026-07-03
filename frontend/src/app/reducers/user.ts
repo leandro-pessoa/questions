@@ -11,6 +11,7 @@ interface IUserState {
 const initialState: IUserState = {
 	user: null,
 	token: '',
+	// obs: o backend não depende desse state para prosseguir com requisições de admin, ele é utilizado apenas para funcionalidades do frontend
 	admin: false
 }
 

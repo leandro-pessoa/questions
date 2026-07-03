@@ -54,7 +54,9 @@ const UsersPage = () => {
 	return (
 		<>
 			<RemoveUser {...modalData}/>
+			{/* somente abre o modal de editar usuários caso o tipo seja igual ao informado */}
 			{modalType === 'editUser' && <UserForm user={modalData} mode='put' />}
+			{/* somente abre o modal de adicionar usuários caso o tipo seja igual ao informado */}
 			{modalType === 'addUser' && <UserForm mode='post' />}
 			<Crud
 				labels={[

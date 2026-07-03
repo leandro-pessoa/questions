@@ -14,11 +14,11 @@ import { Plus, X } from 'lucide-react'
 import Modal from '@/components/Modal'
 import Checkbox from '@/components/Checkbox'
 import Input from '@/components/Input'
+import ModalButtonsDiv from '@/components/ModalButtonsDiv'
 
 import type { IQuestion } from '@/types/IQuestion'
 import type { FieldValues } from 'react-hook-form'
 import type { IAlternative } from '@/types/IAlternative'
-import ModalButtonsDiv from '@/components/ModalButtonsDiv'
 
 const QuestionForm = ({question, mode}: {question?: IQuestion, mode: 'put' | 'post'}) => {
 	const [checked, setChecked] = useState<string>('')
@@ -221,10 +221,12 @@ const QuestionForm = ({question, mode}: {question?: IQuestion, mode: 'put' | 'po
 					/>
 				</InputContainer>
 				<AlternativesDiv>
+					{/* verifica se há algum valor no state alternatives */}
 					{alternatives && alternatives.length > 0 ? (
 						<>
 							<label htmlFor='alternatives'>Alternativas</label>
 							<ul id='alternatives'>
+								{/* caso sim, faz um map, renderizando todas as alternativas */}
 								{alternatives.map((alternative) => {
 									return (
 										<li key={alternative._id}>
@@ -256,6 +258,7 @@ const QuestionForm = ({question, mode}: {question?: IQuestion, mode: 'put' | 'po
 												<Checkbox
 													label='Correta'
 													checked={
+														// verifica se o id da alternativa é igual ao valor do state checked
 														alternative._id ===
 														checked
 													}

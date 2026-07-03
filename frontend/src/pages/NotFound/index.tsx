@@ -1,8 +1,9 @@
+import { useNavigate } from 'react-router-dom'
+
 import Button from '@/components/Button'
 import { CenterContainer } from '@/components/CenterContainer'
 import { Title } from '@/components/Title'
 import { ArrowLeft } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
 
 const NotFound = () => {
 	const navigate = useNavigate()

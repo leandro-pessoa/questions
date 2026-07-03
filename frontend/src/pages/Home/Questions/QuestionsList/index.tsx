@@ -17,6 +17,7 @@ const QuestionsList = memo(
 		) {
 		return <StyledUl>
 			{
+				// itera sobre cada questão do array questions, renderizando um componente Question para cada questão
 				questions?.map((question: IQuestion, index: number) => {
 					const indexPlus: number = index + 1
 

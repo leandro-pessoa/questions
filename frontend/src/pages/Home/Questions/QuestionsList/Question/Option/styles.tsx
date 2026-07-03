@@ -14,8 +14,11 @@ export const StyledLi = styled.li<IStyledLiProps>`
 	border: none;
 	border-radius: ${vars.border.radius};
 	transition: ease 0.2s;
+
+	// muda a decoração do texto ao eliminar uma alternativa
 	text-decoration: ${(props) => (props.$cutted ? 'line-through' : 'none')};
 
+	// caso a questão tenha sido respondida, irá atualizar alguns estilos da opção
 	${(props) => !props.$isAnswered && `
 			&:hover {
 				background-color: ${props.theme.colors.primaryBackgroundColor};
@@ -44,7 +47,10 @@ export const StyledLi = styled.li<IStyledLiProps>`
 	.option__select {
 		${flex('row', 'flex-start', 'center', '16px')}
 		background-color: transparent;
+
+		// muda a cor da fonte ao eliminar uma alternativa
 		color: ${(props) => props.$cutted ? props.theme.colors.primaryBorderColor : props.theme.colors.primaryFontColor};
+
 		border: none;
 		width: 90%;
 		padding: 8px 12px;
@@ -59,8 +65,12 @@ export const StyledLi = styled.li<IStyledLiProps>`
 			border: 2px solid ${vars.colors.blue};
 			width: 25px;
 			height: 25px;
+
+			// muda a cor de fundo ao selecionar uma alternativa
 			background-color: ${(props) =>
 				props.$selected ? vars.colors.blue : 'transparent'};
+
+			// muda a cor da fonte ao selecionar uma alternativa
 			color: ${(props) =>
 				props.$selected
 					? vars.colors.white

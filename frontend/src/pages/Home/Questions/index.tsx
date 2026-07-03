@@ -46,6 +46,7 @@ const Questions = () => {
 
 	const renderQuestions = () => {
 		switch (questionsFetchStatus) {
+			// exibe o componente de loading, caso a requisição esteja pendente
 			case 'pending':
 				return (
 					<CenterContainer $height='header'>
@@ -54,9 +55,11 @@ const Questions = () => {
 						</Loading>
 					</CenterContainer>
 				)
+			// exibe o resultado, caso a requisição seja bem sucedida
 			case 'succeeded':
 				return (
 					<>
+						{/* componente filters com cada select como children */}
 						<Filters
 							limit={limit}
 							isAnyFilterSelected={isAnyFilterSelected}
@@ -71,11 +74,13 @@ const Questions = () => {
 							<FiltersSelect title='Cargo' topicFetchUrl='position' type='checkbox'/>
 							<FiltersSelect title='Banca' topicFetchUrl='examiningBoard' type='checkbox'/>
 						</Filters>
+						{/* lista de questões */}
 						<QuestionsList
 							questions={questions}
 							actualPage={actualPage}
 							limit={fetchLimit}
 						/>
+						{/* paginação */}
 						<Pagination
 							fetchFunc={fetchQuestions}
 							totalPages={totalQuestionPages}
@@ -85,6 +90,7 @@ const Questions = () => {
 						/>
 					</>
 				)
+			// exibe um erro e a opção de recarregar, caso haja uma falha na requisição
 			case 'failed':
 				return (
 					<CenterContainer $height='header'>

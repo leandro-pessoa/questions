@@ -11,9 +11,10 @@ import SideScreen from '@/components/SideScreen'
 import type { FieldValues } from 'react-hook-form'
 
 const UserRegister = () => {
-
 	const { fetchHandle } = useFetch()
 
+	// realiza a requisição para a url post de criação de usuários
+	// utiliza os dados do formulário para isso
 	const submitHandle = async (data: FieldValues) => {
 		fetchHandle({
 			httpMethod: 'post',

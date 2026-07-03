@@ -12,14 +12,18 @@ const App = () => {
 
 	return (
 		<ThemeProvider theme={theme === 'dark' ? darkTheme : lightTheme}>
+			{/* estilos globais */}
 			<GlobalStyles />
+			{/* container dos feedbacks */}
 			<ToastContainer
 				theme={theme}
 				position='top-center'
 				limit={2}
 				autoClose={2000}
 			/>
+			{/* loading global (overlay) */}
 			<GlobalLoading />
+			{/* aplicação em si, que será renderizada de acordo com as rotas */}
 			<AppRoutes />
 		</ThemeProvider>
 	)

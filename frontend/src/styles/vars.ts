@@ -1,3 +1,4 @@
+// variáveis globais utilizadas nos estilos de toda a aplicação
 export const vars = {
 	fonts: {
 		primaryFont: '"Roboto", sans-serif'
