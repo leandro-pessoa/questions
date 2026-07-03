@@ -1,7 +1,8 @@
+import jwt from 'jsonwebtoken'
+import bcrypt from 'bcryptjs'
+
 import CRUDServices from './CRUDServices'
 import User from '@/db/models/User'
-import bcrypt from 'bcryptjs'
-import jwt from 'jsonwebtoken'
 import BaseError from '@/errors/BaseError'
 import BadRequest from '@/errors/BadRequest'
 import NotFound from '@/errors/NotFound'

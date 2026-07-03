@@ -1,8 +1,9 @@
 import QuestionService from '@/services/QuestionService'
 import Controller from './Controller'
+import BadRequest from '@/errors/BadRequest'
+
 import type { IQuestion } from '@/types/IQuestion'
 import type { Request, Response, NextFunction } from 'express'
-import BadRequest from '@/errors/BadRequest'
 
 const questionService = new QuestionService()
 

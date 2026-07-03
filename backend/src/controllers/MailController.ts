@@ -1,10 +1,11 @@
+import jwt from 'jsonwebtoken'
+import { generateRandomCode } from '@/utils/generateRandomCode'
+
 import BadRequest from '@/errors/BadRequest'
 import BaseError from '@/errors/BaseError'
 import NotFound from '@/errors/NotFound'
 import MailServices from '@/services/MailServices'
 import UserService from '@/services/UserService'
-import { generateRandomCode } from '@/utils/generateRandomCode'
-import jwt from 'jsonwebtoken'
 import UserLimiter from '@/db/models/UserLimiter'
 
 import type { Request, Response, NextFunction } from 'express'

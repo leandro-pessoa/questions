@@ -1,8 +1,9 @@
 import mongoose, { Schema } from 'mongoose'
 import bcrypt from 'bcryptjs'
-import type { IUser } from '@/types/IUser'
 import { answeredQuestionSchema } from './AnsweredQuestion'
 import { verifyWhiteSpaces } from '@/utils/verifyWhiteSpaces'
+
+import type { IUser } from '@/types/IUser'
 
 const userSchema = new Schema<IUser>({
 	role: {
@@ -25,6 +26,7 @@ const userSchema = new Schema<IUser>({
 		required: [true, 'E-mail obrigatório'],
 		validate: {
 			validator: (value: string) => {
+				// regexp para validação de emails
 				return /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value)
 			},
 			message: 'E-mail inválido',
@@ -41,6 +43,11 @@ const userSchema = new Schema<IUser>({
 		maxLength: [30, 'A senha não pode ultrapassar 30 caracteres'],
 		validate: {
 			validator: (value: string) => {
+				// verifica se uma senha é forte o suficiente7
+				// tem que incluir:
+				// letras maiúsculas e minúsculas
+				// números
+				// caracteres especiais
 				return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{1,}$/.test(
 					value,
 				)
@@ -51,6 +58,7 @@ const userSchema = new Schema<IUser>({
 	},
 })
 
+// antes de salvar a senha na base de dados, gera uma hash da senha e armazena ela na base
 userSchema.pre('save', async function (next) {
 	if (this.isModified('password')) {
 		const salt = await bcrypt.genSalt(8)
@@ -59,9 +67,12 @@ userSchema.pre('save', async function (next) {
 	next()
 })
 
+// altera a hash da senha ao mudar de senha
 userSchema.pre('findOneAndUpdate', async function (next) {
 	const { password } = this.getUpdate() as Partial<IUser>
 	const { _id } = this.getQuery()
+
+	// caso a senha tenha sido alterada, realiza a troca da hash
 	if(password) {
 		const salt = await bcrypt.genSalt(8)
 		const newPasswordHash = await bcrypt.hash(password as string, salt)

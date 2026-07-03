@@ -1,10 +1,13 @@
 import mongoose, { Schema } from 'mongoose'
-import type { IQuestion } from '@/types/IQuestion'
-import type { IAlternative } from '@/types/IAlternative'
 import { verifyWhiteSpaces } from '@/utils/verifyWhiteSpaces'
 
+import type { IQuestion } from '@/types/IQuestion'
+import type { IAlternative } from '@/types/IAlternative'
+
+// obtém o ano atual
 const fullYear = new Date().getFullYear()
 
+// regexp para verificar se há espaços vazios em uma string
 const alternativeRegexp = /^[^\s]+(?:$|.*[^\s]+$)/
 
 const questionSchema = new Schema<IQuestion>({

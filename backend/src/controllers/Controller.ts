@@ -1,6 +1,7 @@
 import BadRequest from '@/errors/BadRequest'
 import NotFound from '@/errors/NotFound'
 import CRUDServices from '@/services/CRUDServices'
+
 import type { Request, Response, NextFunction } from 'express'
 
 // controller genérico

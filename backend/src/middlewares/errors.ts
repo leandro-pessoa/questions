@@ -1,9 +1,10 @@
+import jwt from 'jsonwebtoken'
+
 import ValidationError from '@/errors/ValidationError'
 import mongoose from 'mongoose'
 import BadRequest from '@/errors/BadRequest'
 import BaseError from '@/errors/BaseError'
 import NotFound from '@/errors/NotFound'
-import jwt from 'jsonwebtoken'
 
 import type { MongooseError } from 'mongoose'
 import type { NextFunction, Request, Response } from 'express'

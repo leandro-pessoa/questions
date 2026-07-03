@@ -1,5 +1,6 @@
-import type { IToken } from '@/types/IToken'
 import mongoose from 'mongoose'
+
+import type { IToken } from '@/types/IToken'
 
 const tokenSchema = new mongoose.Schema<IToken>({
 	userId: {

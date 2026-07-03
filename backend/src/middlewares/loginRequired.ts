@@ -1,6 +1,7 @@
+import jwt from 'jsonwebtoken'
+
 import BadRequest from '@/errors/BadRequest'
 import BaseError from '@/errors/BaseError'
-import jwt from 'jsonwebtoken'
 import UserService from '@/services/UserService'
 
 import type { IUser } from '@/types/IUser'

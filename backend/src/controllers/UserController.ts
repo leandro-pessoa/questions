@@ -1,12 +1,14 @@
+import jwt from 'jsonwebtoken'
+
 import UserService from '@/services/UserService'
 import QuestionService from '@/services/QuestionService'
 import Controller from './Controller'
-import type { IUser } from '@/types/IUser'
-import type { Request, Response, NextFunction } from 'express'
 import BadRequest from '@/errors/BadRequest'
 import NotFound from '@/errors/NotFound'
 import BaseError from '@/errors/BaseError'
-import jwt from 'jsonwebtoken'
+
+import type { IUser } from '@/types/IUser'
+import type { Request, Response, NextFunction } from 'express'
 
 const userService = new UserService()
 const questionService = new QuestionService()
