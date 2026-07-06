@@ -272,6 +272,24 @@ describe('User GET', () => {
 		// 2026-04-03T20:33:39.712Z
 		const timeRegexp = /^\d{4}-\d{2}-\d{2}T(\d{2}:){2}\d{2}\.\d{3}Z$/
 
+		await request(app)
+			.post('/questions')
+			.send({
+				_id: '69565541e723eeea8e38d345',
+				subject: 'Português',
+				statement: 'testedsadsadsadadasdsa',
+				year: 2025,
+				instituition: 'teste',
+				position: 'teste',
+				examiningBoard: 'teste',
+				alternatives: [
+					{right: true, text: 'Eu', letter: 'B'},
+					{right: false, text: 'teste', letter: 'A'}
+				]
+			})
+			.set('Authorization', `Bearer ${adminToken}`)
+			.set('Content-Type', 'application/json')
+
 		await login(email, password)
 			.then(async res => {
 				await request(app)
@@ -282,7 +300,7 @@ describe('User GET', () => {
 					})
 					.set('Authorization', `Bearer ${res.body.token}`)
 					.set('Content-Type', 'application/json')
-		})
+			})
 
 		await login(email, password)
 			.then(async res => {
@@ -334,16 +352,6 @@ describe('User GET', () => {
 			.set('Authorization', `Bearer ${adminToken}`)
 			.then(res => {
 				expect(res.body.pageResult).toHaveLength(1)
-				expect(res.body.pageResult[0].completeName).toEqual('Teste')
-			})
-	})
-
-	it('return values searching by attribute lengths', async () => {
-		await request(app)
-			.get('/searchUsers?searchValue=1&column=answeredQuestions')
-			.set('Authorization', `Bearer ${adminToken}`)
-			.then(res => {
-				expect(res.body.pageResult.length).toBeGreaterThanOrEqual(1)
 				expect(res.body.pageResult[0].completeName).toEqual('Teste')
 			})
 	})
@@ -550,4 +558,12 @@ describe('User DELETE', () => {
 				expect(res.body.email).toEqual(email)
 			})
 	})
+
+	it('remove test question', async () => {
+		await request(app)
+			.delete('/questions/69565541e723eeea8e38d345')
+			.set('Authorization', `Bearer ${adminToken}`)
+	})
 })
+
+

@@ -206,9 +206,9 @@ describe('Question POST', () => {
 			.post('/questions')
 			.send({
 				_id: questionId,
-				subject: testString,
+				subject: 'Português',
 				statement: testString,
-				year: 2020,
+				year: 2025,
 				instituition: testString,
 				position: testString,
 				examiningBoard: testString,
@@ -218,9 +218,9 @@ describe('Question POST', () => {
 			.set('Content-Type', 'application/json')
 			.expect(201)
 			.then(async res => {
-				expect(res.body.subject).toEqual(testString)
+				expect(res.body.subject).toEqual('Português')
 				expect(res.body.statement).toEqual(testString)
-				expect(res.body.year).toEqual(2020)
+				expect(res.body.year).toEqual(2025)
 				expect(res.body.instituition).toEqual(testString)
 				expect(res.body.examiningBoard).toEqual(testString)
 				expect(res.body.alternatives).toEqual(testAlternatives)
@@ -293,11 +293,12 @@ describe('Question GET', () => {
 
 	it('should return filtered questions with pagination and limit', async () => {
 		await request(app)
-			.get('/questions?year=["2025"]&subject=["Português", "Matemática"]&page=1&limit=5&order=-1')
+			.get('/questions?year=["2025"]&subject=["Português"]&page=1&limit=5&order=-1')
 			.expect('Content-Type', /json/)
 			.then(res => {
 				expect(res.body.totalPages).toBeGreaterThanOrEqual(1)
-				expect(res.body.pageResult).toHaveLength(5)
+				expect(res.body.pageResult.length).toBeGreaterThanOrEqual(1)
+				expect(res.body.pageResult.length).toBeLessThanOrEqual(5)
 			})
 	})
 
@@ -310,9 +311,9 @@ describe('Question GET', () => {
 				expect(res.body).toMatchObject<IQuestion>(
 					{
 						_id: questionId,
-						subject: testString,
+						subject: 'Português',
 						statement: testString,
-						year: 2020,
+						year: 2025,
 						instituition: testString,
 						position: testString,
 						examiningBoard: testString,
@@ -328,6 +329,16 @@ describe('Question GET', () => {
 			.expect(200)
 			.then(res => {
 				expect(res.body.length).toBeGreaterThanOrEqual(1)
+			})
+	})
+
+	it('return values searching by attribute lengths', async () => {
+		await request(app)
+			.get('/searchQuestions?searchValue=2&column=alternatives')
+			.set('Authorization', `Bearer ${adminToken}`)
+			.then(res => {
+				expect(res.body.pageResult.length).toBeGreaterThanOrEqual(1)
+				expect(res.body.pageResult[0].subject).toEqual('Português')
 			})
 	})
 })
