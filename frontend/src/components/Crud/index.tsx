@@ -70,15 +70,7 @@ const Crud = <T,>({
 				)
 			// caso a requisição seja bem-sucedida
 			case 'succeeded':
-				return data.length === 0 ? (
-					<Title
-						style={{
-							borderBottom: `2px solid ${vars.colors.blue}`,
-						}}
-					>
-						Nenhum dado foi encontrado
-					</Title>
-				) : (
+				return (
 					<StyledDiv>
 						<CrudFilters
 							fetchFunc={fetchFunc}
@@ -178,12 +170,25 @@ const Crud = <T,>({
 			case 'failed':
 				return (
 					<CenterContainer $height='header'>
-						<h2>Falha ao tentar carregar os dados</h2>
+						<Title
+							style={{
+								borderBottom: `2px solid ${vars.colors.blue}`,
+							}}
+						>
+							Nenhum dado foi encontrado
+						</Title>
 						<br />
-						<Button onClick={() => dispatch(fetchFunc({ token }))}>
-							<RotateCcw />
-							Recarregar
-						</Button>
+						{/* permitirá o usuário recarregar a página ou adicionar um novo valor */}
+						<div style={{ display: 'flex', gap: '8px' }}>
+							<Button onClick={() => dispatch(fetchFunc({ token }))}>
+								<RotateCcw />
+								Recarregar
+							</Button>
+							<Button onClick={addFunc}>
+								<Plus />
+								Adicionar valor
+							</Button>
+						</div>
 					</CenterContainer>
 				)
 		}
