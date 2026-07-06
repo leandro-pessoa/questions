@@ -1,0 +1,14 @@
+server port
+SERVER_PORT=3000
+
+mongoDB connection string
+DATABASE_CONNECTION_STRING=''
+
+json web token secret and expiration
+TOKEN_SECRET=''
+TOKEN_EXPIRATION=7d
+
+email account for sending emails
+GOOGLE_APP_EMAIL=''
+email password
+GOOGLE_APP_PASSWORD=''
