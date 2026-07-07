@@ -1,5 +1,5 @@
 // url permitida para fazer requisições à API
-const whiteList = ['http://localhost:5173']
+const whiteList = [process.env.CORS_ALLOWED_URL]
 
 // tipagens para o atributo origin
 type StaticOrigin = boolean | string | RegExp | Array<boolean | string | RegExp>;

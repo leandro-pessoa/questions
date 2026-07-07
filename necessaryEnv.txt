@@ -1,6 +1,9 @@
 server port
 SERVER_PORT=3000
 
+allowed url to send requests to the api
+CORS_ALLOWED_URL='http://localhost:5173'
+
 mongoDB connection string
 DATABASE_CONNECTION_STRING=''
 
