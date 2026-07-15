@@ -1,6 +1,7 @@
 {
+  "include": ["src/**/*"],
   // exlude build and tests
-  "exclude": ["./coverage", "./dist", "__tests__", "jest.config.js"],
+  "exclude": ["./coverage", "./dist", "__tests__", "jest.config.js", "node_modules"],
 
   // Visit https://aka.ms/tsconfig to read more about this file
   "compilerOptions": {
