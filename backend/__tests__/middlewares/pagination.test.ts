@@ -1,5 +1,5 @@
 import request from 'supertest'
-import app from '../../src/app'
+import app from '../../src/app.ts'
 
 describe('pagination middleware tests', () => {
 	it('should return an error if typeof limit or page is string', async () => {

@@ -1,5 +1,5 @@
 import request from 'supertest'
-import app from '../../src/app'
+import app from '../../src/app.ts'
 import {
 	testUserData,
 	_id, completeName,
@@ -8,10 +8,10 @@ import {
 	login,
 	deleteTestUser,
 	createTestUser
-} from '../testUtils/testUsers'
-import { getAdminToken } from '../testUtils/getAdminToken'
-import { generateRandomCode } from '../../src/utils/generateRandomCode'
-import type { IAnsweredQuestion } from '../../src/types/IAnsweredQuestion'
+} from '../testUtils/testUsers.ts'
+import { getAdminToken } from '../testUtils/getAdminToken.ts'
+import { generateRandomCode } from '../../src/utils/generateRandomCode.ts'
+import type { IAnsweredQuestion } from '../../src/types/IAnsweredQuestion.ts'
 
 let adminToken: string
 

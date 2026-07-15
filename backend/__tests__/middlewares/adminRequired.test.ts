@@ -1,7 +1,7 @@
 import request from "supertest"
-import app from "../../src/app"
-import { createTestUser, deleteTestUser, login, email, password } from "../testUtils/testUsers"
-import { getAdminToken } from "../testUtils/getAdminToken"
+import app from "../../src/app.ts"
+import { createTestUser, deleteTestUser, login, email, password } from "../testUtils/testUsers.ts"
+import { getAdminToken } from "../testUtils/getAdminToken.ts"
 
 let adminToken: string
 

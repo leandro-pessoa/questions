@@ -1,4 +1,4 @@
-import { generateRandomCode } from '../../src/utils/generateRandomCode'
+import { generateRandomCode } from '../../src/utils/generateRandomCode.ts'
 
 describe('generateRandomCode test', () => {
 	it('should return a six digit random code', async () => {

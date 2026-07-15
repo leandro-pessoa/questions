@@ -1,4 +1,4 @@
-import { login } from "./testUsers"
+import { login } from "./testUsers.ts"
 
 const adminEmail = process.env.ADMIN_EMAIL
 const adminPassoword = process.env.ADMIN_PASSWORD

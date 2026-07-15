@@ -1,5 +1,5 @@
 import request from 'supertest'
-import app from '../../src/app'
+import app from '../../src/app.ts'
 
 export const testUserData = {
 	_id: '69169cea4b1e3b44ecffde92',
