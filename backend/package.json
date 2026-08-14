@@ -10,7 +10,9 @@
     "test": "jest --coverage",
     "dev": "nodemon --exec tsx ./src/server.ts",
     "clean": "rm -rf dist build .cache",
-    "start": "env-cmd -f .env node ./dist/server.js"
+	"create-admin": "env-cmd -f .env node ./dist/db/seeds/createFirstAdminUser.js",
+    "start": "env-cmd -f .env node ./dist/server.js",
+	"docker-start": "npm run create-admin && npm run start"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
