@@ -1,0 +1,32 @@
+# add a .env file at ./backend with these vars:
+
+# server port
+SERVER_PORT=3000
+
+# allowed url to send requests to the api
+CORS_ALLOWED_URL='http://localhost:5000'
+
+# mongoDB connection string (mongodb atlas)
+CLOUD_DATABASE_CONNECTION_STRING='atlasurl'
+
+# OR
+
+# local mongoDB credentials
+MONGO_INITDB_ROOT_USERNAME='user'
+MONGO_INITDB_ROOT_PASSWORD='password'
+
+# local mongoDB connection string (mongodb container)
+LOCAL_DATABASE_CONNECTION_STRING='mongodb://user:password@mongodb:27017/questions'
+
+# json web token secret and expiration
+TOKEN_SECRET=''
+TOKEN_EXPIRATION=7d
+
+# email account for sending emails (forget password funcionality)
+GOOGLE_APP_EMAIL=''
+GOOGLE_APP_PASSWORD=''
+
+# first admin user data
+APP_ADMIN_NAME='Admin'
+APP_ADMIN_EMAIL='email'
+APP_ADMIN_PASS='password'

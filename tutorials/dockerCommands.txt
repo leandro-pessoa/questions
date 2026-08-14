@@ -1,0 +1,34 @@
+# if you're using a local database:
+
+    # build
+    docker compose --profile database-container build --no-cache
+
+    # up
+    docker compose --profile database-container up --force-recreate
+
+# if you're using a mongodb atlas database (cloud)
+
+    # build
+    docker compose build --no-cache
+
+    # up
+    docker compose up
+
+# to refresh your build:
+
+    # if database-container was created:
+        # list all containers and copy mongo container id
+        docker images
+
+        # remove mongo container
+        docker rmi -f container-name
+
+        # remove database volumes
+        docker volume rm questions_db
+
+    # stop docker compose containers
+    docker compose down
+
+    # run local or cloud database docker commands
+
+        
