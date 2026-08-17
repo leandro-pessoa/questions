@@ -160,7 +160,7 @@ const QuestionForm = ({question, mode}: {question?: IQuestion, mode: 'put' | 'po
 						id='subject'
 						name='Disciplina'
 						minLength={2}
-						maxLength={20}
+						maxLength={40}
 						value={question ? question.subject : ''}
 					/>
 				</InputContainer>
