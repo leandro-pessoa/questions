@@ -88,7 +88,7 @@ describe('Question POST', () => {
 				status: 400,
 				message: [
 					'subject: A disciplina deve ter no máximo 40 caracteres',
-					'statement: O enunciado deve ter no máximo 500 caracteres',
+					'statement: O enunciado deve ter no máximo 1000 caracteres',
 					`year: O ano não pode ser superior a ${new Date().getFullYear()}`,
 					'instituition: A organização deve ter no máximo 20 caracteres',
 					'position: O cargo deve ter no máximo 30 caracteres',
@@ -192,7 +192,6 @@ describe('Question POST', () => {
 				status: 400,
 				message: [
 					'subject: Espaços vazios inválidos no campo Disciplina',
-					'statement: Espaços vazios inválidos no campo Enunciado',
 					'instituition: Espaços vazios inválidos no campo Organização',
 					'position: Espaços vazios inválidos no campo Cargo',
 					'examiningBoard: Espaços vazios inválidos no campo Banca examinadora',

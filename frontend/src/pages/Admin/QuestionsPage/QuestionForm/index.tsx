@@ -171,7 +171,7 @@ const QuestionForm = ({question, mode}: {question?: IQuestion, mode: 'put' | 'po
 						id='statement'
 						name='Enunciado'
 						minLength={10}
-						maxLength={500}
+						maxLength={1000}
 						value={question ? question.statement : ''}
 					/>
 				</InputContainer>

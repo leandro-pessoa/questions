@@ -22,8 +22,7 @@ const questionSchema = new Schema<IQuestion>({
 		type: String,
 		required: [true, 'Enunciado da questão é obrigatório'],
 		minLength: [10, 'O enunciado deve ter no mínimo 10 caracteres'],
-		maxLength: [500, 'O enunciado deve ter no máximo 500 caracteres'],
-		validate: verifyWhiteSpaces('Enunciado'),
+		maxLength: [1000, 'O enunciado deve ter no máximo 1000 caracteres'],
 	},
 	year: {
 		type: Number,
