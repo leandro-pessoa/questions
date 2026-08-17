@@ -43,7 +43,38 @@ Este projeto é uma aplicação de questões de vestibulares, concursos ou qualq
 Para realizar o download do projeto, recomendo utilizar o seguinte comando dentro da pasta em que deseja inserir:
 
 ```
-  git clone
+git clone https://github.com/leandro-pessoa/questions.git
 ```
 
-# 🚧
+## 🛠️ Executando o projeto
+
+Nesse app, utilizei as ferramentas docker e docker compose para facilitar a portabilidade em diferentes sistemas operacionais. No Linux, é necessário instalar o docker e o docker compose pelo terminal ou instalar o docker desktop. Já no windows, precisa instalar o docker desktop.
+
+- Após a instalação do docker, abra o terminal na pasta do projeto;
+- Adicione um arquivo .env na raiz da pasta backend, conforme o modelo definido no arquivo tutorials/necessaryEnv.txt;
+- No arquivo .env, escolha se irá utilizar o banco de dados local ou via mongodb atlas. Comente ou apague as variáveis da outra opção que não irá utilizar;
+- Execute os comandos de acordo com a opção desejada, conforme o arquivo tutorials/dockerCommands.txt.
+
+Nesse exemplo irei demonstrar o modo do banco de dados local:
+
+Build:
+```
+docker compose --profile database-container build --no-cache
+```
+
+Up:
+```
+docker compose --profile database-container up --force-recreate
+```
+
+Pronto, a aplicação completa agora está acessível no navegador por meio da url:
+
+```
+localhost:5000
+```
+
+A API pode ser utilizada por meio da porta 3000.
+
+## ⚛️ Tecnologias utilizadas
+
+
