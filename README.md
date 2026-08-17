@@ -77,4 +77,26 @@ A API pode ser utilizada por meio da porta 3000.
 
 ## ⚛️ Tecnologias utilizadas
 
+- `typescript`
+- `docker`
+- `docker-compose`
+- `html5`
+- `jest`
+- `mongodb`
+- `mongoose`
+- `nodejs`
+- `nodemailer`
+- `nodemon`
+- `react`
+- `react-hook-form`
+- `redux`
+- `redux-persist`
+- `redux-thunk`
+- `reduxtoolkit`
+- `styled-components`
+- `supertest`
+- `toastify`
 
+## :hurtrealbad: Desenvolvedor
+
+- Desenvolvido por [Leandro Pessoa](https://github.com/leandro-pessoa)
