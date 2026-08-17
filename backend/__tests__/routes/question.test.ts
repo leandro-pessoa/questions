@@ -54,7 +54,7 @@ describe('Question POST', () => {
 			.expect(400, {
 				status: 400,
 				message: [
-					'subject: O enunciado deve ter no mínimo 2 caracteres',
+					'subject: A disciplina deve ter no mínimo 2 caracteres',
 					'statement: O enunciado deve ter no mínimo 10 caracteres',
 					'year: O ano não pode ser inferior a 1900',
 					'instituition: A organização deve ter no mínimo 2 caracteres',
@@ -87,7 +87,7 @@ describe('Question POST', () => {
 			.expect(400, {
 				status: 400,
 				message: [
-					'subject: O enunciado deve ter no máximo 20 caracteres',
+					'subject: A disciplina deve ter no máximo 40 caracteres',
 					'statement: O enunciado deve ter no máximo 500 caracteres',
 					`year: O ano não pode ser superior a ${new Date().getFullYear()}`,
 					'instituition: A organização deve ter no máximo 20 caracteres',

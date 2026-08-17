@@ -14,8 +14,8 @@ const questionSchema = new Schema<IQuestion>({
 	subject: {
 		type: String,
 		required: [true, 'Disciplina da questão é obrigatória'],
-		minLength: [2, 'O enunciado deve ter no mínimo 2 caracteres'],
-		maxLength: [20, 'O enunciado deve ter no máximo 20 caracteres'],
+		minLength: [2, 'A disciplina deve ter no mínimo 2 caracteres'],
+		maxLength: [40, 'A disciplina deve ter no máximo 40 caracteres'],
 		validate: verifyWhiteSpaces('Disciplina'),
 	},
 	statement: {
