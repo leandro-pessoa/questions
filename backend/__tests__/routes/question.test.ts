@@ -90,10 +90,10 @@ describe('Question POST', () => {
 					'subject: A disciplina deve ter no máximo 40 caracteres',
 					'statement: O enunciado deve ter no máximo 1000 caracteres',
 					`year: O ano não pode ser superior a ${new Date().getFullYear()}`,
-					'instituition: A organização deve ter no máximo 20 caracteres',
-					'position: O cargo deve ter no máximo 30 caracteres',
-					'examiningBoard: A banca deve ter no máximo 15 caracteres',
-					'alternatives: Cada alternativa deve ter no máximo 100 caracteres'
+					'instituition: A organização deve ter no máximo 40 caracteres',
+					'position: O cargo deve ter no máximo 40 caracteres',
+					'examiningBoard: A banca deve ter no máximo 40 caracteres',
+					'alternatives: Cada alternativa deve ter no máximo 500 caracteres'
 				]
 			})
 	})

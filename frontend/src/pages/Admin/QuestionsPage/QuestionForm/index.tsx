@@ -194,7 +194,7 @@ const QuestionForm = ({question, mode}: {question?: IQuestion, mode: 'put' | 'po
 						id='instituition'
 						name='Organização'
 						minLength={2}
-						maxLength={30}
+						maxLength={40}
 						value={question ? question.instituition : ''}
 					/>
 				</InputContainer>
@@ -205,7 +205,7 @@ const QuestionForm = ({question, mode}: {question?: IQuestion, mode: 'put' | 'po
 						id='position'
 						name='Cargo'
 						minLength={4}
-						maxLength={30}
+						maxLength={40}
 						value={question ? question.position : ''}
 					/>
 				</InputContainer>
@@ -216,7 +216,7 @@ const QuestionForm = ({question, mode}: {question?: IQuestion, mode: 'put' | 'po
 						id='examiningBoard'
 						name='Banca examinadora'
 						minLength={2}
-						maxLength={30}
+						maxLength={40}
 						value={question ? question.examiningBoard : ''}
 					/>
 				</InputContainer>
@@ -249,7 +249,7 @@ const QuestionForm = ({question, mode}: {question?: IQuestion, mode: 'put' | 'po
 													<Input
 														value={alternative.text}
 														minLength={1}
-														maxLength={100}
+														maxLength={500}
 														onChange={(e) => setAlternative(e, alternative._id, 'text')}
 													/>
 												</div>

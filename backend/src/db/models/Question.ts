@@ -32,19 +32,19 @@ const questionSchema = new Schema<IQuestion>({
 	instituition: {
 		type: String,
 		minLength: [2, 'A organização deve ter no mínimo 2 caracteres'],
-		maxLength: [30, 'A organização deve ter no máximo 20 caracteres'],
+		maxLength: [40, 'A organização deve ter no máximo 40 caracteres'],
 		validate: verifyWhiteSpaces('Organização'),
 	},
 	position: {
 		type: String,
 		minLength: [4, 'O cargo deve ter no mínimo 4 caracteres'],
-		maxLength: [30, 'O cargo deve ter no máximo 30 caracteres'],
+		maxLength: [40, 'O cargo deve ter no máximo 40 caracteres'],
 		validate: verifyWhiteSpaces('Cargo'),
 	},
 	examiningBoard: {
 		type: String,
 		minLength: [2, 'A banca deve ter no mínimo 2 caracteres'],
-		maxLength: [30, 'A banca deve ter no máximo 15 caracteres'],
+		maxLength: [40, 'A banca deve ter no máximo 40 caracteres'],
 		validate: verifyWhiteSpaces('Banca examinadora'),
 	},
 	alternatives: {
@@ -63,8 +63,8 @@ const questionSchema = new Schema<IQuestion>({
 				message: 'Cada alternativa deve ter no mínimo 1 caractere'
 			},
 			{
-				validator: (value: IAlternative[]) => {return value.every(alternative => alternative.text.length <= 100)},
-				message: 'Cada alternativa deve ter no máximo 100 caracteres'
+				validator: (value: IAlternative[]) => {return value.every(alternative => alternative.text.length <= 500)},
+				message: 'Cada alternativa deve ter no máximo 500 caracteres'
 			},
 			{
 				validator: (value: IAlternative[]) => {return value.some(alternative => alternative.right)},
