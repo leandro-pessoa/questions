@@ -1,7 +1,7 @@
-import { login } from "./testUsers.ts"
+import { login } from "./testUsers"
 
-const adminEmail = process.env.ADMIN_EMAIL
-const adminPassoword = process.env.ADMIN_PASSWORD
+const adminEmail = process.env.APP_ADMIN_EMAIL
+const adminPassoword = process.env.APP_ADMIN_PASS
 
 export const getAdminToken = async () => {
 	return await login(adminEmail as string, adminPassoword as string)

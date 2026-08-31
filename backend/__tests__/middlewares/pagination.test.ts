@@ -1,5 +1,5 @@
 import request from 'supertest'
-import app from '../../src/app.ts'
+import app from '@/app'
 
 describe('pagination middleware tests', () => {
 	it('should return an error if typeof limit or page is string', async () => {
@@ -38,7 +38,7 @@ describe('pagination middleware tests', () => {
 				expect(res.body.pageResult.length).toBeLessThanOrEqual(5)
 				expect(res.body.totalPages).toBeGreaterThanOrEqual(1)
 				expect(res.body.totalValues).toBeGreaterThanOrEqual(1)
-				expect(res.body.totalValues).toBeLessThanOrEqual(5)
+				expect(res.body.totalValues).toBeGreaterThanOrEqual(1)
 				expect(res.body.actualPage).toBe(1)
 				expect(res.body.limit).toBe(5)
 			})

@@ -1,5 +1,5 @@
 import request from 'supertest'
-import app from '../../src/app.ts'
+import app from '@/app'
 
 const testToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2OGZkNTE4YWY3ODUzOTVhOWEzODcxZWEiLCJjb21wbGV0ZU5hbWUiOiJMZWFuZHJvIFBlc3NvYSBTb3V6YSBkb3MgUmVpcyIsImVtYWlsIjoibGVhbmRyb0BnbWFpbC5jb20iLCJpYXQiOjE3NjM3NjMwNDYsImV4cCI6MTc2NDM2Nzg0Nn0.BNa86FDmqg_rzskBebRU4olpziPPkB8H1fO8AQgFyD3'
 

@@ -1,5 +1,5 @@
 import request from 'supertest'
-import app from '../../src/app.ts'
+import app from '@/app'
 
 describe('mail tests', () => {
 	it('should return an error if email has not been sent', async () => {
