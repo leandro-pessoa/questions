@@ -1,7 +1,7 @@
 import request from 'supertest'
-import app from '../../src/app.ts'
-import { getAdminToken } from '../testUtils/getAdminToken.ts'
-import type { IQuestion } from '../../src/types/IQuestion.ts'
+import app from '@/app'
+import { getAdminToken } from '../testUtils/getAdminToken'
+import type { IQuestion } from '@/types/IQuestion'
 
 let adminToken: string
 
@@ -66,17 +66,18 @@ describe('Question POST', () => {
 	})
 
 	it('should return an error if attributes length is too long', async () => {
-		const longString = 'a'.repeat(501)
+		const longString = 'a'.repeat(1001)
+		const mediumString = 'a'.repeat(41)
 
 		await request(app)
 			.post('/questions')
 			.send({
-				subject: longString,
+				subject: mediumString,
 				statement: longString,
 				year: 30000,
-				instituition: longString,
-				position: longString,
-				examiningBoard: longString,
+				instituition: mediumString,
+				position: mediumString,
+				examiningBoard: mediumString,
 				alternatives: [
 					{right: false, text: longString, letter: 'C'},
 					{right: true, text: 'dsa', letter: 'E'}
@@ -282,10 +283,10 @@ describe('Question GET', () => {
 
 	it('should return filtered questions if url query is valid and found a question', async () => {
 		await request(app)
-			.get('/questions?year=["2026"]&subject=["Matemática"]')
+			.get('/questions?year=["2026"]&subject=["Português"]')
 			.expect('Content-Type', /json/)
 			.then(res => {
-				expect(res.body.pageResult[0].subject).toEqual('Matemática')
+				expect(res.body.pageResult[0].subject).toEqual('Português')
 				expect(res.body.pageResult[0].year).toEqual(2026)
 			})
 	})
