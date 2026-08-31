@@ -1,5 +1,5 @@
 import request from 'supertest'
-import app from '../../src/app.ts'
+import app from '@/app'
 import {
 	testUserData,
 	_id, completeName,
@@ -8,10 +8,10 @@ import {
 	login,
 	deleteTestUser,
 	createTestUser
-} from '../testUtils/testUsers.ts'
-import { getAdminToken } from '../testUtils/getAdminToken.ts'
-import { generateRandomCode } from '../../src/utils/generateRandomCode.ts'
-import type { IAnsweredQuestion } from '../../src/types/IAnsweredQuestion.ts'
+} from '../testUtils/testUsers'
+import { getAdminToken } from '../testUtils/getAdminToken'
+import { generateRandomCode } from '@/utils/generateRandomCode'
+import type { IAnsweredQuestion } from '@/types/IAnsweredQuestion'
 
 let adminToken: string
 
@@ -307,13 +307,23 @@ describe('User GET', () => {
 				await request(app)
 					.get('/users/getAnsweredQuestions')
 					.set('Authorization', `Bearer ${res.body.token}`)
-					.then((res: {body: {answeredQuestions: IAnsweredQuestion[], correct: number, incorrect: number, weeklyAnsweredQuestions: number[]}}) => {
-						expect(res.body.answeredQuestions[0].questionId).toEqual('69565541e723eeea8e38d345')
-						expect(res.body.answeredQuestions[0].selectedOption).toEqual(
+					.then(
+						(
+							res: {
+								body: {
+									answeredQuestions: IAnsweredQuestion[],
+									correct: number,
+									incorrect: number,
+									weeklyAnsweredQuestions: number[]
+								}
+							}
+						) => {
+						expect(res.body.answeredQuestions[0]?.questionId).toEqual('69565541e723eeea8e38d345')
+						expect(res.body.answeredQuestions[0]?.selectedOption).toEqual(
 							{right: true, text: 'Eu', letter: 'B'}
 						)
-						expect(res.body.answeredQuestions[0].isCorrectAnswer).toBeTruthy()
-						expect(res.body.answeredQuestions[0].updatedAt).toMatch(timeRegexp)
+						expect(res.body.answeredQuestions[0]?.isCorrectAnswer).toBeTruthy()
+						expect(res.body.answeredQuestions[0]?.updatedAt).toMatch(timeRegexp)
 						expect(res.body.correct).toEqual(1)
 						expect(res.body.incorrect).toEqual(0)
 						expect(res.body.weeklyAnsweredQuestions).toHaveLength(7)
@@ -499,11 +509,11 @@ describe('User UPDATE', () => {
 					.set('Authorization', `Bearer ${res.body.token}`)
 					.set('Content-Type', 'application/json')
 					.then((res: {body: {answeredQuestions: IAnsweredQuestion[]}}) => {
-						expect(res.body.answeredQuestions[0].questionId).toEqual('69565541e723eeea8e38d345')
-						expect(res.body.answeredQuestions[0].selectedOption).toEqual(
+						expect(res.body.answeredQuestions[0]?.questionId).toEqual('69565541e723eeea8e38d345')
+						expect(res.body.answeredQuestions[0]?.selectedOption).toEqual(
 							{right: true, text: 'Eu', letter: 'B'}
 						)
-						expect(res.body.answeredQuestions[0].isCorrectAnswer).toBeTruthy()
+						expect(res.body.answeredQuestions[0]?.isCorrectAnswer).toBeTruthy()
 					})
 			})
 	})
