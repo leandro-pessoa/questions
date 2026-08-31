@@ -1,12 +1,12 @@
 {
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "__tests__/**/*"],
   // exlude build and tests
-  "exclude": ["./coverage", "./dist", "__tests__", "jest.config.js", "node_modules"],
+  "exclude": ["./coverage", "./dist", "jest.config.js", "node_modules", ".jest"],
 
   // Visit https://aka.ms/tsconfig to read more about this file
   "compilerOptions": {
     // File Layout
-    "rootDir": "./src",
+    "rootDir": "./",
     "outDir": "./dist",
 
     // Environment Settings
@@ -15,7 +15,7 @@
     "target": "esnext",
     // For nodejs:
     "lib": ["esnext"],
-    "types": ["node"],
+    "types": ["node", "jest"],
 	"esModuleInterop": true,
 	"moduleResolution": "node",
     // and npm install -D @types/node
